@@ -14,6 +14,26 @@ export type TrainingOverview = {
   modules: Array<{ code: string; title: string; description: string; estimated_minutes: number; position: number }>;
   progress: Array<{ module_code: string; current_slide: number; total_slides: number; status: "not_started" | "in_progress" | "completed" }>;
   attempts: Array<{ module_code: string; score: number; is_passed: boolean; submitted_at: string }>;
+  certificate: { certificate_number: string; issued_at: string } | null;
+};
+
+export type SupervisorAgent = {
+  id: string;
+  fullName: string | null;
+  phone: string;
+  category: string;
+  completedModules: number;
+  validatedModules: number;
+  totalModules: number;
+  averageScore: number | null;
+  lastActivity: string | null;
+};
+
+export type SupervisorDashboard = {
+  scope: "assigned" | "global";
+  viewerRole: string;
+  moduleCount: number;
+  agents: SupervisorAgent[];
 };
 
 async function request<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
@@ -48,8 +68,16 @@ export async function loginTraining(phone: string, password: string) {
   return response;
 }
 
-export function getTrainingOverview(token: string) {
-  return request<TrainingOverview>("/overview", {}, token);
+export async function getTrainingOverview(token: string) {
+  const overview = await request<TrainingOverview & { user: TrainingUser & { full_name?: string | null; user_category?: string } }>("/overview", {}, token);
+  return {
+    ...overview,
+    user: {
+      ...overview.user,
+      fullName: overview.user.fullName ?? overview.user.full_name ?? null,
+      category: overview.user.category ?? overview.user.user_category ?? "",
+    },
+  };
 }
 
 export function saveModuleProgress(token: string, payload: { moduleCode: string; currentSlide: number; totalSlides: number; status: "in_progress" | "completed" }) {
@@ -58,4 +86,12 @@ export function saveModuleProgress(token: string, payload: { moduleCode: string;
 
 export function saveAssessment(token: string, payload: { moduleCode: string; score: number; correctAnswers: number; totalQuestions: number; answers: Record<string, number> }) {
   return request<{ success: true; isPassed: boolean }>("/assessment", { method: "POST", body: JSON.stringify(payload) }, token);
+}
+
+export function getSupervisorDashboard(token: string) {
+  return request<SupervisorDashboard>("/dashboard", {}, token);
+}
+
+export function createCertificate(token: string) {
+  return request<{ certificate: { certificate_number: string; issued_at: string }; user: TrainingUser }>("/certificate", { method: "POST" }, token);
 }

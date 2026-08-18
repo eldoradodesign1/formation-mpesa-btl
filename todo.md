@@ -11,3 +11,18 @@
 - [x] Tester visuellement un parcours authentifié complet : connexion réussie, module, test et suivi dans le sélecteur.
 - [x] Vérifier en base qu’une progression et un résultat sont créés après un usage réel.
 - [x] Vérifier puis sauvegarder la version complète.
+- [x] Inspecter les rôles et les affectations d’agents disponibles dans BTL Deployment Tracker.
+- [x] Créer les données de supervision, de certification et d’export des résultats.
+- [x] Ajouter un tableau de bord superviseur avec périmètre agents affectés ou global selon le rôle.
+- [x] Ajouter un repère visuel clair de la session connectée.
+- [x] Générer un certificat téléchargeable après validation de tous les modules.
+- [x] Exporter les résultats de suivi au format CSV et Excel.
+- [x] Vérifier les droits, les exports et les interfaces responsive.
+- [x] Sauvegarder la version enrichie.
+- [x] Revalider que les rôles admin, sous-admin et superadmin voient tous les utilisateurs dans le tableau global.
+- [x] Vérifier visuellement les panneaux superviseur, certificat et export en desktop et mobile.
+- [ ] Créer le dépôt GitHub : bloqué, le jeton GitHub actuel n’a pas le droit `CreateRepository`.
+- [x] Corriger l’exception du raccourci clavier `A` lorsque la touche ne fournit pas de caractère exploitable.
+- [x] Vérifier l’ensemble des raccourcis clavier après correction, sans exception runtime.
+- [x] Afficher le nom de l’agent connecté dans l’indicateur de session, sans repli vers son numéro.
+- [x] Corriger le mapping de session pour afficher le champ `full_name` du profil connecté dans l’indicateur.

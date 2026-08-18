@@ -3,17 +3,22 @@
  */
 import { useCallback, useEffect, useState } from "react";
 import {
+  Award,
   ClipboardCheck,
   ChevronLeft,
   ChevronRight,
   CircleHelp,
   Expand,
   Grid2X2,
+  LayoutDashboard,
   LogOut,
   X,
 } from "lucide-react";
 import { AssessmentPanel, TrainingLogin } from "@/components/TrainingAccess";
-import { clearTrainingToken, getTrainingOverview, getTrainingToken, saveAssessment, saveModuleProgress, type TrainingOverview, type TrainingUser } from "@/lib/trainingGateway";
+import { CertificatePanel, SupervisorPanel } from "@/components/LearningTools";
+import { clearTrainingToken, createCertificate, getSupervisorDashboard, getTrainingOverview, getTrainingToken, saveAssessment, saveModuleProgress, type SupervisorDashboard, type TrainingOverview, type TrainingUser } from "@/lib/trainingGateway";
+import { canAccessSupervision, isCertificateEligible } from "@shared/trainingCompletion";
+import { getPresentationKeyAction } from "@shared/presentationKeyboard";
 
 const brandMark = "/manus-storage/mpesa-btl-mark_cba7e3e0.png";
 
@@ -576,12 +581,21 @@ export default function Home() {
   const [trainingOverview, setTrainingOverview] = useState<TrainingOverview | null>(null);
   const [trainingReady, setTrainingReady] = useState(() => !getTrainingToken());
   const [showAssessment, setShowAssessment] = useState(false);
+  const [showCertificate, setShowCertificate] = useState(false);
+  const [showSupervisor, setShowSupervisor] = useState(false);
+  const [supervisorDashboard, setSupervisorDashboard] = useState<SupervisorDashboard | null>(null);
+  const [dashboardError, setDashboardError] = useState("");
 
   const activeSession = sessions.find((session) => session.id === sessionId) ?? sessions[0];
   const currentPosition = Math.max(0, activeSession.slideIndexes.indexOf(current));
   const activeAssessment = activeSession.moduleCode ? assessmentQuestions[activeSession.moduleCode] : undefined;
   const activeProgress = trainingOverview?.progress.find((item) => item.module_code === activeSession.moduleCode);
   const activeAttempt = trainingOverview?.attempts.find((item) => item.module_code === activeSession.moduleCode);
+  const canSupervise = canAccessSupervision(trainingUser?.role);
+  const trainingModules = trainingOverview?.modules ?? [];
+  const trainingProgress = trainingOverview?.progress ?? [];
+  const trainingAttempts = trainingOverview?.attempts ?? [];
+  const certificateEligible = isCertificateEligible(trainingModules, trainingProgress, trainingAttempts);
 
   useEffect(() => {
     if (!trainingToken) {
@@ -655,26 +669,29 @@ export default function Home() {
 
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
-      if (event.metaKey || event.ctrlKey || event.altKey) return;
-      if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
+      const action = getPresentationKeyAction(event);
+      if (action === "next") {
         event.preventDefault();
         goRelative(1);
       }
-      if (event.key === "ArrowLeft" || event.key === "PageUp" || event.key === "Backspace") {
+      if (action === "previous") {
         event.preventDefault();
         goRelative(-1);
       }
-      if (event.key === "Home") { event.preventDefault(); goTo(activeSession.slideIndexes[0]); }
-      if (event.key === "End") { event.preventDefault(); goTo(activeSession.slideIndexes[activeSession.slideIndexes.length - 1]); }
-      if (event.key.toLowerCase() === "g" || event.key.toLowerCase() === "m") setShowDeck((value) => !value);
-      if (event.key === "?" || (event.key === "/" && event.shiftKey)) setShowHelp((value) => !value);
-      if (event.key.toLowerCase() === "f") toggleFullscreen();
-      if (event.key.toLowerCase() === "a" && slides[current].kind === "quiz") setShowAnswers((value) => !value);
-      if (event.key === "Escape") { setShowDeck(false); setShowHelp(false); }
+      if (action === "start") { event.preventDefault(); goTo(activeSession.slideIndexes[0]); }
+      if (action === "end") { event.preventDefault(); goTo(activeSession.slideIndexes[activeSession.slideIndexes.length - 1]); }
+      if (action === "sessions") setShowDeck((value) => !value);
+      if (action === "help") setShowHelp((value) => !value);
+      if (action === "fullscreen") toggleFullscreen();
+      if (action === "assessment") {
+        if (slides[current].kind === "quiz") setShowAnswers((value) => !value);
+        else if (activeAssessment) setShowAssessment(true);
+      }
+      if (action === "close") { setShowDeck(false); setShowHelp(false); setShowAssessment(false); setShowCertificate(false); setShowSupervisor(false); }
     };
     window.addEventListener("keydown", handleKeydown);
     return () => window.removeEventListener("keydown", handleKeydown);
-  }, [activeSession.slideIndexes, current, goRelative, goTo, toggleFullscreen]);
+  }, [activeAssessment, activeSession.slideIndexes, current, goRelative, goTo, toggleFullscreen]);
 
   const slide = slides[current];
   const theme = getSlideTheme(slide);
@@ -692,6 +709,24 @@ export default function Home() {
     setTrainingOverview(await getTrainingOverview(trainingToken));
   };
 
+  const openSupervisor = async () => {
+    if (!trainingToken) return;
+    setDashboardError("");
+    try {
+      setSupervisorDashboard(await getSupervisorDashboard(trainingToken));
+      setShowSupervisor(true);
+    } catch (cause) {
+      setDashboardError(cause instanceof Error ? cause.message : "Impossible de charger le suivi.");
+    }
+  };
+
+  const issueCertificate = async () => {
+    if (!trainingToken) throw new Error("Session invalide.");
+    const result = await createCertificate(trainingToken);
+    setTrainingOverview((current) => current ? { ...current, certificate: result.certificate } : current);
+    return result.certificate;
+  };
+
   const logoutTraining = () => {
     clearTrainingToken();
     setTrainingToken(null);
@@ -699,6 +734,8 @@ export default function Home() {
     setTrainingOverview(null);
     setShowDeck(false);
     setShowAssessment(false);
+    setShowCertificate(false);
+    setShowSupervisor(false);
   };
 
   if (!trainingReady) return <main className="training-loading"><span>Connexion au parcours…</span></main>;
@@ -706,6 +743,7 @@ export default function Home() {
 
   return (
     <main className="mpesa-deck" aria-label="Présentation de formation M-Pesa BTL">
+      <button type="button" className="session-indicator" onClick={() => setShowDeck(true)} aria-label="Afficher les informations de la session connectée"><span className="session-indicator__dot" /><span><b>{trainingUser.fullName || "Agent connecté"}</b><small>{trainingUser.role.replace(/_/g, " ")} · session connectée</small></span></button>
       <div className="presentation-shell">
         <div className="presentation-frame">
           <aside className="rail" aria-label="Repères de la présentation">
@@ -732,15 +770,20 @@ export default function Home() {
         <span className="control-divider" />
         <button type="button" className="control-button" onClick={() => setShowDeck((value) => !value)} aria-label="Choisir une séance"><Grid2X2 size={18} /></button>
         {activeAssessment && <button type="button" className="control-button" onClick={() => setShowAssessment(true)} aria-label="Lancer l’évaluation du module"><ClipboardCheck size={18} /></button>}
+        <button type="button" className="control-button" onClick={() => setShowCertificate(true)} aria-label="Afficher mon certificat"><Award size={18} /></button>
+        {canSupervise && <button type="button" className="control-button" onClick={openSupervisor} aria-label="Ouvrir le tableau de bord superviseur"><LayoutDashboard size={18} /></button>}
         <button type="button" className="control-button" onClick={toggleFullscreen} aria-label="Basculer en plein écran"><Expand size={17} /></button>
         <button type="button" className="control-button" onClick={() => setShowHelp((value) => !value)} aria-label="Afficher les raccourcis clavier"><CircleHelp size={18} /></button>
         <button type="button" className="control-button" onClick={logoutTraining} aria-label="Se déconnecter de la formation"><LogOut size={17} /></button>
       </nav>
 
-      {showDeck && <aside className="deck-panel" aria-label="Sélecteur de séances"><div className="panel-heading"><div><span className="micro-label">{trainingUser.fullName || trainingUser.phone}</span><h2>Choisir une séance</h2></div><button type="button" aria-label="Fermer le sélecteur de séances" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="session-grid">{sessions.map((session) => { const progress = trainingOverview?.progress.find((item) => item.module_code === session.moduleCode); const attempt = trainingOverview?.attempts.find((item) => item.module_code === session.moduleCode); return <button key={session.id} type="button" onClick={() => startSession(session.id)} className={`session-card ${session.id === activeSession.id ? "session-card--active" : ""}`}><span className="session-card__duration">{session.duration}</span><b>{session.label}</b><small>{session.description}</small><span className="session-card__count">{session.moduleCode ? `${progress?.status === "completed" ? "Parcours terminé" : `${progress?.current_slide || 0}/${session.slideIndexes.length} slides`} · ${attempt ? `${attempt.score}%` : "test à faire"}` : `${session.slideIndexes.length} slides`}</span></button>; })}</div><div className="deck-panel__section"><span className="micro-label">Séance active · {activeSession.labelShort}{activeProgress ? ` · ${activeProgress.status === "completed" ? "terminée" : "en cours"}` : ""}{activeAttempt ? ` · dernier test ${activeAttempt.score}%` : ""}</span><div className="deck-panel__list">{activeSession.slideIndexes.map((slideIndex, index) => { const item = slides[slideIndex]; return <button key={`${item.title}-${slideIndex}`} type="button" onClick={() => { goTo(slideIndex); setShowDeck(false); }} className={`deck-panel__item ${current === slideIndex ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>; })}</div>{activeAssessment && <button type="button" className="deck-panel__assessment" onClick={() => { setShowDeck(false); setShowAssessment(true); }}>Lancer le test du module</button>}</div></aside>}
+      {showDeck && <aside className="deck-panel" aria-label="Sélecteur de séances"><div className="panel-heading"><div><span className="micro-label">{trainingUser.fullName || "Agent connecté"}</span><h2>Choisir une séance</h2></div><button type="button" aria-label="Fermer le sélecteur de séances" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="session-grid">{sessions.map((session) => { const progress = trainingOverview?.progress.find((item) => item.module_code === session.moduleCode); const attempt = trainingOverview?.attempts.find((item) => item.module_code === session.moduleCode); return <button key={session.id} type="button" onClick={() => startSession(session.id)} className={`session-card ${session.id === activeSession.id ? "session-card--active" : ""}`}><span className="session-card__duration">{session.duration}</span><b>{session.label}</b><small>{session.description}</small><span className="session-card__count">{session.moduleCode ? `${progress?.status === "completed" ? "Parcours terminé" : `${progress?.current_slide || 0}/${session.slideIndexes.length} slides`} · ${attempt ? `${attempt.score}%` : "test à faire"}` : `${session.slideIndexes.length} slides`}</span></button>; })}</div><div className="deck-panel__section"><span className="micro-label">Séance active · {activeSession.labelShort}{activeProgress ? ` · ${activeProgress.status === "completed" ? "terminée" : "en cours"}` : ""}{activeAttempt ? ` · dernier test ${activeAttempt.score}%` : ""}</span><div className="deck-panel__list">{activeSession.slideIndexes.map((slideIndex, index) => { const item = slides[slideIndex]; return <button key={`${item.title}-${slideIndex}`} type="button" onClick={() => { goTo(slideIndex); setShowDeck(false); }} className={`deck-panel__item ${current === slideIndex ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>; })}</div>{activeAssessment && <button type="button" className="deck-panel__assessment" onClick={() => { setShowDeck(false); setShowAssessment(true); }}>Lancer le test du module</button>}</div></aside>}
 
-      {showHelp && <aside className="help-panel" role="dialog" aria-modal="true" aria-label="Raccourcis clavier"><span className="micro-label">Mode présentateur</span><h2>Pilotez au clavier.</h2><div className="help-grid"><div><kbd>→ / espace</kbd>Slide suivante</div><div><kbd>← / retour</kbd>Slide précédente</div><div><kbd>Home / End</kbd>Début / fin de séance</div><div><kbd>G ou M</kbd>Choisir une séance</div><div><kbd>F</kbd>Plein écran</div><div><kbd>A</kbd>Réponses du quiz</div><div><kbd>?</kbd>Cette aide</div><div><kbd>Échap</kbd>Fermer un panneau</div></div><button type="button" className="help-close" onClick={() => setShowHelp(false)}>Reprendre la présentation</button></aside>}
+      {showHelp && <aside className="help-panel" role="dialog" aria-modal="true" aria-label="Raccourcis clavier"><span className="micro-label">Mode présentateur</span><h2>Pilotez au clavier.</h2><div className="help-grid"><div><kbd>→ / espace</kbd>Slide suivante</div><div><kbd>← / retour</kbd>Slide précédente</div><div><kbd>Home / End</kbd>Début / fin de séance</div><div><kbd>G ou M</kbd>Choisir une séance</div><div><kbd>F</kbd>Plein écran</div><div><kbd>A</kbd>Test ou réponses du quiz</div><div><kbd>?</kbd>Cette aide</div><div><kbd>Échap</kbd>Fermer un panneau</div></div><button type="button" className="help-close" onClick={() => setShowHelp(false)}>Reprendre la présentation</button></aside>}
       {showAssessment && activeAssessment && <AssessmentPanel sessionLabel={activeSession.label} questions={activeAssessment} onClose={() => setShowAssessment(false)} onSubmit={handleAssessment} />}
+      {showCertificate && <CertificatePanel user={trainingUser} certificate={trainingOverview?.certificate || null} eligible={certificateEligible} onClose={() => setShowCertificate(false)} onIssue={issueCertificate} />}
+      {showSupervisor && supervisorDashboard && <SupervisorPanel dashboard={supervisorDashboard} onClose={() => setShowSupervisor(false)} />}
+      {dashboardError && <div className="session-error" role="status">{dashboardError}</div>}
     </main>
   );
 }
