@@ -3,13 +3,17 @@
  */
 import { useCallback, useEffect, useState } from "react";
 import {
+  ClipboardCheck,
   ChevronLeft,
   ChevronRight,
   CircleHelp,
   Expand,
   Grid2X2,
+  LogOut,
   X,
 } from "lucide-react";
+import { AssessmentPanel, TrainingLogin } from "@/components/TrainingAccess";
+import { clearTrainingToken, getTrainingOverview, getTrainingToken, saveAssessment, saveModuleProgress, type TrainingOverview, type TrainingUser } from "@/lib/trainingGateway";
 
 const brandMark = "/manus-storage/mpesa-btl-mark_cba7e3e0.png";
 
@@ -26,6 +30,9 @@ type Slide = {
     | "clients"
     | "identities"
     | "merchant"
+    | "merchantPaymentIntro"
+    | "merchantPaymentRoute"
+    | "merchantPaymentBA"
     | "route"
     | "rules"
     | "visaIntro"
@@ -154,6 +161,39 @@ const slides: Slide[] = [
       "Le plafond communiqué est de 7 050 000 CDF.",
       "Les frais de retrait restent applicables.",
     ],
+  },
+  {
+    module: "Paiement Marchand",
+    kicker: "Module 03 · encaissement client",
+    title: "Faire payer le client directement chez le marchand.",
+    subtitle: "Le Paiement Marchand permet au client de régler un produit ou un service avec son compte M-Pesa, sans manipulation d’espèces.",
+    theme: "merchant",
+    kind: "merchantPaymentIntro",
+  },
+  {
+    module: "Paiement Marchand",
+    kicker: "Module 03 · parcours client",
+    title: "Le marchand communique son numéro. Le client vérifie, puis confirme.",
+    subtitle: "Le bon réflexe terrain consiste à faire valider le numéro marchand et le montant avant toute confirmation finale.",
+    theme: "paper",
+    kind: "merchantPaymentRoute",
+    code: "N° MARCHAND",
+    aside: "Parcours de paiement client",
+    compact: true,
+    content: [
+      "Le client choisit le produit ou le service à payer.",
+      "Le marchand communique son numéro marchand.",
+      "Le client saisit le numéro et le montant dans son parcours M-Pesa.",
+      "Le client vérifie les informations, puis confirme la transaction.",
+      "Le marchand reçoit la confirmation avant de remettre le produit ou le service.",
+    ],
+  },
+  {
+    module: "Paiement Marchand",
+    kicker: "Module 03 · posture Brand Ambassador",
+    title: "Présenter une solution d’encaissement, pas une promesse non confirmée.",
+    subtitle: "Le Brand Ambassador qualifie le commerce, explique les avantages concrets et oriente vers la procédure officielle en vigueur.",
+    kind: "merchantPaymentBA",
   },
   {
     module: "M-Pesa Carte Visa",
@@ -314,7 +354,7 @@ const slides: Slide[] = [
   },
 ];
 
-const moduleNames = ["Ouverture", "Clients M-Pesa", "Petit Commerce", "M-Pesa Carte Visa", "M-Pesa Mikili", "M-Pesa Rallonge", "Conclusion"];
+const moduleNames = ["Ouverture", "Clients M-Pesa", "Petit Commerce", "Paiement Marchand", "M-Pesa Carte Visa", "M-Pesa Mikili", "M-Pesa Rallonge", "Conclusion"];
 
 type Session = {
   id: string;
@@ -323,16 +363,59 @@ type Session = {
   description: string;
   duration: string;
   slideIndexes: number[];
+  moduleCode?: string;
 };
 
 const sessions: Session[] = [
-  { id: "complete", label: "Formation complète", labelShort: "Complète", description: "L’intégralité des produits, le quiz et la conclusion.", duration: "2 h 00", slideIndexes: slides.map((_, index) => index) },
-  { id: "clients", label: "Module 1 · Clients M-Pesa", labelShort: "Clients", description: "Profils Lite et Premium, éligibilité et pièces acceptées.", duration: "15 min", slideIndexes: [3, 4, 5] },
-  { id: "commerce", label: "Module 2 · Petit Commerce", labelShort: "Petit Commerce", description: "Compte marchand, activation, paiement et règles d’usage.", duration: "20 min", slideIndexes: [6, 7, 8, 9] },
-  { id: "visa", label: "Module 3 · M-Pesa Carte Visa", labelShort: "Carte Visa", description: "Carte virtuelle, création, options de gestion, sécurité et frais.", duration: "20 min", slideIndexes: [10, 11, 12, 13] },
-  { id: "mikili", label: "Module 4 · M-Pesa Mikili", labelShort: "Mikili", description: "Réception depuis l’étranger, limites, notification et envoi régional.", duration: "30 min", slideIndexes: [14, 15, 16, 17, 18, 19] },
-  { id: "rallonge", label: "Module 5 · M-Pesa Rallonge", labelShort: "Rallonge", description: "Découvert ponctuel, éligibilité, usage, remboursement et pénalités.", duration: "25 min", slideIndexes: [20, 21, 22, 23] },
+  { id: "complete", label: "Formation complète", labelShort: "Complète", description: "L’intégralité des produits, les tests et la conclusion.", duration: "2 h 20", slideIndexes: slides.map((_, index) => index) },
+  { id: "clients", label: "Module 1 · Clients M-Pesa", labelShort: "Clients", description: "Profils Lite et Premium, éligibilité et pièces acceptées.", duration: "15 min", slideIndexes: [3, 4, 5], moduleCode: "clients" },
+  { id: "commerce", label: "Module 2 · Petit Commerce", labelShort: "Petit Commerce", description: "Compte marchand, activation, paiement et règles d’usage.", duration: "20 min", slideIndexes: [6, 7, 8, 9], moduleCode: "petit-commerce" },
+  { id: "paiement-marchand", label: "Module 3 · Paiement Marchand", labelShort: "Paiement Marchand", description: "Paiement client chez le commerçant, validation et message terrain.", duration: "20 min", slideIndexes: [10, 11, 12], moduleCode: "paiement-marchand" },
+  { id: "visa", label: "Module 4 · M-Pesa Carte Visa", labelShort: "Carte Visa", description: "Carte virtuelle, création, options de gestion, sécurité et frais.", duration: "20 min", slideIndexes: [13, 14, 15, 16], moduleCode: "carte-visa" },
+  { id: "mikili", label: "Module 5 · M-Pesa Mikili", labelShort: "Mikili", description: "Réception depuis l’étranger, limites, notification et envoi régional.", duration: "30 min", slideIndexes: [17, 18, 19, 20, 21, 22], moduleCode: "mikili" },
+  { id: "rallonge", label: "Module 6 · M-Pesa Rallonge", labelShort: "Rallonge", description: "Découvert ponctuel, éligibilité, usage, remboursement et pénalités.", duration: "25 min", slideIndexes: [23, 24, 25, 26], moduleCode: "rallonge" },
 ];
+
+type AssessmentQuestion = { id: string; prompt: string; options: string[]; answer: number };
+
+const assessmentQuestions: Record<string, AssessmentQuestion[]> = {
+  clients: [
+    { id: "clients-1", prompt: "Quel niveau de compte permet d’accéder aux transactions en USD ?", options: ["Lite", "Premium correctement enregistré", "Business uniquement", "Aucun compte"], answer: 1 },
+    { id: "clients-2", prompt: "Avant de présenter un produit, quel réflexe est prioritaire ?", options: ["Identifier le type et le niveau du compte", "Promettre un avantage", "Demander le PIN", "Changer le numéro du client"], answer: 0 },
+    { id: "clients-3", prompt: "Un document d’identité recevable sert principalement à :", options: ["Obtenir une carte SIM", "Passer un compte au statut Premium", "Recevoir un prêt", "Créer un compte marchand"], answer: 1 },
+    { id: "clients-4", prompt: "Quelle posture est correcte si une information n’est pas confirmée ?", options: ["L’inventer pour aider", "La vérifier dans le support ou auprès du superviseur", "Ignorer la question", "Garantir le résultat"], answer: 1 },
+  ],
+  "petit-commerce": [
+    { id: "commerce-1", prompt: "Quel besoin principal couvre Petit Commerce ?", options: ["Recevoir un transfert international", "Séparer les recettes commerciales du compte personnel", "Payer en ligne", "Retirer chez un agent"], answer: 1 },
+    { id: "commerce-2", prompt: "Quel profil doit disposer du compte de base adapté avant l’activation ?", options: ["Client Lite", "Client Premium", "Nouveau client sans compte", "Visiteur étranger sans document"], answer: 1 },
+    { id: "commerce-3", prompt: "Que faut-il attendre après avoir saisi le PIN dans le parcours d’activation ?", options: ["Un message de confirmation", "Un appel du marchand", "Un code CVV", "Une facture papier"], answer: 0 },
+    { id: "commerce-4", prompt: "Quelle orientation est correcte si l’option Petit Commerce n’apparaît pas ?", options: ["Réessayer sans limite", "Solliciter l’assistance selon la procédure communiquée", "Utiliser le PIN d’un autre client", "Promettre une activation immédiate"], answer: 1 },
+  ],
+  "paiement-marchand": [
+    { id: "merchant-1", prompt: "Quel est le rôle du numéro marchand dans le paiement ?", options: ["Identifier le bénéficiaire du paiement", "Remplacer le PIN du client", "Servir de code de réduction", "Créer un compte Lite"], answer: 0 },
+    { id: "merchant-2", prompt: "À quel moment le marchand doit-il remettre le produit ou fournir le service ?", options: ["Avant le paiement", "Après la confirmation du paiement", "Après un retrait cash", "Après l’appel du BA"], answer: 1 },
+    { id: "merchant-3", prompt: "Quel avantage est le plus juste à présenter au commerçant ?", options: ["Crédit garanti", "Paiement digital complémentaire et encaissement facilité", "Suppression obligatoire du cash", "Commission non confirmée"], answer: 1 },
+    { id: "merchant-4", prompt: "Face à un commerce intéressé, le BA commence par :", options: ["Forcer l’inscription", "Comprendre l’activité et le besoin", "Demander le mot de passe", "Promettre un bénéfice"], answer: 1 },
+  ],
+  "carte-visa": [
+    { id: "visa-1", prompt: "La Carte Visa M-Pesa est destinée principalement à :", options: ["Des achats en ligne", "Des retraits uniquement", "L’enregistrement d’un agent", "L’envoi de SMS"], answer: 0 },
+    { id: "visa-2", prompt: "Quelle information de sécurité ne doit pas être partagée sans vigilance ?", options: ["Le CVV", "Le nom du produit", "La date de formation", "Le numéro de module"], answer: 0 },
+    { id: "visa-3", prompt: "Après la création, le client peut notamment gérer sa carte pour :", options: ["Modifier le CVV ou bloquer la carte", "Changer sa SIM automatiquement", "Créer un compte marchand", "Supprimer son compte Premium"], answer: 0 },
+    { id: "visa-4", prompt: "Quel élément faut-il clarifier avant toute décision client ?", options: ["Les frais applicables", "La couleur du téléphone", "Le quartier du BA", "La marque du navigateur"], answer: 0 },
+  ],
+  mikili: [
+    { id: "mikili-1", prompt: "M-Pesa Mikili permet principalement :", options: ["De recevoir des fonds depuis l’étranger", "D’ouvrir une carte Visa", "De créer un commerce", "De demander un découvert"], answer: 0 },
+    { id: "mikili-2", prompt: "Quel profil est requis pour recevoir le service selon le module ?", options: ["Lite", "Premium correctement enregistré", "Compte sans identité", "Compte marchand uniquement"], answer: 1 },
+    { id: "mikili-3", prompt: "Quel point doit être expliqué avant l’opération ?", options: ["L’absence de reversal prévue", "Une remise automatique", "Un crédit garanti", "La fermeture du compte"], answer: 0 },
+    { id: "mikili-4", prompt: "Comment le bénéficiaire est-il informé après une transaction aboutie ?", options: ["Par notification SMS", "Par courrier", "Par appel obligatoire du BA", "Par carte Visa"], answer: 0 },
+  ],
+  rallonge: [
+    { id: "rallonge-1", prompt: "Dans quelle situation la Rallonge intervient-elle ?", options: ["Quand le solde est insuffisant pour une transaction ciblée", "À l’ouverture du compte", "Après un retrait cash", "Pour toute demande de crédit"], answer: 0 },
+    { id: "rallonge-2", prompt: "Quel profil peut être éligible selon le module ?", options: ["Un client Premium actif", "Tout compte Lite", "Un visiteur sans compte", "Un marchand sans activité"], answer: 0 },
+    { id: "rallonge-3", prompt: "Comment le remboursement est-il présenté dans le module ?", options: ["Automatique lors d’un crédit entrant sur le compte CDF", "Uniquement en espèces", "Jamais récupéré", "Par le BA directement"], answer: 0 },
+    { id: "rallonge-4", prompt: "Avant l’acceptation, quel sujet doit être compris ?", options: ["Les frais, conditions et pénalités", "La couleur de la SIM", "Le nom de l’agent", "Le code du marchand"], answer: 0 },
+  ],
+};
 
 function getInitialSessionId() {
   const requested = new URLSearchParams(window.location.search).get("session");
@@ -406,7 +489,7 @@ function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; sho
             <p className="agenda-path__note">{slide.subtitle}</p>
           </div>
           <div className="module-list">
-            {moduleNames.slice(1, 6).map((name, index) => <div className="module-list__item" key={name}><span className="module-list__number">{formatNumber(index)}</span><b>{name}</b><span>Module</span></div>)}
+            {moduleNames.slice(1, 7).map((name, index) => <div className="module-list__item" key={name}><span className="module-list__number">{formatNumber(index)}</span><b>{name}</b><span>Module</span></div>)}
           </div>
         </div>
       );
@@ -438,6 +521,12 @@ function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; sho
       );
     case "merchant":
       return <div className="service-promise"><div className="service-promise__lead">Un compte distinct pour encaisser son activité.</div><p className="service-promise__text">Le client individuel Premium avec activité lucrative peut recevoir le paiement de ses produits dans un autre compte M-Pesa dissocié de son compte individuel.</p><div className="service-promise__flag">Préalable : le service Petit Commerce doit être activé avant la réception des paiements.</div></div>;
+    case "merchantPaymentIntro":
+      return <div className="merchant-flow"><div className="merchant-flow__statement">Client <span>→</span> M-Pesa <span>→</span> Marchand <span>→</span> Produit ou service</div><div className="merchant-flow__cards"><div><b>Pour le client</b><p>Un paiement pratique depuis son téléphone, en complément du cash.</p></div><div><b>Pour le marchand</b><p>Un encaissement digital et une option de paiement supplémentaire.</p></div></div></div>;
+    case "merchantPaymentRoute":
+      return <Route slide={slide} />;
+    case "merchantPaymentBA":
+      return <div className="two-column-copy"><section className="copy-panel"><h3>Le message simple</h3><p>« Vos clients peuvent régler leurs achats avec M-Pesa, de manière pratique, sans devoir payer en espèces. »</p><BulletStack items={["Identifiez les commerces qui reçoivent des paiements clients.", "Expliquez le principe et les avantages avec des mots simples.", "Orientez vers la procédure officielle d’enregistrement."]} /></section><section className="copy-panel"><h3>Les limites de posture</h3><BulletStack items={["Ne promettez jamais un crédit, une commission ou un avantage non confirmé.", "Ne demandez pas le PIN du client et ne validez pas à sa place.", "En cas de doute, vérifiez l’information auprès du superviseur ou du support officiel."]} /></section></div>;
     case "route":
       return <Route slide={slide} />;
     case "rules":
@@ -482,9 +571,40 @@ export default function Home() {
   const [showDeck, setShowDeck] = useState(() => new URLSearchParams(window.location.search).get("selector") === "1");
   const [showHelp, setShowHelp] = useState(false);
   const [showAnswers, setShowAnswers] = useState(false);
+  const [trainingToken, setTrainingToken] = useState<string | null>(() => getTrainingToken());
+  const [trainingUser, setTrainingUser] = useState<TrainingUser | null>(null);
+  const [trainingOverview, setTrainingOverview] = useState<TrainingOverview | null>(null);
+  const [trainingReady, setTrainingReady] = useState(() => !getTrainingToken());
+  const [showAssessment, setShowAssessment] = useState(false);
 
   const activeSession = sessions.find((session) => session.id === sessionId) ?? sessions[0];
   const currentPosition = Math.max(0, activeSession.slideIndexes.indexOf(current));
+  const activeAssessment = activeSession.moduleCode ? assessmentQuestions[activeSession.moduleCode] : undefined;
+  const activeProgress = trainingOverview?.progress.find((item) => item.module_code === activeSession.moduleCode);
+  const activeAttempt = trainingOverview?.attempts.find((item) => item.module_code === activeSession.moduleCode);
+
+  useEffect(() => {
+    if (!trainingToken) {
+      setTrainingReady(true);
+      return;
+    }
+    let active = true;
+    setTrainingReady(false);
+    getTrainingOverview(trainingToken).then((overview) => {
+      if (!active) return;
+      setTrainingOverview(overview);
+      setTrainingUser(overview.user);
+    }).catch(() => {
+      if (!active) return;
+      clearTrainingToken();
+      setTrainingToken(null);
+      setTrainingUser(null);
+      setTrainingOverview(null);
+    }).finally(() => {
+      if (active) setTrainingReady(true);
+    });
+    return () => { active = false; };
+  }, [trainingToken]);
 
   const goTo = useCallback((index: number) => {
     const nextIndex = Math.max(0, Math.min(slides.length - 1, index));
@@ -506,6 +626,7 @@ export default function Home() {
     setDirection("forward");
     setCurrent(nextSession.slideIndexes[0]);
     setShowAnswers(false);
+    setShowAssessment(false);
     setShowDeck(false);
   }, []);
 
@@ -520,6 +641,17 @@ export default function Home() {
     search.set("slide", String(current + 1));
     window.history.replaceState(null, "", `${window.location.pathname}?${search.toString()}`);
   }, [current, sessionId]);
+
+  useEffect(() => {
+    if (!trainingToken || !activeSession.moduleCode) return;
+    const status = currentPosition === activeSession.slideIndexes.length - 1 ? "completed" : "in_progress";
+    void saveModuleProgress(trainingToken, {
+      moduleCode: activeSession.moduleCode,
+      currentSlide: currentPosition + 1,
+      totalSlides: activeSession.slideIndexes.length,
+      status,
+    }).catch(() => undefined);
+  }, [activeSession.moduleCode, activeSession.slideIndexes.length, currentPosition, trainingToken]);
 
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
@@ -548,6 +680,30 @@ export default function Home() {
   const theme = getSlideTheme(slide);
   const moduleIndex = Math.max(0, moduleNames.indexOf(slide.module));
 
+  const handleLogin = (token: string, user: TrainingUser) => {
+    setTrainingUser(user);
+    setTrainingToken(token);
+    setTrainingReady(false);
+  };
+
+  const handleAssessment = async (answers: Record<string, number>, score: number, correctAnswers: number) => {
+    if (!trainingToken || !activeSession.moduleCode || !activeAssessment) return;
+    await saveAssessment(trainingToken, { moduleCode: activeSession.moduleCode, score, correctAnswers, totalQuestions: activeAssessment.length, answers });
+    setTrainingOverview(await getTrainingOverview(trainingToken));
+  };
+
+  const logoutTraining = () => {
+    clearTrainingToken();
+    setTrainingToken(null);
+    setTrainingUser(null);
+    setTrainingOverview(null);
+    setShowDeck(false);
+    setShowAssessment(false);
+  };
+
+  if (!trainingReady) return <main className="training-loading"><span>Connexion au parcours…</span></main>;
+  if (!trainingUser) return <TrainingLogin onSuccess={handleLogin} />;
+
   return (
     <main className="mpesa-deck" aria-label="Présentation de formation M-Pesa BTL">
       <div className="presentation-shell">
@@ -575,13 +731,16 @@ export default function Home() {
         <button type="button" className="control-button" onClick={() => goRelative(1)} disabled={currentPosition === activeSession.slideIndexes.length - 1} aria-label="Slide suivante"><ChevronRight size={19} /></button>
         <span className="control-divider" />
         <button type="button" className="control-button" onClick={() => setShowDeck((value) => !value)} aria-label="Choisir une séance"><Grid2X2 size={18} /></button>
+        {activeAssessment && <button type="button" className="control-button" onClick={() => setShowAssessment(true)} aria-label="Lancer l’évaluation du module"><ClipboardCheck size={18} /></button>}
         <button type="button" className="control-button" onClick={toggleFullscreen} aria-label="Basculer en plein écran"><Expand size={17} /></button>
         <button type="button" className="control-button" onClick={() => setShowHelp((value) => !value)} aria-label="Afficher les raccourcis clavier"><CircleHelp size={18} /></button>
+        <button type="button" className="control-button" onClick={logoutTraining} aria-label="Se déconnecter de la formation"><LogOut size={17} /></button>
       </nav>
 
-      {showDeck && <aside className="deck-panel" aria-label="Sélecteur de séances"><div className="panel-heading"><div><span className="micro-label">Format de diffusion</span><h2>Choisir une séance</h2></div><button type="button" aria-label="Fermer le sélecteur de séances" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="session-grid">{sessions.map((session) => <button key={session.id} type="button" onClick={() => startSession(session.id)} className={`session-card ${session.id === activeSession.id ? "session-card--active" : ""}`}><span className="session-card__duration">{session.duration}</span><b>{session.label}</b><small>{session.description}</small><span className="session-card__count">{session.slideIndexes.length} slides</span></button>)}</div><div className="deck-panel__section"><span className="micro-label">Séance active · {activeSession.labelShort}</span><div className="deck-panel__list">{activeSession.slideIndexes.map((slideIndex, index) => { const item = slides[slideIndex]; return <button key={`${item.title}-${slideIndex}`} type="button" onClick={() => { goTo(slideIndex); setShowDeck(false); }} className={`deck-panel__item ${current === slideIndex ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>; })}</div></div></aside>}
+      {showDeck && <aside className="deck-panel" aria-label="Sélecteur de séances"><div className="panel-heading"><div><span className="micro-label">{trainingUser.fullName || trainingUser.phone}</span><h2>Choisir une séance</h2></div><button type="button" aria-label="Fermer le sélecteur de séances" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="session-grid">{sessions.map((session) => { const progress = trainingOverview?.progress.find((item) => item.module_code === session.moduleCode); const attempt = trainingOverview?.attempts.find((item) => item.module_code === session.moduleCode); return <button key={session.id} type="button" onClick={() => startSession(session.id)} className={`session-card ${session.id === activeSession.id ? "session-card--active" : ""}`}><span className="session-card__duration">{session.duration}</span><b>{session.label}</b><small>{session.description}</small><span className="session-card__count">{session.moduleCode ? `${progress?.status === "completed" ? "Parcours terminé" : `${progress?.current_slide || 0}/${session.slideIndexes.length} slides`} · ${attempt ? `${attempt.score}%` : "test à faire"}` : `${session.slideIndexes.length} slides`}</span></button>; })}</div><div className="deck-panel__section"><span className="micro-label">Séance active · {activeSession.labelShort}{activeProgress ? ` · ${activeProgress.status === "completed" ? "terminée" : "en cours"}` : ""}{activeAttempt ? ` · dernier test ${activeAttempt.score}%` : ""}</span><div className="deck-panel__list">{activeSession.slideIndexes.map((slideIndex, index) => { const item = slides[slideIndex]; return <button key={`${item.title}-${slideIndex}`} type="button" onClick={() => { goTo(slideIndex); setShowDeck(false); }} className={`deck-panel__item ${current === slideIndex ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>; })}</div>{activeAssessment && <button type="button" className="deck-panel__assessment" onClick={() => { setShowDeck(false); setShowAssessment(true); }}>Lancer le test du module</button>}</div></aside>}
 
       {showHelp && <aside className="help-panel" role="dialog" aria-modal="true" aria-label="Raccourcis clavier"><span className="micro-label">Mode présentateur</span><h2>Pilotez au clavier.</h2><div className="help-grid"><div><kbd>→ / espace</kbd>Slide suivante</div><div><kbd>← / retour</kbd>Slide précédente</div><div><kbd>Home / End</kbd>Début / fin de séance</div><div><kbd>G ou M</kbd>Choisir une séance</div><div><kbd>F</kbd>Plein écran</div><div><kbd>A</kbd>Réponses du quiz</div><div><kbd>?</kbd>Cette aide</div><div><kbd>Échap</kbd>Fermer un panneau</div></div><button type="button" className="help-close" onClick={() => setShowHelp(false)}>Reprendre la présentation</button></aside>}
+      {showAssessment && activeAssessment && <AssessmentPanel sessionLabel={activeSession.label} questions={activeAssessment} onClose={() => setShowAssessment(false)} onSubmit={handleAssessment} />}
     </main>
   );
 }
