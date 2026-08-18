@@ -29,3 +29,6 @@
 - [ ] Préparer la configuration GitHub Pages compatible avec l’application de formation.
 - [ ] Ajouter le workflow de déploiement GitHub Pages et synchroniser le dépôt.
 - [ ] Activer GitHub Pages puis vérifier le lien public déployé.
+- [ ] Ajouter le favicon et le manifeste PWA avec les icônes d’installation.
+- [ ] Corriger la déclaration pnpm du workflow GitHub Pages.
+- [ ] Vérifier la publication GitHub Pages et le manifeste PWA sur le lien public.
