@@ -21,8 +21,11 @@
 - [x] Sauvegarder la version enrichie.
 - [x] Revalider que les rôles admin, sous-admin et superadmin voient tous les utilisateurs dans le tableau global.
 - [x] Vérifier visuellement les panneaux superviseur, certificat et export en desktop et mobile.
-- [ ] Créer le dépôt GitHub : bloqué, le jeton GitHub actuel n’a pas le droit `CreateRepository`.
+- [x] Créer le dépôt GitHub et envoyer la branche principale vers `eldoradodesign1/formation-mpesa-btl`.
 - [x] Corriger l’exception du raccourci clavier `A` lorsque la touche ne fournit pas de caractère exploitable.
 - [x] Vérifier l’ensemble des raccourcis clavier après correction, sans exception runtime.
 - [x] Afficher le nom de l’agent connecté dans l’indicateur de session, sans repli vers son numéro.
 - [x] Corriger le mapping de session pour afficher le champ `full_name` du profil connecté dans l’indicateur.
+- [ ] Préparer la configuration GitHub Pages compatible avec l’application de formation.
+- [ ] Ajouter le workflow de déploiement GitHub Pages et synchroniser le dépôt.
+- [ ] Activer GitHub Pages puis vérifier le lien public déployé.

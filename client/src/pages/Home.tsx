@@ -20,7 +20,7 @@ import { clearTrainingToken, createCertificate, getSupervisorDashboard, getTrain
 import { canAccessSupervision, isCertificateEligible } from "@shared/trainingCompletion";
 import { getPresentationKeyAction } from "@shared/presentationKeyboard";
 
-const brandMark = "/manus-storage/mpesa-btl-mark_cba7e3e0.png";
+const brandMark = "/formation-mpesa-btl/images/mark.png";
 
 type Slide = {
   module: string;
