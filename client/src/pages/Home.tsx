@@ -8,7 +8,6 @@ import {
   CircleHelp,
   Expand,
   Grid2X2,
-  List,
   X,
 } from "lucide-react";
 
@@ -317,6 +316,35 @@ const slides: Slide[] = [
 
 const moduleNames = ["Ouverture", "Clients M-Pesa", "Petit Commerce", "M-Pesa Carte Visa", "M-Pesa Mikili", "M-Pesa Rallonge", "Conclusion"];
 
+type Session = {
+  id: string;
+  label: string;
+  labelShort: string;
+  description: string;
+  duration: string;
+  slideIndexes: number[];
+};
+
+const sessions: Session[] = [
+  { id: "complete", label: "Formation complète", labelShort: "Complète", description: "L’intégralité des produits, le quiz et la conclusion.", duration: "2 h 00", slideIndexes: slides.map((_, index) => index) },
+  { id: "clients", label: "Module 1 · Clients M-Pesa", labelShort: "Clients", description: "Profils Lite et Premium, éligibilité et pièces acceptées.", duration: "15 min", slideIndexes: [3, 4, 5] },
+  { id: "commerce", label: "Module 2 · Petit Commerce", labelShort: "Petit Commerce", description: "Compte marchand, activation, paiement et règles d’usage.", duration: "20 min", slideIndexes: [6, 7, 8, 9] },
+  { id: "visa", label: "Module 3 · M-Pesa Carte Visa", labelShort: "Carte Visa", description: "Carte virtuelle, création, options de gestion, sécurité et frais.", duration: "20 min", slideIndexes: [10, 11, 12, 13] },
+  { id: "mikili", label: "Module 4 · M-Pesa Mikili", labelShort: "Mikili", description: "Réception depuis l’étranger, limites, notification et envoi régional.", duration: "30 min", slideIndexes: [14, 15, 16, 17, 18, 19] },
+  { id: "rallonge", label: "Module 5 · M-Pesa Rallonge", labelShort: "Rallonge", description: "Découvert ponctuel, éligibilité, usage, remboursement et pénalités.", duration: "25 min", slideIndexes: [20, 21, 22, 23] },
+];
+
+function getInitialSessionId() {
+  const requested = new URLSearchParams(window.location.search).get("session");
+  return sessions.some((session) => session.id === requested) ? requested! : "complete";
+}
+
+function getInitialSlide(sessionId: string) {
+  const session = sessions.find((item) => item.id === sessionId) ?? sessions[0];
+  const requested = Number.parseInt(new URLSearchParams(window.location.search).get("slide") ?? "1", 10) - 1;
+  return session.slideIndexes.includes(requested) ? requested : session.slideIndexes[0];
+}
+
 function formatNumber(index: number) {
   return String(index + 1).padStart(2, "0");
 }
@@ -329,6 +357,10 @@ function getSlideTheme(slide: Slide) {
   if (slide.theme === "security") return "image-split image-split--security";
   if (slide.theme === "cover") return "cover-slide";
   return "";
+}
+
+function BrandMark({ variant = "default" }: { variant?: "default" | "hero" | "close" }) {
+  return <span className={`brand-monogram brand-monogram--${variant}`} aria-hidden="true"><i /><i /><i /></span>;
 }
 
 function Route({ slide }: { slide: Slide }) {
@@ -359,7 +391,7 @@ function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; sho
     case "cover":
       return (
         <div>
-          <div className="brand-signature brand-signature--hero"><img src={brandMark} alt="" /><span><b>M-PESA</b><small>BTL Learning</small></span></div>
+          <div className="brand-signature brand-signature--hero"><BrandMark variant="hero" /><span><b>M-PESA</b><small>BTL Learning</small></span></div>
           <div className="cover-kicker">Formation BTL</div>
           <h1 className="slide__title">{slide.title.split("\n").map((line) => <span key={line} className="block">{line}</span>)}</h1>
           <p className="slide__subtitle">{slide.subtitle}</p>
@@ -417,7 +449,7 @@ function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; sho
     case "visaSecurity":
       return <div className="two-column-copy"><section className="copy-panel"><h3>À expliquer au client</h3><BulletStack items={["Le CVV (ou CVC) est un code de sécurité qui aide à réduire la fraude.", "Le numéro de carte comporte généralement 16 chiffres.", "À la création : numéro de carte, CVV et validité sont communiqués.", "La carte est valable 6 mois à partir de sa création."]} /></section><section className="copy-panel"><h3>Frais des services</h3><div className="table-wrap"><table className="rate-table"><thead><tr><th>Service</th><th>Frais USD</th></tr></thead><tbody>{[["Créer la carte Visa", "1"], ["Changer le CVV", "0,50"], ["Voir les détails", "1"], ["Bloquer la carte", "1"], ["Débloquer la carte", "2"], ["Annuler la carte", "3"]].map(([service, price]) => <tr key={service}><td>{service}</td><td>{price}</td></tr>)}</tbody></table></div></section></div>;
     case "mikiliIntro":
-      return <div className="global-flow"><div><p className="global-flow__big">L’argent envoyé de l’étranger arrive <em>directement</em> sur le compte M-Pesa.</p><p className="global-flow__desc">Une réponse aux besoins d’une clientèle qui souhaite recevoir simplement des fonds envoyés par ses proches depuis l’étranger.</p></div><div className="flow-points"><div className="flow-point"><span className="flow-point__index">01</span><div><b>Un proche initie le transfert</b><span>Depuis le partenaire disponible dans son pays.</span></div></div><div className="flow-point"><span className="flow-point__index">02</span><div><b>MFS vérifie le parcours</b><span>Le KYC du bénéficiaire et les contrôles nécessaires sont pris en compte.</span></div></div><div className="flow-point"><span className="flow-point__index">03</span><div><b>Le bénéficiaire est notifié</b><span>Les fonds sont crédités sur le compte M-Pesa si le contrôle est concluant.</span></div></div></div></div>;
+      return <div className="global-flow"><div><p className="global-flow__big">Une réception <em>directe</em>, vérifiée et notifiée.</p><p className="global-flow__desc">Le transfert de fonds depuis l’étranger s’appuie sur le partenaire disponible dans le pays de l’expéditeur et arrive sur le compte M-Pesa du bénéficiaire si le contrôle est concluant.</p></div><div className="flow-points"><div className="flow-point"><span className="flow-point__index">01</span><div><b>Un proche initie le transfert</b><span>Depuis le partenaire disponible dans son pays.</span></div></div><div className="flow-point"><span className="flow-point__index">02</span><div><b>MFS vérifie le parcours</b><span>Le KYC du bénéficiaire et les contrôles nécessaires sont pris en compte.</span></div></div><div className="flow-point"><span className="flow-point__index">03</span><div><b>Le bénéficiaire est notifié</b><span>Les fonds sont crédités sur le compte M-Pesa si le contrôle est concluant.</span></div></div></div></div>;
     case "eligibility":
       return <div className="two-column-copy"><section className="copy-panel"><h3>Client éligible</h3><BulletStack items={["Détenir un compte M-Pesa Premium correctement enregistré.", "Ne pas figurer sur les listes de sanctions internationales liées notamment à la fraude ou au blanchiment d’argent."]} /></section><section className="copy-panel"><h3>Rôle du partenaire</h3><BulletStack items={["MFS s’intègre à des plateformes et applications financières partenaires.", "L’expéditeur utilise le lien ou l’application disponible dans son pays.", "La plateforme recueille le montant et le numéro du bénéficiaire M-Pesa avant validation."]} /></section></div>;
     case "sender":
@@ -439,19 +471,20 @@ function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; sho
     case "quiz":
       return <div className="quiz-layout"><div className="quiz-intro">Testons les réflexes.<span>Le formateur peut recueillir les réponses, puis révéler le corrigé lorsque le groupe est prêt.</span><button type="button" className="quiz-button" onClick={toggleAnswers}>{showAnswers ? "Masquer les réponses" : "Révéler les réponses"}</button></div><div className="quiz-questions">{[["Quel type de compte doit avoir le client pour recevoir un transfert M-Pesa Mikili ?", "Un compte M-Pesa Premium correctement enregistré."], ["Quel menu faut-il choisir dans *1122# pour activer Petit Commerce ?", "L’option 5. Petit Commerce, puis Créer mon compte."], ["Quand la Rallonge intervient-elle ?", "Lorsque le client exécute une transaction ciblée et que son solde est nul ou insuffisant."]].map(([question, answer]) => <div className="quiz-question" key={question}><b>{question}</b>{showAnswers && <div className="quiz-answer">Réponse : {answer}</div>}</div>)}</div></div>;
     case "close":
-      return <div className="close-layout"><div className="brand-signature brand-signature--close"><img src={brandMark} alt="" /><span><b>M-PESA</b><small>BTL Learning</small></span></div><p className="close-layout__statement" dangerouslySetInnerHTML={{ __html: slide.title }} /><p className="close-layout__small">{slide.subtitle}</p></div>;
+      return <div className="close-layout"><div className="brand-signature brand-signature--close"><BrandMark variant="close" /><span><b>M-PESA</b><small>BTL Learning</small></span></div><p className="close-layout__statement" dangerouslySetInnerHTML={{ __html: slide.title }} /><p className="close-layout__small">{slide.subtitle}</p></div>;
   }
 }
 
 export default function Home() {
-  const [current, setCurrent] = useState(() => {
-    const requested = Number.parseInt(new URLSearchParams(window.location.search).get("slide") ?? "1", 10);
-    return Number.isFinite(requested) ? Math.max(0, Math.min(slides.length - 1, requested - 1)) : 0;
-  });
+  const [sessionId, setSessionId] = useState(getInitialSessionId);
+  const [current, setCurrent] = useState(() => getInitialSlide(getInitialSessionId()));
   const [direction, setDirection] = useState<"forward" | "backward">("forward");
-  const [showDeck, setShowDeck] = useState(false);
+  const [showDeck, setShowDeck] = useState(() => new URLSearchParams(window.location.search).get("selector") === "1");
   const [showHelp, setShowHelp] = useState(false);
   const [showAnswers, setShowAnswers] = useState(false);
+
+  const activeSession = sessions.find((session) => session.id === sessionId) ?? sessions[0];
+  const currentPosition = Math.max(0, activeSession.slideIndexes.indexOf(current));
 
   const goTo = useCallback((index: number) => {
     const nextIndex = Math.max(0, Math.min(slides.length - 1, index));
@@ -460,25 +493,48 @@ export default function Home() {
     setShowAnswers(false);
   }, [current]);
 
+  const goRelative = useCallback((offset: number) => {
+    const session = sessions.find((item) => item.id === sessionId) ?? sessions[0];
+    const position = Math.max(0, session.slideIndexes.indexOf(current));
+    const nextPosition = Math.max(0, Math.min(session.slideIndexes.length - 1, position + offset));
+    goTo(session.slideIndexes[nextPosition]);
+  }, [current, goTo, sessionId]);
+
+  const startSession = useCallback((nextSessionId: string) => {
+    const nextSession = sessions.find((session) => session.id === nextSessionId) ?? sessions[0];
+    setSessionId(nextSession.id);
+    setDirection("forward");
+    setCurrent(nextSession.slideIndexes[0]);
+    setShowAnswers(false);
+    setShowDeck(false);
+  }, []);
+
   const toggleFullscreen = useCallback(async () => {
     if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
     else await document.exitFullscreen?.();
   }, []);
 
   useEffect(() => {
+    const search = new URLSearchParams(window.location.search);
+    search.set("session", sessionId);
+    search.set("slide", String(current + 1));
+    window.history.replaceState(null, "", `${window.location.pathname}?${search.toString()}`);
+  }, [current, sessionId]);
+
+  useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       if (event.key === "ArrowRight" || event.key === "PageDown" || event.key === " ") {
         event.preventDefault();
-        goTo(current + 1);
+        goRelative(1);
       }
       if (event.key === "ArrowLeft" || event.key === "PageUp" || event.key === "Backspace") {
         event.preventDefault();
-        goTo(current - 1);
+        goRelative(-1);
       }
-      if (event.key === "Home") { event.preventDefault(); goTo(0); }
-      if (event.key === "End") { event.preventDefault(); goTo(slides.length - 1); }
-      if (event.key.toLowerCase() === "g") setShowDeck((value) => !value);
+      if (event.key === "Home") { event.preventDefault(); goTo(activeSession.slideIndexes[0]); }
+      if (event.key === "End") { event.preventDefault(); goTo(activeSession.slideIndexes[activeSession.slideIndexes.length - 1]); }
+      if (event.key.toLowerCase() === "g" || event.key.toLowerCase() === "m") setShowDeck((value) => !value);
       if (event.key === "?" || (event.key === "/" && event.shiftKey)) setShowHelp((value) => !value);
       if (event.key.toLowerCase() === "f") toggleFullscreen();
       if (event.key.toLowerCase() === "a" && slides[current].kind === "quiz") setShowAnswers((value) => !value);
@@ -486,7 +542,7 @@ export default function Home() {
     };
     window.addEventListener("keydown", handleKeydown);
     return () => window.removeEventListener("keydown", handleKeydown);
-  }, [current, goTo, toggleFullscreen]);
+  }, [activeSession.slideIndexes, current, goRelative, goTo, toggleFullscreen]);
 
   const slide = slides[current];
   const theme = getSlideTheme(slide);
@@ -497,35 +553,35 @@ export default function Home() {
       <div className="presentation-shell">
         <div className="presentation-frame">
           <aside className="rail" aria-label="Repères de la présentation">
-            <div className="rail__brand"><img src={brandMark} alt="Marque graphique BTL" /></div>
+            <div className="rail__brand" aria-label="Monogramme BTL à trois chevrons"><BrandMark /></div>
             <div className="rail__label">M-Pesa / BTL Learning</div>
             <div className="rail__rule" />
-            <div className="rail__position">{formatNumber(moduleIndex + 1)}</div>
+            <div className="rail__position">{activeSession.id === "complete" ? formatNumber(moduleIndex + 1) : `${formatNumber(currentPosition)} / ${formatNumber(activeSession.slideIndexes.length - 1)}`}</div>
           </aside>
           <section className="slide-stage" aria-live="polite">
             <article key={current} className={`slide ${theme} ${slide.compact ? "compact" : ""} ${direction === "forward" ? "slide--forward" : "slide--backward"}`}>
               {slide.kind !== "cover" && slide.kind !== "close" && <div className="slide__topline"><span className="eyebrow">{slide.kicker}</span><span className="micro-label">{slide.module}</span></div>}
-              {slide.kind !== "cover" && slide.kind !== "close" && <h1 className="slide__title">{slide.title}</h1>}
-              {slide.kind !== "cover" && slide.kind !== "close" && slide.subtitle && <p className="slide__subtitle">{slide.subtitle}</p>}
+              {slide.kind !== "cover" && slide.kind !== "close" && slide.kind !== "mikiliIntro" && <h1 className="slide__title">{slide.title}</h1>}
+              {slide.kind !== "cover" && slide.kind !== "close" && slide.kind !== "mikiliIntro" && slide.subtitle && <p className="slide__subtitle">{slide.subtitle}</p>}
               <div className="slide__body"><SlideContent slide={slide} showAnswers={showAnswers} toggleAnswers={() => setShowAnswers((value) => !value)} /></div>
-              <footer className="slide__footer"><span>Formation Produits & Services M-Pesa · Usage interne</span><span>{formatNumber(current)} / {formatNumber(slides.length - 1)}</span></footer>
+              <footer className="slide__footer"><span>{activeSession.id === "complete" ? "Formation Produits & Services M-Pesa · Usage interne" : `${activeSession.label} · Séance autonome`}</span><span>{formatNumber(currentPosition)} / {formatNumber(activeSession.slideIndexes.length - 1)}</span></footer>
             </article>
           </section>
         </div>
       </div>
 
       <nav className="control-strip" aria-label="Contrôles de la présentation">
-        <button type="button" className="control-button" onClick={() => goTo(current - 1)} disabled={current === 0} aria-label="Slide précédente"><ChevronLeft size={19} /></button>
-        <button type="button" className="control-button" onClick={() => goTo(current + 1)} disabled={current === slides.length - 1} aria-label="Slide suivante"><ChevronRight size={19} /></button>
+        <button type="button" className="control-button" onClick={() => goRelative(-1)} disabled={currentPosition === 0} aria-label="Slide précédente"><ChevronLeft size={19} /></button>
+        <button type="button" className="control-button" onClick={() => goRelative(1)} disabled={currentPosition === activeSession.slideIndexes.length - 1} aria-label="Slide suivante"><ChevronRight size={19} /></button>
         <span className="control-divider" />
-        <button type="button" className="control-button" onClick={() => setShowDeck((value) => !value)} aria-label="Afficher le sommaire"><List size={18} /></button>
+        <button type="button" className="control-button" onClick={() => setShowDeck((value) => !value)} aria-label="Choisir une séance"><Grid2X2 size={18} /></button>
         <button type="button" className="control-button" onClick={toggleFullscreen} aria-label="Basculer en plein écran"><Expand size={17} /></button>
         <button type="button" className="control-button" onClick={() => setShowHelp((value) => !value)} aria-label="Afficher les raccourcis clavier"><CircleHelp size={18} /></button>
       </nav>
 
-      {showDeck && <aside className="deck-panel" aria-label="Sommaire des slides"><div className="panel-heading"><div><span className="micro-label">Navigation</span><h2>Parcourir la formation</h2></div><button type="button" aria-label="Fermer le sommaire" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="deck-panel__list">{slides.map((item, index) => <button key={`${item.title}-${index}`} type="button" onClick={() => { goTo(index); setShowDeck(false); }} className={`deck-panel__item ${current === index ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>)}</div></aside>}
+      {showDeck && <aside className="deck-panel" aria-label="Sélecteur de séances"><div className="panel-heading"><div><span className="micro-label">Format de diffusion</span><h2>Choisir une séance</h2></div><button type="button" aria-label="Fermer le sélecteur de séances" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="session-grid">{sessions.map((session) => <button key={session.id} type="button" onClick={() => startSession(session.id)} className={`session-card ${session.id === activeSession.id ? "session-card--active" : ""}`}><span className="session-card__duration">{session.duration}</span><b>{session.label}</b><small>{session.description}</small><span className="session-card__count">{session.slideIndexes.length} slides</span></button>)}</div><div className="deck-panel__section"><span className="micro-label">Séance active · {activeSession.labelShort}</span><div className="deck-panel__list">{activeSession.slideIndexes.map((slideIndex, index) => { const item = slides[slideIndex]; return <button key={`${item.title}-${slideIndex}`} type="button" onClick={() => { goTo(slideIndex); setShowDeck(false); }} className={`deck-panel__item ${current === slideIndex ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>; })}</div></div></aside>}
 
-      {showHelp && <aside className="help-panel" role="dialog" aria-modal="true" aria-label="Raccourcis clavier"><span className="micro-label">Mode présentateur</span><h2>Pilotez au clavier.</h2><div className="help-grid"><div><kbd>→ / espace</kbd>Slide suivante</div><div><kbd>← / retour</kbd>Slide précédente</div><div><kbd>Home / End</kbd>Début / fin</div><div><kbd>G</kbd>Sommaire</div><div><kbd>F</kbd>Plein écran</div><div><kbd>A</kbd>Réponses du quiz</div><div><kbd>?</kbd>Cette aide</div><div><kbd>Échap</kbd>Fermer un panneau</div></div><button type="button" className="help-close" onClick={() => setShowHelp(false)}>Reprendre la présentation</button></aside>}
+      {showHelp && <aside className="help-panel" role="dialog" aria-modal="true" aria-label="Raccourcis clavier"><span className="micro-label">Mode présentateur</span><h2>Pilotez au clavier.</h2><div className="help-grid"><div><kbd>→ / espace</kbd>Slide suivante</div><div><kbd>← / retour</kbd>Slide précédente</div><div><kbd>Home / End</kbd>Début / fin de séance</div><div><kbd>G ou M</kbd>Choisir une séance</div><div><kbd>F</kbd>Plein écran</div><div><kbd>A</kbd>Réponses du quiz</div><div><kbd>?</kbd>Cette aide</div><div><kbd>Échap</kbd>Fermer un panneau</div></div><button type="button" className="help-close" onClick={() => setShowHelp(false)}>Reprendre la présentation</button></aside>}
     </main>
   );
 }

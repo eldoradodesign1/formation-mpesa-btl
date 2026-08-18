@@ -4,6 +4,19 @@
 
 Le support devient un parcours de conversation pour l’animateur BTL. Chaque service est présenté selon une même logique : **ce que c’est**, **pour qui**, **comment l’activer ou l’utiliser**, puis **ce qu’il faut retenir**. Cette organisation simplifie la prise de parole et permet au public de mémoriser les règles d’éligibilité avant les parcours USSD.
 
+## Modes de diffusion
+
+La présentation proposera un **parcours complet** reprenant les 27 slides dans leur continuité, ainsi que cinq **séances modulaires**. Dans un mode modulaire, les contrôles précédent/suivant restent limités au module sélectionné, ce qui permet au formateur de le donner comme une séance autonome puis de revenir au sélecteur de séances.
+
+| Séance | Contenu | Slides | Durée indicative |
+| --- | --- | ---: | ---: |
+| Formation complète | Tous les services, récapitulatif et quiz | 27 | 2 h 00 |
+| Module 1 | Clients M-Pesa | 4–6 | 15 min |
+| Module 2 | Petit Commerce | 7–10 | 20 min |
+| Module 3 | M-Pesa Carte Visa | 11–14 | 20 min |
+| Module 4 | M-Pesa Mikili | 15–20 | 30 min |
+| Module 5 | M-Pesa Rallonge | 21–24 | 25 min |
+
 | Module | Slides | Intention pédagogique |
 | --- | ---: | --- |
 | Ouverture | 1–3 | Poser le cadre, les objectifs et le parcours de formation. |

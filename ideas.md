@@ -69,3 +69,5 @@ Un marqueur BTL autonome : **trois chevrons progressifs** disposés en éventail
 - **Règle de trajectoire :** chaque slide procédurale matérialise l’avancement par une trajectoire rouge continue et des checkpoints, plutôt que par une simple grille d’étapes.
 - **Discipline du rouge :** Signal Red est réservé à l’action, la confirmation, les chiffres critiques, les cartes de départ USSD et les marqueurs de progression. Un fond rouge intégral est uniquement admis pour les signaux majeurs d’ouverture ou de clôture.
 - **Règle de signature :** le monogramme BTL à trois chevrons apparaît comme une signature affirmée sur l’ouverture et la clôture, et reste le marqueur de navigation commun sur les slides intérieures.
+- **Monogramme :** les trois chevrons sont distincts, ascendants et systématiquement visibles dans les moments de marque ; ils ne sont jamais remplacés par une flèche générique.
+- **Imagerie opérationnelle :** les cartes, trajectoires, points de contrôle et routes de service structurent les visuels avant tout effet de technologie générique.
