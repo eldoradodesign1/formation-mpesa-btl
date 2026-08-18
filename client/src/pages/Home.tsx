@@ -651,6 +651,10 @@ export default function Home() {
 
   useEffect(() => {
     const search = new URLSearchParams(window.location.search);
+    const hasExplicitPosition = search.has("session") || search.has("slide");
+
+    if (sessionId === "complete" && current === 0 && !hasExplicitPosition) return;
+
     search.set("session", sessionId);
     search.set("slide", String(current + 1));
     window.history.replaceState(null, "", `${window.location.pathname}?${search.toString()}`);
