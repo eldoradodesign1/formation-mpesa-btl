@@ -4,6 +4,7 @@ import { loginTraining, type TrainingUser } from "@/lib/trainingGateway";
 import { calculateAssessmentResult } from "@shared/trainingAssessment";
 
 type Question = { id: string; prompt: string; options: string[]; answer: number };
+const joinQrCode = `${import.meta.env.BASE_URL}images/join-qr.png`;
 
 export function TrainingLogin({ onSuccess }: { onSuccess: (token: string, user: TrainingUser) => void }) {
   const [phone, setPhone] = useState("");
@@ -25,7 +26,7 @@ export function TrainingLogin({ onSuccess }: { onSuccess: (token: string, user: 
     }
   };
 
-  return <main className="training-login" aria-label="Connexion à la formation M-Pesa BTL"><section className="training-login__card"><div className="training-login__mark" aria-hidden="true"><i /><i /><i /></div><span className="micro-label">BTL Learning · Accès formation</span><h1>Entrez dans le parcours.</h1><p>Utilisez les mêmes identifiants que votre espace BTL Deployment Tracker.</p><form onSubmit={submit}><label><span>Numéro de téléphone</span><input value={phone} onChange={(event) => setPhone(event.target.value)} inputMode="tel" autoComplete="tel" placeholder="Ex. 081…" required /></label><label><span>Mot de passe</span><input value={password} onChange={(event) => setPassword(event.target.value)} type="password" autoComplete="current-password" placeholder="Votre mot de passe" required /></label>{error && <p className="training-login__error" role="alert">{error}</p>}<button type="submit" disabled={loading}>{loading ? <><Loader2 size={16} className="spin" /> Connexion…</> : "Accéder à la formation"}</button></form><small>La progression et les tests sont enregistrés automatiquement par module.</small></section></main>;
+  return <main className="training-login" aria-label="Connexion à la formation M-Pesa BTL"><section className="training-login__card"><div className="training-login__mark" aria-hidden="true"><i /><i /><i /></div><span className="micro-label">BTL Learning · Accès formation</span><h1>Entrez dans le parcours.</h1><p>Utilisez les mêmes identifiants que votre espace BTL Deployment Tracker.</p><form onSubmit={submit}><label><span>Numéro de téléphone</span><input value={phone} onChange={(event) => setPhone(event.target.value)} inputMode="tel" autoComplete="tel" placeholder="Ex. 081…" required /></label><label><span>Mot de passe</span><input value={password} onChange={(event) => setPassword(event.target.value)} type="password" autoComplete="current-password" placeholder="Votre mot de passe" required /></label>{error && <p className="training-login__error" role="alert">{error}</p>}<button type="submit" disabled={loading}>{loading ? <><Loader2 size={16} className="spin" /> Connexion…</> : "Accéder à la formation"}</button></form><div className="training-login__join"><img src={joinQrCode} alt="QR code pour rejoindre la formation M-Pesa BTL" /><p><b>Rejoindre la formation</b><span>Scannez ce code avec votre téléphone.</span></p></div><small>La progression et les tests sont enregistrés automatiquement par module.</small></section></main>;
 }
 
 export function AssessmentPanel({ sessionLabel, questions, onClose, onSubmit }: { sessionLabel: string; questions: Question[]; onClose: () => void; onSubmit: (answers: Record<string, number>, score: number, correctAnswers: number) => Promise<void> }) {

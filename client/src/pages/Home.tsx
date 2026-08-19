@@ -21,6 +21,7 @@ import { canAccessSupervision, isCertificateEligible } from "@shared/trainingCom
 import { getPresentationKeyAction } from "@shared/presentationKeyboard";
 
 const brandMark = "/formation-mpesa-btl/images/mark.png";
+const joinQrCode = `${import.meta.env.BASE_URL}images/join-qr.png`;
 
 type Slide = {
   module: string;
@@ -754,6 +755,7 @@ export default function Home() {
             <div className="rail__brand" aria-label="Monogramme BTL à trois chevrons"><BrandMark /></div>
             <div className="rail__label">M-Pesa / BTL Learning</div>
             <div className="rail__rule" />
+            <div className="rail__join"><img src={joinQrCode} alt="QR code pour rejoindre la formation" /><span>Rejoindre</span></div>
             <div className="rail__position">{activeSession.id === "complete" ? formatNumber(moduleIndex + 1) : `${formatNumber(currentPosition)} / ${formatNumber(activeSession.slideIndexes.length - 1)}`}</div>
           </aside>
           <section className="slide-stage" aria-live="polite">
