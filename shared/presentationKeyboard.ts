@@ -1,5 +1,17 @@
 export type PresentationKeyAction = "next" | "previous" | "start" | "end" | "sessions" | "help" | "fullscreen" | "assessment" | "close" | null;
 
+type EditableTarget = {
+  tagName?: unknown;
+  isContentEditable?: unknown;
+};
+
+export function isEditableKeyboardTarget(target: EditableTarget | null | undefined) {
+  if (!target) return false;
+  if (target.isContentEditable === true) return true;
+  if (typeof target.tagName !== "string") return false;
+  return ["input", "textarea", "select"].includes(target.tagName.toLowerCase());
+}
+
 type KeyboardInput = {
   key?: unknown;
   metaKey?: boolean;

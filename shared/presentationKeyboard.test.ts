@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getPresentationKeyAction } from "./presentationKeyboard";
+import { getPresentationKeyAction, isEditableKeyboardTarget } from "./presentationKeyboard";
 
 describe("getPresentationKeyAction", () => {
   it("couvre tous les raccourcis de la présentation", () => {
@@ -18,5 +18,14 @@ describe("getPresentationKeyAction", () => {
     expect(getPresentationKeyAction({})).toBeNull();
     expect(getPresentationKeyAction({ key: undefined })).toBeNull();
     expect(getPresentationKeyAction({ key: "a", ctrlKey: true })).toBeNull();
+  });
+
+  it("reconnaît les cibles éditables pour préserver la saisie", () => {
+    expect(isEditableKeyboardTarget({ tagName: "INPUT" })).toBe(true);
+    expect(isEditableKeyboardTarget({ tagName: "textarea" })).toBe(true);
+    expect(isEditableKeyboardTarget({ tagName: "select" })).toBe(true);
+    expect(isEditableKeyboardTarget({ isContentEditable: true })).toBe(true);
+    expect(isEditableKeyboardTarget({ tagName: "BUTTON" })).toBe(false);
+    expect(isEditableKeyboardTarget(null)).toBe(false);
   });
 });

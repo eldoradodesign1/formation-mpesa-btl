@@ -18,7 +18,7 @@ import { AssessmentPanel, TrainingLogin } from "@/components/TrainingAccess";
 import { CertificatePanel, SupervisorPanel } from "@/components/LearningTools";
 import { clearTrainingToken, createCertificate, getSupervisorDashboard, getTrainingOverview, getTrainingToken, saveAssessment, saveModuleProgress, type SupervisorDashboard, type TrainingOverview, type TrainingUser } from "@/lib/trainingGateway";
 import { canAccessSupervision, isCertificateEligible } from "@shared/trainingCompletion";
-import { getPresentationKeyAction } from "@shared/presentationKeyboard";
+import { getPresentationKeyAction, isEditableKeyboardTarget } from "@shared/presentationKeyboard";
 
 const brandMark = "/formation-mpesa-btl/images/mark.png";
 const joinQrCode = `${import.meta.env.BASE_URL}images/join-qr.png`;
@@ -674,6 +674,7 @@ export default function Home() {
 
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
+      if (isEditableKeyboardTarget(event.target as { tagName?: unknown; isContentEditable?: unknown } | null)) return;
       const action = getPresentationKeyAction(event);
       if (action === "next") {
         event.preventDefault();
