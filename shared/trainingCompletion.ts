@@ -1,4 +1,4 @@
-export const supervisionRoles = new Set(["supervisor", "admin", "sub_admin", "superadmin"]);
+export const supervisionRoles = new Set(["supervisor", "admin", "sub_admin", "superadmin", "super_admi"]);
 
 export function canAccessSupervision(role: string | null | undefined) {
   return supervisionRoles.has(role || "");
