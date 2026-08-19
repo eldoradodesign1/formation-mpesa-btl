@@ -1,4 +1,5 @@
 const gatewayUrl = "https://upkzlppvwckriuidnyvq.supabase.co/functions/v1/training-gateway";
+const ratingsGatewayUrl = "https://upkzlppvwckriuidnyvq.supabase.co/functions/v1/training-ratings";
 const tokenStorageKey = "mpesa_btl_training_token";
 
 export type TrainingUser = {
@@ -26,6 +27,9 @@ export type SupervisorAgent = {
   validatedModules: number;
   totalModules: number;
   averageScore: number | null;
+  supervisorRating: number | null;
+  supervisorComment: string | null;
+  consolidatedScore: number | null;
   lastActivity: string | null;
 };
 
@@ -33,6 +37,7 @@ export type SupervisorDashboard = {
   scope: "assigned" | "global";
   viewerRole: string;
   moduleCount: number;
+  canRate: boolean;
   agents: SupervisorAgent[];
 };
 
@@ -57,6 +62,13 @@ export function getTrainingToken() {
 
 export function clearTrainingToken() {
   window.localStorage.removeItem(tokenStorageKey);
+}
+
+async function ratingsRequest<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
+  const response = await fetch(`${ratingsGatewayUrl}${path}`, { ...options, headers: { "Content-Type": "application/json", ...(token ? { "x-training-token": token } : {}), ...(options.headers ?? {}) } });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(body.error || "La cotation n’a pas abouti.");
+  return body as T;
 }
 
 export async function loginTraining(phone: string, password: string) {
@@ -88,9 +100,13 @@ export function saveAssessment(token: string, payload: { moduleCode: string; sco
   return request<{ success: true; isPassed: boolean }>("/assessment", { method: "POST", body: JSON.stringify(payload) }, token);
 }
 
-export function getSupervisorDashboard(token: string) {
-  return request<SupervisorDashboard>("/dashboard", {}, token);
+export async function getSupervisorDashboard(token: string) {
+  const [dashboard, ratings] = await Promise.all([request<Omit<SupervisorDashboard, "canRate">>("/dashboard", {}, token), ratingsRequest<{ canRate: boolean; ratings: Array<{ agent_id: string; rating: number; comment: string | null }> }>("/", {}, token)]);
+  const byAgent = new Map(ratings.ratings.map((rating) => [rating.agent_id, rating]));
+  return { ...dashboard, canRate: ratings.canRate, agents: dashboard.agents.map((agent) => { const rating = byAgent.get(agent.id); const supervisorRating = rating?.rating ?? null; const consolidatedScore = agent.averageScore === null ? (supervisorRating === null ? null : supervisorRating * 20) : supervisorRating === null ? agent.averageScore : Math.round(agent.averageScore * 0.8 + supervisorRating * 20); return { ...agent, supervisorRating, supervisorComment: rating?.comment ?? null, consolidatedScore }; }) };
 }
+
+export function saveSupervisorRating(token: string, payload: { agentId: string; rating: number; comment: string }) { return ratingsRequest<{ success: true }>("/", { method: "POST", body: JSON.stringify(payload) }, token); }
 
 export function createCertificate(token: string) {
   return request<{ certificate: { certificate_number: string; issued_at: string }; user: TrainingUser }>("/certificate", { method: "POST" }, token);

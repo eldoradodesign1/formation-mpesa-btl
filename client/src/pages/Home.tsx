@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { AssessmentPanel, TrainingLogin } from "@/components/TrainingAccess";
 import { CertificatePanel, SupervisorPanel } from "@/components/LearningTools";
-import { clearTrainingToken, createCertificate, getSupervisorDashboard, getTrainingOverview, getTrainingToken, saveAssessment, saveModuleProgress, type SupervisorDashboard, type TrainingOverview, type TrainingUser } from "@/lib/trainingGateway";
+import { clearTrainingToken, createCertificate, getSupervisorDashboard, getTrainingOverview, getTrainingToken, saveAssessment, saveModuleProgress, saveSupervisorRating, type SupervisorDashboard, type TrainingOverview, type TrainingUser } from "@/lib/trainingGateway";
 import { canAccessSupervision, isCertificateEligible } from "@shared/trainingCompletion";
 import { getPresentationKeyAction, isEditableKeyboardTarget } from "@shared/presentationKeyboard";
 
@@ -726,6 +726,12 @@ export default function Home() {
     }
   };
 
+  const rateAgent = async (agentId: string, rating: number, comment: string) => {
+    if (!trainingToken) return;
+    await saveSupervisorRating(trainingToken, { agentId, rating, comment });
+    setSupervisorDashboard(await getSupervisorDashboard(trainingToken));
+  };
+
   const issueCertificate = async () => {
     if (!trainingToken) throw new Error("Session invalide.");
     const result = await createCertificate(trainingToken);
@@ -789,7 +795,7 @@ export default function Home() {
       {showHelp && <aside className="help-panel" role="dialog" aria-modal="true" aria-label="Raccourcis clavier"><span className="micro-label">Mode présentateur</span><h2>Pilotez au clavier.</h2><div className="help-grid"><div><kbd>→ / espace</kbd>Slide suivante</div><div><kbd>← / retour</kbd>Slide précédente</div><div><kbd>Home / End</kbd>Début / fin de séance</div><div><kbd>G ou M</kbd>Choisir une séance</div><div><kbd>F</kbd>Plein écran</div><div><kbd>A</kbd>Test ou réponses du quiz</div><div><kbd>?</kbd>Cette aide</div><div><kbd>Échap</kbd>Fermer un panneau</div></div><button type="button" className="help-close" onClick={() => setShowHelp(false)}>Reprendre la présentation</button></aside>}
       {showAssessment && activeAssessment && <AssessmentPanel sessionLabel={activeSession.label} questions={activeAssessment} onClose={() => setShowAssessment(false)} onSubmit={handleAssessment} />}
       {showCertificate && <CertificatePanel user={trainingUser} certificate={trainingOverview?.certificate || null} eligible={certificateEligible} onClose={() => setShowCertificate(false)} onIssue={issueCertificate} />}
-      {showSupervisor && supervisorDashboard && <SupervisorPanel dashboard={supervisorDashboard} onClose={() => setShowSupervisor(false)} />}
+      {showSupervisor && supervisorDashboard && <SupervisorPanel dashboard={supervisorDashboard} onClose={() => setShowSupervisor(false)} onRate={rateAgent} />}
       {dashboardError && <div className="session-error" role="status">{dashboardError}</div>}
     </main>
   );
