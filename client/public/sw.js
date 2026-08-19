@@ -1,4 +1,4 @@
-const CACHE_NAME = "mpesa-btl-v2";
+const CACHE_NAME = "mpesa-btl-v3";
 const APP_SHELL = ["./", "./index.html", "./manifest.webmanifest", "./images/favicon.png", "./images/icon-192.png", "./images/icon-512.png"];
 
 self.addEventListener("install", (event) => {
