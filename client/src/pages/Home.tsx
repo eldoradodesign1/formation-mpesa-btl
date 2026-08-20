@@ -579,6 +579,7 @@ export default function Home() {
   const [showAnswers, setShowAnswers] = useState(false);
   const [trainingToken, setTrainingToken] = useState<string | null>(() => getTrainingToken());
   const [trainingUser, setTrainingUser] = useState<TrainingUser | null>(null);
+  const [isGuest, setIsGuest] = useState(false);
   const [trainingOverview, setTrainingOverview] = useState<TrainingOverview | null>(null);
   const [trainingReady, setTrainingReady] = useState(() => !getTrainingToken());
   const [showAssessment, setShowAssessment] = useState(false);
@@ -662,7 +663,7 @@ export default function Home() {
   }, [current, sessionId]);
 
   useEffect(() => {
-    if (!trainingToken || !activeSession.moduleCode) return;
+    if (!trainingToken || isGuest || !activeSession.moduleCode) return;
     const status = currentPosition === activeSession.slideIndexes.length - 1 ? "completed" : "in_progress";
     void saveModuleProgress(trainingToken, {
       moduleCode: activeSession.moduleCode,
@@ -670,7 +671,7 @@ export default function Home() {
       totalSlides: activeSession.slideIndexes.length,
       status,
     }).catch(() => undefined);
-  }, [activeSession.moduleCode, activeSession.slideIndexes.length, currentPosition, trainingToken]);
+  }, [activeSession.moduleCode, activeSession.slideIndexes.length, currentPosition, isGuest, trainingToken]);
 
   useEffect(() => {
     const handleKeydown = (event: KeyboardEvent) => {
@@ -710,7 +711,7 @@ export default function Home() {
   };
 
   const handleAssessment = async (answers: Record<string, number>, score: number, correctAnswers: number) => {
-    if (!trainingToken || !activeSession.moduleCode || !activeAssessment) return;
+    if (!trainingToken || isGuest || !activeSession.moduleCode || !activeAssessment) return;
     await saveAssessment(trainingToken, { moduleCode: activeSession.moduleCode, score, correctAnswers, totalQuestions: activeAssessment.length, answers });
     setTrainingOverview(await getTrainingOverview(trainingToken));
   };
@@ -751,7 +752,9 @@ export default function Home() {
   };
 
   if (!trainingReady) return <main className="training-loading"><span>Connexion au parcours…</span></main>;
-  if (!trainingUser) return <TrainingLogin onSuccess={handleLogin} />;
+  const handleGuest = () => { setIsGuest(true); setTrainingUser({ id: "guest", fullName: "Invité", role: "guest", phone: "", category: "lecture_seule" }); setTrainingOverview(null); };
+
+  if (!trainingUser) return <TrainingLogin onSuccess={handleLogin} onGuest={handleGuest} />;
 
   return (
     <main className="mpesa-deck" aria-label="Présentation de formation M-Pesa BTL">
@@ -793,7 +796,7 @@ export default function Home() {
       {showDeck && <aside className="deck-panel" aria-label="Sélecteur de séances"><div className="panel-heading"><div><span className="micro-label">{trainingUser.fullName || "Agent connecté"}</span><h2>Choisir une séance</h2></div><button type="button" aria-label="Fermer le sélecteur de séances" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="session-grid">{sessions.map((session) => { const progress = trainingOverview?.progress.find((item) => item.module_code === session.moduleCode); const attempt = trainingOverview?.attempts.find((item) => item.module_code === session.moduleCode); return <button key={session.id} type="button" onClick={() => startSession(session.id)} className={`session-card ${session.id === activeSession.id ? "session-card--active" : ""}`}><span className="session-card__duration">{session.duration}</span><b>{session.label}</b><small>{session.description}</small><span className="session-card__count">{session.moduleCode ? `${progress?.status === "completed" ? "Parcours terminé" : `${progress?.current_slide || 0}/${session.slideIndexes.length} slides`} · ${attempt ? `${attempt.score}%` : "test à faire"}` : `${session.slideIndexes.length} slides`}</span></button>; })}</div><div className="deck-panel__section"><span className="micro-label">Séance active · {activeSession.labelShort}{activeProgress ? ` · ${activeProgress.status === "completed" ? "terminée" : "en cours"}` : ""}{activeAttempt ? ` · dernier test ${activeAttempt.score}%` : ""}</span><div className="deck-panel__list">{activeSession.slideIndexes.map((slideIndex, index) => { const item = slides[slideIndex]; return <button key={`${item.title}-${slideIndex}`} type="button" onClick={() => { goTo(slideIndex); setShowDeck(false); }} className={`deck-panel__item ${current === slideIndex ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>; })}</div>{activeAssessment && <button type="button" className="deck-panel__assessment" onClick={() => { setShowDeck(false); setShowAssessment(true); }}>Lancer le test du module</button>}</div></aside>}
 
       {showHelp && <aside className="help-panel" role="dialog" aria-modal="true" aria-label="Raccourcis clavier"><span className="micro-label">Mode présentateur</span><h2>Pilotez au clavier.</h2><div className="help-grid"><div><kbd>→ / espace</kbd>Slide suivante</div><div><kbd>← / retour</kbd>Slide précédente</div><div><kbd>Home / End</kbd>Début / fin de séance</div><div><kbd>G ou M</kbd>Choisir une séance</div><div><kbd>F</kbd>Plein écran</div><div><kbd>A</kbd>Test ou réponses du quiz</div><div><kbd>?</kbd>Cette aide</div><div><kbd>Échap</kbd>Fermer un panneau</div></div><button type="button" className="help-close" onClick={() => setShowHelp(false)}>Reprendre la présentation</button></aside>}
-      {showAssessment && activeAssessment && <AssessmentPanel sessionLabel={activeSession.label} questions={activeAssessment} onClose={() => setShowAssessment(false)} onSubmit={handleAssessment} />}
+      {showAssessment && activeAssessment && <AssessmentPanel sessionLabel={activeSession.label} questions={activeAssessment} onClose={() => setShowAssessment(false)} onSubmit={handleAssessment} readOnly={isGuest} />}
       {showCertificate && <CertificatePanel user={trainingUser} certificate={trainingOverview?.certificate || null} eligible={certificateEligible} onClose={() => setShowCertificate(false)} onIssue={issueCertificate} />}
       {showSupervisor && supervisorDashboard && <SupervisorPanel dashboard={supervisorDashboard} onClose={() => setShowSupervisor(false)} onRate={rateAgent} />}
       {dashboardError && <div className="session-error" role="status">{dashboardError}</div>}
