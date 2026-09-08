@@ -113,3 +113,4 @@
 - [x] Ajouter le module Vodacom Privilège aux séances, au parcours complet et au suivi de progression.
 - [x] Construire des slides détaillées et une évaluation renforcée propres au service Vodacom Privilège.
 - [ ] Vérifier le nouveau module en desktop et mobile, puis le publier sur GitHub Pages.
+- [ ] Rétablir l’autorisation d’écriture GitHub de `eldoradodesign1` et publier le module Vodacom Privilège sur GitHub Pages.
