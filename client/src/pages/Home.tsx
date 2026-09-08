@@ -364,6 +364,25 @@ const slides: Slide[] = [
   },
   {
     module: "Vodacom Privilège",
+    kicker: "Module 07 · Activation recommandée",
+    title: "Le chemin conseillé : *1111#, puis 4. Privilège.",
+    subtitle: "Dans le menu Profil JS8, guidez le client vers Privilège avant de suivre le sous-menu adapté à l’offre retenue.",
+    theme: "paper",
+    kind: "route",
+    code: "*1111#",
+    aside: "Activation Vodacom Privilège",
+    compact: true,
+    content: [
+      "Composez *1111# depuis la ligne du client, puis envoyez.",
+      "Vérifiez l’affichage du menu Profil JS8.",
+      "Choisissez 4. Privilège.",
+      "Sélectionnez l’option correspondant au forfait conseillé et suivez les instructions affichées.",
+      "Conseil terrain : le menu *1111# → 4 est le parcours recommandé ; ne présentez pas un code direct comme procédure standard.",
+      "Si une condition, une option ou une éligibilité n’est pas claire, vérifiez auprès du canal Vodacom compétent avant de promettre une activation.",
+    ],
+  },
+  {
+    module: "Vodacom Privilège",
     kicker: "Module 07 · Gamme Gold",
     title: "Gold : la valeur d’un forfait flexible, calibré selon le besoin.",
     subtitle: "Présentez les volumes de façon simple et n’annoncez les avantages actifs qu’après vérification des conditions de campagne.",
@@ -477,7 +496,7 @@ const sessions: Session[] = [
   { id: "visa", label: "Module 4 · M-Pesa Carte Visa", labelShort: "Carte Visa", description: "Carte virtuelle, création, options de gestion, sécurité et frais.", duration: "20 min", slideIndexes: [13, 14, 15, 16], moduleCode: "carte-visa" },
   { id: "mikili", label: "Module 5 · M-Pesa Mikili", labelShort: "Mikili", description: "Réception depuis l’étranger, limites, notification et envoi régional.", duration: "30 min", slideIndexes: [17, 18, 19, 20, 21, 22], moduleCode: "mikili" },
   { id: "rallonge", label: "Module 6 · M-Pesa Rallonge", labelShort: "Rallonge", description: "Découvert ponctuel, éligibilité, usage, remboursement et pénalités.", duration: "25 min", slideIndexes: [23, 24, 25, 26], moduleCode: "rallonge" },
-  { id: "vodacom-privilege", label: "Module 7 · Vodacom Privilège", labelShort: "Privilège", description: "Offres Gold et Platinum, découverte du besoin, service client, conformité et mise en situation.", duration: "50 min", slideIndexes: [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37], moduleCode: "vodacom-privilege" },
+  { id: "vodacom-privilege", label: "Module 7 · Vodacom Privilège", labelShort: "Privilège", description: "Offres Gold et Platinum, activation *1111# → 4, service client, conformité et mise en situation.", duration: "55 min", slideIndexes: [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38], moduleCode: "vodacom-privilege" },
 ];
 
 type AssessmentQuestion = { id: string; prompt: string; options: string[]; answer: number };
