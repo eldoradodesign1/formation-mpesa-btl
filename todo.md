@@ -114,5 +114,5 @@
 - [x] Construire des slides détaillées et une évaluation renforcée propres au service Vodacom Privilège.
 - [x] Vérifier le nouveau module en desktop et mobile, puis le publier sur GitHub Pages.
 - [x] Rétablir l’autorisation d’écriture GitHub de `eldoradodesign1` et publier le module Vodacom Privilège sur GitHub Pages.
-- [ ] Ajouter la procédure d’activation recommandée `*1111#` → option `4 — Privilège` au module Vodacom Privilège.
-- [ ] Ajouter une question de contrôle sur le chemin USSD conseillé et vérifier la publication GitHub Pages.
+- [x] Ajouter la procédure d’activation recommandée `*1111#` → option `4 — Privilège` au module Vodacom Privilège.
+- [x] Ajouter une question de contrôle sur le chemin USSD conseillé et vérifier la publication GitHub Pages.
