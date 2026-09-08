@@ -19,8 +19,9 @@ import { CertificatePanel, SupervisorPanel } from "@/components/LearningTools";
 import { clearTrainingToken, createCertificate, getSupervisorDashboard, getTrainingOverview, getTrainingToken, saveAssessment, saveModuleProgress, saveSupervisorRating, type SupervisorDashboard, type TrainingOverview, type TrainingUser } from "@/lib/trainingGateway";
 import { canAccessSupervision, isCertificateEligible } from "@shared/trainingCompletion";
 import { getPresentationKeyAction, isEditableKeyboardTarget } from "@shared/presentationKeyboard";
+import { vodacomPrivilegeAssessmentQuestions } from "@shared/vodacomPrivilegeAssessment";
 
-const brandMark = "/formation-mpesa-btl/images/mark.png";
+const brandMark = "/manus-storage/mark_512f1f81.png";
 const joinQrCode = `${import.meta.env.BASE_URL}images/join-qr.png`;
 
 type Slide = {
@@ -53,6 +54,17 @@ type Slide = {
     | "rallongeEligibility"
     | "rallongeUsage"
     | "rallongeRepayment"
+    | "privilegeIntro"
+    | "privilegeDiscovery"
+    | "privilegeGold"
+    | "privilegePlatinum"
+    | "privilegeValue"
+    | "privilegeJourney"
+    | "privilegeObjections"
+    | "privilegeTrust"
+    | "privilegeCalmer"
+    | "privilegeScenario"
+    | "privilegeScorecard"
     | "takeaway"
     | "quiz"
     | "close";
@@ -81,7 +93,7 @@ const slides: Slide[] = [
   {
     module: "Ouverture",
     kicker: "Le parcours",
-    title: "Cinq services. Une même exigence : la clarté.",
+    title: "Sept expertises. Une même exigence : la clarté.",
     subtitle: "Chaque module suit une logique simple : comprendre le besoin, vérifier l’éligibilité, guider le parcours et retenir les règles.",
     kind: "agenda",
   },
@@ -336,6 +348,91 @@ const slides: Slide[] = [
     kind: "rallongeRepayment",
   },
   {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Service client premium",
+    title: "Vodacom Privilège : un parcours pensé pour des usages exigeants.",
+    subtitle: "« Un parcours d’exception, des forfaits à la hauteur de vos attentes. » La mission terrain consiste à attirer, découvrir, expliquer, accompagner et fidéliser.",
+    kind: "privilegeIntro",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Découverte du besoin",
+    title: "Ne récitez pas l’offre. Découvrez d’abord le profil du client.",
+    subtitle: "La recommandation doit partir de l’usage réel : Internet, appels, transactions M-Pesa, roaming et partage éventuel.",
+    theme: "paper",
+    kind: "privilegeDiscovery",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Gamme Gold",
+    title: "Gold : la valeur d’un forfait flexible, calibré selon le besoin.",
+    subtitle: "Présentez les volumes de façon simple et n’annoncez les avantages actifs qu’après vérification des conditions de campagne.",
+    compact: true,
+    kind: "privilegeGold",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Gamme Platinum",
+    title: "Platinum : davantage d’appels, de services et de possibilités de partage.",
+    subtitle: "La gamme Platinum introduit notamment le partage avec quotas et la carte M-Pesa Visa gratuite selon le niveau d’offre.",
+    theme: "paper",
+    compact: true,
+    kind: "privilegePlatinum",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Avantage → utilité",
+    title: "Le client n’achète pas un chiffre : il choisit une utilité concrète.",
+    subtitle: "Transformez chaque caractéristique en bénéfice compréhensible, sans forcer le choix ni surpromettre.",
+    kind: "privilegeValue",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Parcours en boutique",
+    title: "Une interaction réussie suit huit étapes, du premier contact à l’orientation.",
+    subtitle: "Chaque étape doit rester brève, personnalisée et fondée sur des informations confirmées.",
+    kind: "privilegeJourney",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Objections client",
+    title: "Écouter, clarifier, répondre avec des faits : jamais avec une promesse.",
+    subtitle: "Une objection est une occasion de revenir au besoin réel, au budget et aux conditions de l’offre.",
+    theme: "paper",
+    kind: "privilegeObjections",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Conformité et confidentialité",
+    title: "La confiance se protège avant, pendant et après l’interaction.",
+    subtitle: "Exactitude des informations, confidentialité M-Pesa et respect du périmètre opérationnel sont non négociables.",
+    theme: "security",
+    kind: "privilegeTrust",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Client mécontent",
+    title: "CALMER la situation sans promettre ce que l’on ne maîtrise pas.",
+    subtitle: "La méthode donne un cadre professionnel pour accueillir une réclamation, proposer une suite et escalader si nécessaire.",
+    kind: "privilegeCalmer",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Mise en situation",
+    title: "Faire vivre l’offre au client : accueillir, qualifier, répondre, conclure.",
+    subtitle: "Le jeu de rôle prépare l’hôtesse à une conversation complète autour de Gold 2 500 U.",
+    theme: "red",
+    kind: "privilegeScenario",
+  },
+  {
+    module: "Vodacom Privilège",
+    kicker: "Module 07 · Standard terrain",
+    title: "La qualité de service se mesure aussi dans le comportement.",
+    subtitle: "La grille terrain valorise la maîtrise des offres autant que l’écoute, la conformité et la qualité de la conclusion.",
+    theme: "paper",
+    kind: "privilegeScorecard",
+  },
+  {
     module: "Conclusion",
     kicker: "Les réflexes BTL",
     title: "Cinq réflexes pour un conseil M-Pesa juste et rassurant.",
@@ -360,7 +457,7 @@ const slides: Slide[] = [
   },
 ];
 
-const moduleNames = ["Ouverture", "Clients M-Pesa", "Petit Commerce", "Paiement Marchand", "M-Pesa Carte Visa", "M-Pesa Mikili", "M-Pesa Rallonge", "Conclusion"];
+const moduleNames = ["Ouverture", "Clients M-Pesa", "Petit Commerce", "Paiement Marchand", "M-Pesa Carte Visa", "M-Pesa Mikili", "M-Pesa Rallonge", "Vodacom Privilège", "Conclusion"];
 
 type Session = {
   id: string;
@@ -373,13 +470,14 @@ type Session = {
 };
 
 const sessions: Session[] = [
-  { id: "complete", label: "Formation complète", labelShort: "Complète", description: "L’intégralité des produits, les tests et la conclusion.", duration: "2 h 20", slideIndexes: slides.map((_, index) => index) },
+  { id: "complete", label: "Formation complète", labelShort: "Complète", description: "L’intégralité des produits, les tests, Vodacom Privilège et la conclusion.", duration: "3 h 10", slideIndexes: slides.map((_, index) => index) },
   { id: "clients", label: "Module 1 · Clients M-Pesa", labelShort: "Clients", description: "Profils Lite et Premium, éligibilité et pièces acceptées.", duration: "15 min", slideIndexes: [3, 4, 5], moduleCode: "clients" },
   { id: "commerce", label: "Module 2 · Petit Commerce", labelShort: "Petit Commerce", description: "Compte marchand, activation, paiement et règles d’usage.", duration: "20 min", slideIndexes: [6, 7, 8, 9], moduleCode: "petit-commerce" },
   { id: "paiement-marchand", label: "Module 3 · Paiement Marchand", labelShort: "Paiement Marchand", description: "Paiement client chez le commerçant, validation et message terrain.", duration: "20 min", slideIndexes: [10, 11, 12], moduleCode: "paiement-marchand" },
   { id: "visa", label: "Module 4 · M-Pesa Carte Visa", labelShort: "Carte Visa", description: "Carte virtuelle, création, options de gestion, sécurité et frais.", duration: "20 min", slideIndexes: [13, 14, 15, 16], moduleCode: "carte-visa" },
   { id: "mikili", label: "Module 5 · M-Pesa Mikili", labelShort: "Mikili", description: "Réception depuis l’étranger, limites, notification et envoi régional.", duration: "30 min", slideIndexes: [17, 18, 19, 20, 21, 22], moduleCode: "mikili" },
   { id: "rallonge", label: "Module 6 · M-Pesa Rallonge", labelShort: "Rallonge", description: "Découvert ponctuel, éligibilité, usage, remboursement et pénalités.", duration: "25 min", slideIndexes: [23, 24, 25, 26], moduleCode: "rallonge" },
+  { id: "vodacom-privilege", label: "Module 7 · Vodacom Privilège", labelShort: "Privilège", description: "Offres Gold et Platinum, découverte du besoin, service client, conformité et mise en situation.", duration: "50 min", slideIndexes: [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37], moduleCode: "vodacom-privilege" },
 ];
 
 type AssessmentQuestion = { id: string; prompt: string; options: string[]; answer: number };
@@ -421,6 +519,7 @@ const assessmentQuestions: Record<string, AssessmentQuestion[]> = {
     { id: "rallonge-3", prompt: "Comment le remboursement est-il présenté dans le module ?", options: ["Automatique lors d’un crédit entrant sur le compte CDF", "Uniquement en espèces", "Jamais récupéré", "Par le BA directement"], answer: 0 },
     { id: "rallonge-4", prompt: "Avant l’acceptation, quel sujet doit être compris ?", options: ["Les frais, conditions et pénalités", "La couleur de la SIM", "Le nom de l’agent", "Le code du marchand"], answer: 0 },
   ],
+  "vodacom-privilege": vodacomPrivilegeAssessmentQuestions,
 };
 
 function getInitialSessionId() {
@@ -475,6 +574,10 @@ function BulletStack({ items }: { items: string[] }) {
   return <div className="bullet-stack">{items.map((item) => <div key={item} className="bullet-stack__item">{item}</div>)}</div>;
 }
 
+function PrivilegeOfferTable({ level, label, rows }: { level: "gold" | "platinum"; label: string; rows: Array<[string, string, string, string, string]> }) {
+  return <section className={`privilege-offer-card privilege-offer-card--${level}`}><div className="privilege-offer-card__heading"><span>{label}</span><small>À confirmer selon les conditions de campagne en vigueur</small></div><div className="privilege-offer-card__table"><table><thead><tr><th>Offre</th><th>Internet</th><th>Appels</th><th>SMS</th><th>Repère terrain</th></tr></thead><tbody>{rows.map(([offer, internet, calls, sms, benefit]) => <tr key={offer}><td><b>{offer}</b></td><td>{internet}</td><td>{calls}</td><td>{sms}</td><td>{benefit}</td></tr>)}</tbody></table></div></section>;
+}
+
 function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; showAnswers: boolean; toggleAnswers: () => void }) {
   switch (slide.kind) {
     case "cover":
@@ -495,7 +598,7 @@ function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; sho
             <p className="agenda-path__note">{slide.subtitle}</p>
           </div>
           <div className="module-list">
-            {moduleNames.slice(1, 7).map((name, index) => <div className="module-list__item" key={name}><span className="module-list__number">{formatNumber(index)}</span><b>{name}</b><span>Module</span></div>)}
+            {moduleNames.slice(1, -1).map((name, index) => <div className="module-list__item" key={name}><span className="module-list__number">{formatNumber(index)}</span><b>{name}</b><span>Module</span></div>)}
           </div>
         </div>
       );
@@ -561,6 +664,28 @@ function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; sho
       return <div className="takeaway-layout"><div className="takeaway-list">{["Le service intervient au point d’exécution d’une transaction ciblée.", "Le client reçoit une proposition de découvert selon la limite qui lui est accordée.", "Le client doit accepter les termes et conditions du service.", "Les conditions sont indiquées comme disponibles sur www.vodacom.cd."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>La proposition arrive quand le besoin se présente.</p><span>Rallonge · usage contextuel</span></aside></div>;
     case "rallongeRepayment":
       return <div className="two-column-copy"><section className="copy-panel"><h3>Remboursement automatique</h3><BulletStack items={["10 % de frais sur le montant du prêt, plus 16 % de TVA, sont indiqués dans le manuel.", "1 % de frais d’intérêts journaliers, plus 16 % de TVA, sont également indiqués.", "Le découvert est remboursé automatiquement lorsque le compte CDF est crédité par une transaction entrante.", "Exemples de crédits entrants : P2P, dépôt, paiement en masse, bureau de change ou transfert de journal."]} /></section><section className="copy-panel"><h3>Retard et pénalités</h3><BulletStack items={["Une pénalité de 1 % de frais d’intérêts journaliers est appliquée à partir de la réception du découvert.", "Après trente jours, le processus de pénalités est suspendu et 10 % de frais de traitement sont facturés.", "Une période de grâce de deux jours est accordée pour rembourser.", "Au-delà, le client est écarté du processus et ne bénéficie plus de M-Pesa Rallonge."]} /></section></div>;
+    case "privilegeIntro":
+      return <div className="global-flow"><div><p className="global-flow__big">Un parcours <em>premium</em> commence par une écoute attentive.</p><p className="global-flow__desc">Vodacom Privilège valorise les usages du client à travers Internet, appels, SMS, flexibilité, avantages M-Pesa, roaming et services associés selon l’offre.</p></div><div className="flow-points"><div className="flow-point"><span className="flow-point__index">01</span><div><b>Attirer et accueillir</b><span>Créer un contact positif, professionnel et disponible.</span></div></div><div className="flow-point"><span className="flow-point__index">02</span><div><b>Découvrir et expliquer</b><span>Qualifier l’usage avant de traduire l’offre en utilité.</span></div></div><div className="flow-point"><span className="flow-point__index">03</span><div><b>Accompagner et fidéliser</b><span>Conclure clairement, sécuriser l’information et orienter correctement.</span></div></div></div></div>;
+    case "privilegeDiscovery":
+      return <div className="two-column-copy"><section className="copy-panel"><h3>La méthode des 3 questions</h3><BulletStack items={["« Vous utilisez principalement votre téléphone pour quoi ? »", "« En moyenne, vous consommez beaucoup de forfait Internet ? »", "« Vous faites régulièrement des transactions M-Pesa ? »", "Ajoutez une question sur le roaming ou le partage si l’usage client le justifie."]} /></section><section className="copy-panel"><h3>Du besoin à la recommandation</h3><BulletStack items={["Reformulez le besoin avant de proposer une offre.", "Présentez le prix, les volumes et les avantages sans surcharger le client.", "Adaptez votre conseil au budget, sans jamais forcer une décision.", "Vérifiez les conditions actives avant d’accompagner une adhésion ou une activation."]} /></section></div>;
+    case "privilegeGold":
+      return <PrivilegeOfferTable level="gold" label="Gamme Gold" rows={[["1 000 U", "10 GB", "70 min", "10", "Minutes ↔ Internet ; Internet local ↔ roaming."], ["2 500 U", "30 GB", "135 min", "15", "Avantages précédents + 2 envois M-Pesa gratuits + carte M-Pesa gratuite."], ["3 500 U", "50 GB", "150 min", "20", "Avantages précédents + 3 envois M-Pesa gratuits."]]} />;
+    case "privilegePlatinum":
+      return <PrivilegeOfferTable level="platinum" label="Gamme Platinum" rows={[["5 000 U", "8 GB", "240 min", "30", "Flexibilité, partage avec quotas, 4 envois M-Pesa gratuits et carte M-Pesa Visa gratuite."], ["7 500 U", "13,5 GB", "330 min", "40", "Avantages Platinum 5 000 U + 5 envois M-Pesa gratuits."], ["10 000 U", "20 GB", "360 min", "50", "Avantages Platinum 7 500 U + 6 envois M-Pesa gratuits."]]} />;
+    case "privilegeValue":
+      return <div className="two-column-copy"><section className="copy-panel"><h3>Formuler la valeur</h3><BulletStack items={["Minutes convertibles en Internet : davantage de flexibilité si le besoin change.", "Internet local convertible en roaming : plus de souplesse lors des usages autorisés en itinérance.", "Envois M-Pesa gratuits : un nombre défini d’envois selon l’offre choisie.", "Partage avec quotas : un partage encadré par les conditions applicables."]} /></section><section className="copy-panel"><h3>Rester juste</h3><BulletStack items={["Expliquez les avantages avec des mots simples et vérifiables.", "Ne garantissez jamais une éligibilité, une gratuité ou une activation non confirmée.", "Ne présentez pas un avantage futur comme s’il était déjà disponible.", "En cas de doute, préférez : « Je vais vérifier pour vous donner une information exacte. »"]} /></section></div>;
+    case "privilegeJourney":
+      return <div className="route-layout"><aside className="route-aside"><div><span className="micro-label">Parcours service</span><span className="route-aside__code">08<br/>ÉTAPES</span><p>Un cadre de boutique pour guider sans précipiter ni perdre la qualité de service.</p></div><span className="route-aside__count">Accueil → orientation</span></aside><div className="route-steps">{["Accueillir : créer un premier contact positif.", "Approcher : demander si le client connaît déjà Vodacom Privilège.", "Découvrir : comprendre l’utilisation principale de la ligne.", "Qualifier : Internet, appels, M-Pesa, roaming et partage.", "Proposer : présenter l’offre la plus adaptée au profil.", "Expliquer : prix, volumes et avantages, avec des faits validés.", "Traiter : écouter les objections avant de répondre.", "Conclure : accompagner selon la procédure ou orienter correctement."].map((item) => <div className="route-step" key={item}>{item}</div>)}</div></div>;
+    case "privilegeObjections":
+      return <div className="two-column-copy"><section className="copy-panel"><h3>Écouter sans contester</h3><BulletStack items={["« C’est trop cher » → Revenir au budget et à l’utilisation réelle.", "« Je n’ai pas besoin de ça » → Demander l’usage principal avant de conclure.", "« J’ai déjà un forfait » → Vérifier si Privilège apporte une valeur concrète supplémentaire.", "« Je veux seulement Internet » → Concentrer l’échange sur les offres adaptées à cette consommation."]} /></section><section className="copy-panel"><h3>Répondre avec professionnalisme</h3><BulletStack items={["Reconnaissez la préoccupation avant d’argumenter.", "Présentez uniquement les éléments confirmés par les supports applicables.", "Ne cherchez pas à gagner le débat : cherchez à éclairer le choix du client.", "Si la réponse dépend d’une vérification, annoncez la prochaine étape clairement."]} /></section></div>;
+    case "privilegeTrust":
+      return <div className="comparison-grid"><section className="comparison-card"><span className="comparison-card__tag">Règle absolue</span><h3>Pas de fausse promesse.</h3><BulletStack items={["Ne garantissez pas une éligibilité non confirmée.", "Ne promettez pas un avantage ou une gratuité non validés.", "Ne garantissez pas une activation immédiate si elle ne l’est pas.", "N’annoncez pas une résolution technique que vous ne maîtrisez pas."]} /></section><section className="comparison-card comparison-card--focus"><span className="comparison-card__tag">Confidentialité M-Pesa</span><h3>Le PIN reste privé.</h3><BulletStack items={["Ne demandez jamais le PIN M-Pesa du client.", "Ne saisissez jamais le PIN à sa place.", "Ne conservez ni ne diffusez une information confidentielle.", "Orientez toute opération nécessitant une habilitation vers le personnel compétent."]} /></section></div>;
+    case "privilegeCalmer":
+      return <div className="rule-cards">{[["C", "Comprendre : laisser le client expliquer."], ["A", "Accuser réception : reconnaître sa préoccupation."], ["L", "Laisser retomber : ne pas répondre avec agressivité."], ["M", "Montrer la solution : expliquer ce qui peut être fait."], ["E", "Escalader : solliciter le responsable si nécessaire."], ["R", "Rassurer : sans faire de fausse promesse."]].map(([value, label]) => <div className="rule-card" key={value}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
+    case "privilegeScenario":
+      return <div className="takeaway-layout"><div className="takeaway-list">{["Le client dispose d’un budget de 2 500 U.", "Il consomme beaucoup Internet et effectue régulièrement des transactions M-Pesa.", "Accueillez-le, posez des questions et reformulez son besoin.", "Présentez Gold 2 500 U et les avantages confirmés, sans surcharge.", "Répondez à « je préfère acheter juste des mégabytes » puis concluez et accompagnez selon la procédure."].map((item, index) => <div key={item} className="takeaway-item"><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Le rôle-play transforme une fiche tarifaire en conversation utile.</p><span>Cas pratique · Gold 2 500 U</span></aside></div>;
+    case "privilegeScorecard":
+      return <div className="rule-cards">{[["15", "Critères notés sur 5 : accueil, écoute, besoin, explication, objections, conformité et conclusion."], ["/75", "Total de la grille terrain : présentation, professionnalisme, protection des données et orientation inclus."], ["65–75", "Excellent : maîtrise et posture de référence."], ["55–64", "Très bon : performance solide à consolider."], ["45–54", "Acceptable : accompagnement ciblé recommandé."], ["<35", "Coaching obligatoire selon le standard de formation."]].map(([value, label]) => <div className="rule-card" key={value}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
     case "takeaway":
       return <div className="takeaway-layout"><div className="takeaway-list">{["Commencez toujours par identifier le type et le niveau du compte client.", "Clarifiez le besoin avant de choisir le service à présenter.", "Annoncez les conditions d’éligibilité et les limites avant de guider le parcours USSD.", "Faites confirmer les informations sensibles : numéro, montant, PIN et choix final.", "Rappelez les règles importantes : frais, absence de reversal, remboursement ou assistance 1111 selon le service."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Le bon conseil rend le service plus sûr.</p><span>Réflexe BTL</span></aside></div>;
     case "quiz":

@@ -26,9 +26,90 @@
 - [x] Vérifier l’ensemble des raccourcis clavier après correction, sans exception runtime.
 - [x] Afficher le nom de l’agent connecté dans l’indicateur de session, sans repli vers son numéro.
 - [x] Corriger le mapping de session pour afficher le champ `full_name` du profil connecté dans l’indicateur.
-- [ ] Préparer la configuration GitHub Pages compatible avec l’application de formation.
-- [ ] Ajouter le workflow de déploiement GitHub Pages et synchroniser le dépôt.
-- [ ] Activer GitHub Pages puis vérifier le lien public déployé.
-- [ ] Ajouter le favicon et le manifeste PWA avec les icônes d’installation.
-- [ ] Corriger la déclaration pnpm du workflow GitHub Pages.
-- [ ] Vérifier la publication GitHub Pages et le manifeste PWA sur le lien public.
+- [x] Générer un QR code pointant vers la formation GitHub Pages publiée.
+- [x] Afficher le QR code sur l’écran de connexion avec un libellé clair.
+- [x] Afficher le QR code dans la barre latérale de la formation.
+- [x] Vérifier le QR code sur desktop et mobile puis synchroniser la mise à jour GitHub Pages.
+- [x] Vérifier visuellement le QR code de la barre latérale sur desktop dans une session authentifiée.
+- [x] Confirmer le comportement mobile du QR de la barre latérale, masqué volontairement pour préserver la lisibilité des slides.
+- [x] Confirmer sur la version GitHub Pages publiée que le QR de la barre latérale est présent et scannable en contexte de présentation.
+- [x] Tester le QR code publié avec un lecteur mobile et confirmer qu’il ouvre directement la formation GitHub Pages.
+- [x] Déplacer les visuels lourds du dépôt vers le stockage externe du projet.
+- [x] Remplacer les chemins locaux d’images par leurs références de stockage.
+- [x] Vérifier le rendu puis sauvegarder le jalon QR sans médias lourds locaux.
+- [x] Vérifier visuellement les visuels hero, global, merchant, security et le QR après migration vers le stockage externe.
+- [x] Confirmer que la version GitHub Pages publiée charge correctement les visuels après la migration de stockage.
+- [x] Créer un checkpoint réussi après suppression des médias lourds locaux.
+- [x] Vérifier visuellement sur GitHub Pages les slides utilisant les visuels hero, global, merchant et security.
+- [x] Confirmer la présence conjointe du QR code et des visuels migrés sur les slides concernées de la publication.
+- [x] Documenter la revue visuelle des backgrounds hero, merchant, security et global avec le QR de barre latérale sur GitHub Pages.
+- [x] Revalider ces slides après revue documentée avant le checkpoint final.
+- [x] Contrôler explicitement les backgrounds CSS actifs des slides hero, merchant, security et global sur GitHub Pages.
+- [x] Confirmer, pour chaque slide contrôlée, la présence simultanée du QR latéral et du background calculé.
+- [x] Sauvegarder le jalon final après ces contrôles de style calculé.
+- [x] Préparer la configuration GitHub Pages compatible avec l’application de formation.
+- [x] Ajouter le workflow de déploiement GitHub Pages et synchroniser le dépôt.
+- [x] Activer GitHub Pages puis vérifier le lien public déployé.
+- [x] Ajouter le favicon et le manifeste PWA avec les icônes d’installation.
+- [x] Corriger la déclaration pnpm du workflow GitHub Pages.
+- [x] Vérifier la publication GitHub Pages et le manifeste PWA sur le lien public.
+- [x] Préparer les visuels et le QR code pour une synchronisation GitHub Pages sans dégrader le rendu.
+- [x] Envoyer la version QR compatible vers la branche principale GitHub.
+- [x] Vérifier le déploiement GitHub Pages après synchronisation.
+- [x] Créer une révision GitHub Pages autonome documentant la version QR finalisée.
+- [x] Pousser la révision vers la branche principale GitHub et vérifier son identifiant de commit.
+- [x] Vérifier GitHub Pages après le nouveau push de synchronisation.
+- [x] Empêcher les raccourcis de présentation d’intercepter l’effacement et les flèches dans les champs de connexion.
+- [x] Tester la saisie, la correction et le déplacement du curseur dans les identifiants.
+- [x] Publier la correction sur GitHub Pages et vérifier le formulaire de connexion.
+- [x] Invalider le cache PWA GitHub Pages afin de forcer le chargement de la correction clavier.
+- [x] Revalider l’effacement et les flèches sur la version servie après mise à jour du service worker.
+- [x] Inspecter les données d’affectation et le modèle de scores existant.
+- [x] Créer la table et les droits de cotation qualitative par superviseur.
+- [x] Ajouter le formulaire de cotation réservé au superviseur affecté, sous-admin et admin.
+- [x] Intégrer la cotation au score et au tableau de suivi des agents.
+- [x] Vérifier les droits de saisie et l’enregistrement réel de la cotation dans BTL.
+- [x] Publier la mise à jour de cotation sur GitHub Pages.
+- [x] Créer une révision GitHub Pages de la cotation avec le calcul consolidé 80/20.
+- [x] Vérifier la publication GitHub Pages de la cotation superviseur.
+- [x] Confirmer la formule du score consolidé : 80 % résultats d’évaluation et 20 % cotation superviseur.
+- [x] Étendre le rôle super_admi à tous les contrôles de supervision et de cotation administratifs.
+- [x] Vérifier la vue globale et les droits de cotation super_admi sur GitHub Pages.
+- [x] Synchroniser le contrôle d’accès Super Admin dans la version GitHub Pages publiée.
+- [x] Confirmer que les deux passerelles Supabase reconnaissent Super Admin comme rôle global.
+- [x] Tester avec un compte Super Admin la vue globale et l’enregistrement d’une cotation sur GitHub Pages.
+- [x] Identifier la valeur exacte du rôle Super Admin reçue par l’interface publiée.
+- [x] Normaliser ce rôle dans le contrôle d’accès du tableau de bord et publier le correctif.
+- [x] Vérifier que le bouton tableau de bord apparaît pour le compte Super Admin publié.
+- [x] Corriger le refus « Accès superviseur requis » pour le rôle super_admin dans la passerelle serveur.
+- [x] Vérifier avec le compte Super Admin que le tableau de bord s’ouvre et charge les données globales.
+- [x] Confirmer la règle exacte : dashboard cumulatif Super Admin, cotation limitée aux admins.
+- [x] Tester en production une cotation Super Admin sur un admin et confirmer sa persistance dans BTL.
+- [x] Restreindre la cotation Admin aux agents, superviseurs et sous-admins.
+- [x] Restreindre la cotation Super Admin aux admins uniquement.
+- [x] Masquer les admins de tous les dashboards hors Super Admin.
+- [x] Vérifier et publier la hiérarchie de cotation par rôle.
+- [x] Donner au Super Admin une vue cumulative sur admins, sous-admins, superviseurs et agents.
+- [x] Conserver la cotation Super Admin limitée aux admins malgré sa vue globale.
+- [x] Déployer la restriction serveur de cotation : Admin vers agents, superviseurs et sous-admins ; Super Admin vers admins.
+- [x] Vérifier que les dashboards hors Super Admin n’affichent aucun admin.
+- [x] Tester en production les refus et autorisations de cotation Admin et Super Admin.
+- [x] Exclure explicitement les admins de toutes les vues dashboard non-Super-Admin.
+- [x] Tester en production un dashboard superviseur sans admin visible.
+- [x] Tester en production un dashboard sous-admin sans admin visible.
+- [x] Valider en production : Super Admin voit tous les niveaux mais ne cote que les admins.
+- [x] Valider la vue cumulative Super Admin avec les quatre niveaux d’utilisateurs.
+- [x] Ajouter l’accès « Se connecter comme invité » sur l’écran d’accueil.
+- [x] Créer une session Invité en lecture seule sans tableau de bord ni enregistrement de données.
+- [x] Rendre les questionnaires consultables mais non répondables en mode Invité.
+- [x] Vérifier et publier le mode Invité sur GitHub Pages.
+- [x] Repenser l’accès Invité avec une action compacte, iconographique et typographiquement cohérente avec Momentum Delta.
+- [x] Vérifier le rendu desktop et mobile de l’écran de connexion après la retouche.
+- [x] Publier la correction visuelle de l’accès Invité sur GitHub Pages.
+- [x] Ajouter le libellé « Visiter la formation » à gauche du contrôle Invité validé.
+- [x] Vérifier et publier la retouche de libellé sur GitHub Pages.
+- [x] Confirmer la propagation du libellé « Visiter la formation » dans la page publique après le build GitHub Pages.
+- [x] Analyser le manuel Vodacom Privilège et définir une structure pédagogique approfondie.
+- [x] Ajouter le module Vodacom Privilège aux séances, au parcours complet et au suivi de progression.
+- [x] Construire des slides détaillées et une évaluation renforcée propres au service Vodacom Privilège.
+- [ ] Vérifier le nouveau module en desktop et mobile, puis le publier sur GitHub Pages.
