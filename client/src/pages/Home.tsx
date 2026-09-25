@@ -899,6 +899,7 @@ export default function Home() {
   const [showSupervisor, setShowSupervisor] = useState(false);
   const [supervisorDashboard, setSupervisorDashboard] = useState<SupervisorDashboard | null>(null);
   const [dashboardError, setDashboardError] = useState("");
+  const [sessionMessage, setSessionMessage] = useState("");
 
   const canAccessHostessModule = canAccessTrainingModule(trainingUser, hostessModuleCode, isGuest);
   const visibleModuleNames = moduleNames.filter((name) => name !== "Formation Hôtesses" || canAccessHostessModule);
@@ -937,12 +938,13 @@ export default function Home() {
       if (!active) return;
       setTrainingOverview(overview);
       setTrainingUser(overview.user);
-    }).catch(() => {
+    }).catch((cause) => {
       if (!active) return;
       clearTrainingToken();
       setTrainingToken(null);
       setTrainingUser(null);
       setTrainingOverview(null);
+      setSessionMessage(cause instanceof Error ? `${cause.message} Connectez-vous à nouveau pour reprendre votre parcours.` : "La session n’a pas pu être restaurée. Connectez-vous à nouveau pour reprendre votre parcours.");
     }).finally(() => {
       if (active) setTrainingReady(true);
     });
@@ -1032,6 +1034,7 @@ export default function Home() {
   const moduleIndex = Math.max(0, visibleModuleNames.indexOf(slide.module));
 
   const handleLogin = (token: string, user: TrainingUser) => {
+    setSessionMessage("");
     setTrainingUser(user);
     setTrainingToken(token);
     setTrainingReady(false);
@@ -1068,6 +1071,7 @@ export default function Home() {
   };
 
   const logoutTraining = () => {
+    setSessionMessage("");
     clearTrainingToken();
     setTrainingToken(null);
     setTrainingUser(null);
@@ -1078,10 +1082,10 @@ export default function Home() {
     setShowSupervisor(false);
   };
 
-  if (!trainingReady) return <main className="training-loading"><span>Connexion au parcours…</span></main>;
-  const handleGuest = () => { setIsGuest(true); setTrainingUser({ id: "guest", fullName: "Invité", role: "guest", phone: "", category: "lecture_seule" }); setTrainingOverview(null); };
+  if (!trainingReady) return <main className="training-loading"><div><span>Connexion au parcours…</span><small>Vérification sécurisée de votre session.</small></div></main>;
+  const handleGuest = () => { setSessionMessage(""); setIsGuest(true); setTrainingUser({ id: "guest", fullName: "Invité", role: "guest", phone: "", category: "lecture_seule" }); setTrainingOverview(null); };
 
-  if (!trainingUser) return <TrainingLogin onSuccess={handleLogin} onGuest={handleGuest} />;
+  if (!trainingUser) return <TrainingLogin onSuccess={handleLogin} onGuest={handleGuest} notice={sessionMessage} />;
 
   return (
     <main className="mpesa-deck" aria-label="Présentation de formation M-Pesa BTL">

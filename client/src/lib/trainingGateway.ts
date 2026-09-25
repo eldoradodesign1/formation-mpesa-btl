@@ -41,19 +41,36 @@ export type SupervisorDashboard = {
   agents: SupervisorAgent[];
 };
 
-async function request<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
-  const response = await fetch(`${gatewayUrl}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { "x-training-token": token } : {}),
-      ...(options.headers ?? {}),
-    },
-  });
+async function fetchWithTimeout(input: RequestInfo | URL, options: RequestInit) {
+  const controller = options.signal ? null : new AbortController();
+  const timeout = controller ? window.setTimeout(() => controller.abort(), 15_000) : null;
+  try {
+    return await fetch(input, { ...options, signal: options.signal ?? controller?.signal });
+  } finally {
+    if (timeout !== null) window.clearTimeout(timeout);
+  }
+}
 
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(body.error || "La demande n’a pas abouti.");
-  return body as T;
+async function request<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
+  try {
+    const response = await fetchWithTimeout(`${gatewayUrl}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { "x-training-token": token } : {}),
+        ...(options.headers ?? {}),
+      },
+    });
+
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.error || "La demande n’a pas abouti.");
+    return body as T;
+  } catch (cause) {
+    if (cause instanceof Error && (cause.name === "TimeoutError" || cause.name === "AbortError")) {
+      throw new Error("La connexion prend trop de temps. Vérifiez le réseau puis réessayez.");
+    }
+    throw cause;
+  }
 }
 
 export function getTrainingToken() {
@@ -65,10 +82,17 @@ export function clearTrainingToken() {
 }
 
 async function ratingsRequest<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
-  const response = await fetch(`${ratingsGatewayUrl}${path}`, { ...options, headers: { "Content-Type": "application/json", ...(token ? { "x-training-token": token } : {}), ...(options.headers ?? {}) } });
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(body.error || "La cotation n’a pas abouti.");
-  return body as T;
+  try {
+    const response = await fetchWithTimeout(`${ratingsGatewayUrl}${path}`, { ...options, headers: { "Content-Type": "application/json", ...(token ? { "x-training-token": token } : {}), ...(options.headers ?? {}) } });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.error || "La cotation n’a pas abouti.");
+    return body as T;
+  } catch (cause) {
+    if (cause instanceof Error && (cause.name === "TimeoutError" || cause.name === "AbortError")) {
+      throw new Error("La connexion prend trop de temps. Vérifiez le réseau puis réessayez.");
+    }
+    throw cause;
+  }
 }
 
 export async function loginTraining(phone: string, password: string) {
