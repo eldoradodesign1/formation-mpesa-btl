@@ -20,6 +20,8 @@ import { clearTrainingToken, createCertificate, getSupervisorDashboard, getTrain
 import { canAccessSupervision, isCertificateEligible } from "@shared/trainingCompletion";
 import { getPresentationKeyAction, isEditableKeyboardTarget } from "@shared/presentationKeyboard";
 import { vodacomPrivilegeAssessmentQuestions } from "@shared/vodacomPrivilegeAssessment";
+import { hotessesAssessmentQuestions } from "@shared/hotessesAssessment";
+import { canAccessTrainingModule, hostessModuleCode } from "@shared/trainingModuleAccess";
 
 const brandMark = "/manus-storage/mark_512f1f81.png";
 const joinQrCode = `${import.meta.env.BASE_URL}images/join-qr.png`;
@@ -29,7 +31,7 @@ type Slide = {
   kicker: string;
   title: string;
   subtitle?: string;
-  theme?: "paper" | "red" | "merchant" | "global" | "security" | "cover";
+  theme?: "paper" | "red" | "merchant" | "global" | "security" | "cover" | "hostessEvent" | "hostessProximity" | "hostessReady";
   compact?: boolean;
   kind:
     | "cover"
@@ -65,6 +67,20 @@ type Slide = {
     | "privilegeCalmer"
     | "privilegeScenario"
     | "privilegeScorecard"
+    | "hostessIntro"
+    | "hostessRoles"
+    | "hostessReadiness"
+    | "hostessOrientation"
+    | "hostessProximity"
+    | "hostessApproach"
+    | "hostessConversation"
+    | "hostessEmotions"
+    | "hostessPresence"
+    | "hostessDifficult"
+    | "hostessEthics"
+    | "hostessEscalation"
+    | "hostessRolePlay"
+    | "hostessScorecard"
     | "takeaway"
     | "quiz"
     | "close";
@@ -93,7 +109,7 @@ const slides: Slide[] = [
   {
     module: "Ouverture",
     kicker: "Le parcours",
-    title: "Sept expertises. Une même exigence : la clarté.",
+    title: "Des expertises. Une même exigence : la clarté.",
     subtitle: "Chaque module suit une logique simple : comprendre le besoin, vérifier l’éligibilité, guider le parcours et retenir les règles.",
     kind: "agenda",
   },
@@ -452,6 +468,115 @@ const slides: Slide[] = [
     kind: "privilegeScorecard",
   },
   {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Présence terrain",
+    title: "Une présence qui rassure, oriente et crée une relation utile.",
+    subtitle: "Une formation complète pour les hôtesses d’accueil événementiel et les hôtesses de proximité en campagne.",
+    theme: "hostessEvent",
+    kind: "hostessIntro",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Deux rôles",
+    title: "Accueillir quand l’invité vient. Approcher avec tact quand le lieu vit.",
+    subtitle: "Les deux missions partagent la même exigence de service, mais diffèrent par leur point de départ et leur rythme.",
+    theme: "paper",
+    kind: "hostessRoles",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Avant la prise de poste",
+    title: "La qualité du contact se prépare bien avant la première conversation.",
+    subtitle: "Ponctualité, tenue, matériel, briefing et connaissance du lieu forment le premier standard de confiance.",
+    theme: "hostessReady",
+    kind: "hostessReadiness",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Accueil événementiel",
+    title: "Recevoir, vérifier, orienter, rester disponible.",
+    subtitle: "À l’événement, l’invité arrive vers l’hôtesse. La mission est de rendre son parcours immédiat, calme et clair.",
+    kind: "hostessOrientation",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Proximité",
+    title: "Dans un lieu fixe, l’approche commence par la lecture du contexte.",
+    subtitle: "HORECA, shop, aéroport ou espace de campagne : l’hôtesse s’adresse aux personnes disponibles, jamais à leur place.",
+    theme: "hostessProximity",
+    kind: "hostessProximity",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Premier contact",
+    title: "Une phrase courte, une permission, une utilité.",
+    subtitle: "Créer l’envie professionnellement, c’est susciter l’attention par la pertinence et le respect — jamais par la pression.",
+    theme: "paper",
+    kind: "hostessApproach",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Écoute et empathie",
+    title: "Écouter le besoin avant de proposer une réponse.",
+    subtitle: "L’hôtesse reformule, apporte une information vérifiée et sait reconnaître quand une réponse doit être orientée.",
+    kind: "hostessConversation",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Maîtrise de soi",
+    title: "L’émotion est un signal. La posture reste professionnelle.",
+    subtitle: "En situation de tension, le calme, le ton et les mots transforment une interaction fragile en prochaine étape claire.",
+    theme: "red",
+    kind: "hostessEmotions",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Présence professionnelle",
+    title: "La tenue, le langage corporel et la ponctualité parlent avant les mots.",
+    subtitle: "Une image soignée n’est pas une apparence figée : elle rend le service crédible, accessible et cohérent avec le brief.",
+    theme: "paper",
+    kind: "hostessPresence",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Cas sensibles",
+    title: "Un refus, une réclamation ou une urgence se gèrent sans perdre la dignité de personne.",
+    subtitle: "La bonne réponse protège le client, le lieu, l’équipe et l’hôtesse elle-même.",
+    kind: "hostessDifficult",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Éthique et confidentialité",
+    title: "Informer sans manipuler. Assister sans demander ce qui doit rester privé.",
+    subtitle: "Le respect du consentement, des données personnelles et du périmètre de rôle est une exigence de terrain.",
+    theme: "security",
+    kind: "hostessEthics",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Reporting et escalade",
+    title: "Ce que vous ne pouvez pas résoudre doit être tracé et transmis correctement.",
+    subtitle: "Le reporting transforme les interactions terrain en informations utiles pour le superviseur et l’équipe campagne.",
+    theme: "paper",
+    kind: "hostessEscalation",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Mise en situation",
+    title: "Deux contextes, une même méthode : accueillir, comprendre, aider, conclure.",
+    subtitle: "Le rôle-play permet de passer d’un discours appris à un comportement réellement observable sur le terrain.",
+    theme: "hostessEvent",
+    kind: "hostessRolePlay",
+  },
+  {
+    module: "Formation Hôtesses",
+    kicker: "Module 08 · Standard de maîtrise",
+    title: "Une prestation complète se mesure dans le détail et se renforce par le coaching.",
+    subtitle: "La grille terrain combine préparation, relation client, conformité, résolution et reporting.",
+    theme: "paper",
+    kind: "hostessScorecard",
+  },
+  {
     module: "Conclusion",
     kicker: "Les réflexes BTL",
     title: "Cinq réflexes pour un conseil M-Pesa juste et rassurant.",
@@ -476,7 +601,7 @@ const slides: Slide[] = [
   },
 ];
 
-const moduleNames = ["Ouverture", "Clients M-Pesa", "Petit Commerce", "Paiement Marchand", "M-Pesa Carte Visa", "M-Pesa Mikili", "M-Pesa Rallonge", "Vodacom Privilège", "Conclusion"];
+const moduleNames = ["Ouverture", "Clients M-Pesa", "Petit Commerce", "Paiement Marchand", "M-Pesa Carte Visa", "M-Pesa Mikili", "M-Pesa Rallonge", "Vodacom Privilège", "Formation Hôtesses", "Conclusion"];
 
 type Session = {
   id: string;
@@ -489,7 +614,7 @@ type Session = {
 };
 
 const sessions: Session[] = [
-  { id: "complete", label: "Formation complète", labelShort: "Complète", description: "L’intégralité des produits, les tests, Vodacom Privilège et la conclusion.", duration: "3 h 10", slideIndexes: slides.map((_, index) => index) },
+  { id: "complete", label: "Formation complète", labelShort: "Complète", description: "L’intégralité des produits, les tests, Vodacom Privilège, Formation Hôtesses et la conclusion.", duration: "4 h 15", slideIndexes: slides.map((_, index) => index) },
   { id: "clients", label: "Module 1 · Clients M-Pesa", labelShort: "Clients", description: "Profils Lite et Premium, éligibilité et pièces acceptées.", duration: "15 min", slideIndexes: [3, 4, 5], moduleCode: "clients" },
   { id: "commerce", label: "Module 2 · Petit Commerce", labelShort: "Petit Commerce", description: "Compte marchand, activation, paiement et règles d’usage.", duration: "20 min", slideIndexes: [6, 7, 8, 9], moduleCode: "petit-commerce" },
   { id: "paiement-marchand", label: "Module 3 · Paiement Marchand", labelShort: "Paiement Marchand", description: "Paiement client chez le commerçant, validation et message terrain.", duration: "20 min", slideIndexes: [10, 11, 12], moduleCode: "paiement-marchand" },
@@ -497,6 +622,7 @@ const sessions: Session[] = [
   { id: "mikili", label: "Module 5 · M-Pesa Mikili", labelShort: "Mikili", description: "Réception depuis l’étranger, limites, notification et envoi régional.", duration: "30 min", slideIndexes: [17, 18, 19, 20, 21, 22], moduleCode: "mikili" },
   { id: "rallonge", label: "Module 6 · M-Pesa Rallonge", labelShort: "Rallonge", description: "Découvert ponctuel, éligibilité, usage, remboursement et pénalités.", duration: "25 min", slideIndexes: [23, 24, 25, 26], moduleCode: "rallonge" },
   { id: "vodacom-privilege", label: "Module 7 · Vodacom Privilège", labelShort: "Privilège", description: "Offres Gold et Platinum, activation *1111# → 4, service client, conformité et mise en situation.", duration: "55 min", slideIndexes: [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38], moduleCode: "vodacom-privilege" },
+  { id: "formation-hotesses", label: "Module 8 · Formation Hôtesses", labelShort: "Hôtesses", description: "Accueil événementiel, proximité, posture, relation client, gestion terrain et cas pratiques.", duration: "65 min", slideIndexes: [39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52], moduleCode: hostessModuleCode },
 ];
 
 type AssessmentQuestion = { id: string; prompt: string; options: string[]; answer: number };
@@ -539,6 +665,7 @@ const assessmentQuestions: Record<string, AssessmentQuestion[]> = {
     { id: "rallonge-4", prompt: "Avant l’acceptation, quel sujet doit être compris ?", options: ["Les frais, conditions et pénalités", "La couleur de la SIM", "Le nom de l’agent", "Le code du marchand"], answer: 0 },
   ],
   "vodacom-privilege": vodacomPrivilegeAssessmentQuestions,
+  [hostessModuleCode]: hotessesAssessmentQuestions,
 };
 
 function getInitialSessionId() {
@@ -562,6 +689,9 @@ function getSlideTheme(slide: Slide) {
   if (slide.theme === "merchant") return "image-split image-split--merchant";
   if (slide.theme === "global") return "image-split image-split--global";
   if (slide.theme === "security") return "image-split image-split--security";
+  if (slide.theme === "hostessEvent") return "image-split image-split--hostess-event";
+  if (slide.theme === "hostessProximity") return "image-split image-split--hostess-proximity";
+  if (slide.theme === "hostessReady") return "image-split image-split--hostess-ready";
   if (slide.theme === "cover") return "cover-slide";
   return "";
 }
@@ -597,7 +727,7 @@ function PrivilegeOfferTable({ level, label, rows }: { level: "gold" | "platinum
   return <section className={`privilege-offer-card privilege-offer-card--${level}`}><div className="privilege-offer-card__heading"><span>{label}</span><small>À confirmer selon les conditions de campagne en vigueur</small></div><div className="privilege-offer-card__table"><table><thead><tr><th>Offre</th><th>Internet</th><th>Appels</th><th>SMS</th><th>Repère terrain</th></tr></thead><tbody>{rows.map(([offer, internet, calls, sms, benefit]) => <tr key={offer}><td><b>{offer}</b></td><td>{internet}</td><td>{calls}</td><td>{sms}</td><td>{benefit}</td></tr>)}</tbody></table></div></section>;
 }
 
-function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; showAnswers: boolean; toggleAnswers: () => void }) {
+function SlideContent({ slide, showAnswers, toggleAnswers, visibleModuleNames }: { slide: Slide; showAnswers: boolean; toggleAnswers: () => void; visibleModuleNames: string[] }) {
   switch (slide.kind) {
     case "cover":
       return (
@@ -617,7 +747,7 @@ function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; sho
             <p className="agenda-path__note">{slide.subtitle}</p>
           </div>
           <div className="module-list">
-            {moduleNames.slice(1, -1).map((name, index) => <div className="module-list__item" key={name}><span className="module-list__number">{formatNumber(index)}</span><b>{name}</b><span>Module</span></div>)}
+            {visibleModuleNames.slice(1, -1).map((name, index) => <div className="module-list__item" key={name}><span className="module-list__number">{formatNumber(index)}</span><b>{name}</b><span>Module</span></div>)}
           </div>
         </div>
       );
@@ -705,6 +835,34 @@ function SlideContent({ slide, showAnswers, toggleAnswers }: { slide: Slide; sho
       return <div className="takeaway-layout"><div className="takeaway-list">{["Le client dispose d’un budget de 2 500 U.", "Il consomme beaucoup Internet et effectue régulièrement des transactions M-Pesa.", "Accueillez-le, posez des questions et reformulez son besoin.", "Présentez Gold 2 500 U et les avantages confirmés, sans surcharge.", "Répondez à « je préfère acheter juste des mégabytes » puis concluez et accompagnez selon la procédure."].map((item, index) => <div key={item} className="takeaway-item"><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Le rôle-play transforme une fiche tarifaire en conversation utile.</p><span>Cas pratique · Gold 2 500 U</span></aside></div>;
     case "privilegeScorecard":
       return <div className="rule-cards">{[["15", "Critères notés sur 5 : accueil, écoute, besoin, explication, objections, conformité et conclusion."], ["/75", "Total de la grille terrain : présentation, professionnalisme, protection des données et orientation inclus."], ["65–75", "Excellent : maîtrise et posture de référence."], ["55–64", "Très bon : performance solide à consolider."], ["45–54", "Acceptable : accompagnement ciblé recommandé."], ["<35", "Coaching obligatoire selon le standard de formation."]].map(([value, label]) => <div className="rule-card" key={value}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
+    case "hostessIntro":
+      return <div className="hostess-hero-copy"><span className="micro-label">Hospitalité · proximité · confiance</span><p>Une hôtesse ne se limite pas à être présente. Elle rend un lieu lisible, une interaction plus simple et une personne mieux considérée.</p><div className="hostess-hero-copy__pillars"><span>Accueillir</span><span>Comprendre</span><span>Orienter</span><span>Conclure</span></div></div>;
+    case "hostessRoles":
+      return <div className="comparison-grid"><section className="comparison-card"><span className="comparison-card__tag">Événements ponctuels</span><h3>Hôtesse d’accueil</h3><p>L’invité vient vers elle. Elle reçoit, vérifie selon le brief, guide, renseigne et rend le parcours fluide dès l’arrivée.</p><BulletStack items={["Point d’entrée : l’arrivée de l’invité.", "Réflexe : saluer, clarifier, orienter.", "Cadre : accès, programme, services, circulation."]} /></section><section className="comparison-card comparison-card--focus"><span className="comparison-card__tag">Campagnes en lieu fixe</span><h3>Hôtesse de proximité</h3><p>Elle va à la rencontre de personnes disponibles dans un HORECA, un shop, un aéroport ou un autre point d’affectation.</p><BulletStack items={["Point d’entrée : le bon moment et la permission d’échanger.", "Réflexe : observer, approcher avec tact, apporter une utilité.", "Cadre : ne pas gêner le lieu, le client ou l’activité en cours."]} /></section></div>;
+    case "hostessReadiness":
+      return <div className="takeaway-layout"><div className="takeaway-list">{["Arriver avec une marge suffisante pour prendre connaissance du lieu, du brief et des consignes de sécurité.", "Vérifier une tenue propre, conforme et adaptée à la durée du poste ainsi qu’une hygiène soignée.", "Préparer les supports, le matériel autorisé, les contacts d’escalade et l’objectif de la journée.", "Repérer les entrées, les zones de service, les sanitaires, les issues et le responsable de site.", "Confirmer son point d’affectation, son rythme de pause et le format de reporting attendu."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Être prête, c’est déjà commencer à servir.</p><span>Checklist de prise de poste</span></aside></div>;
+    case "hostessOrientation":
+      return <div className="route-layout"><aside className="route-aside"><div><span className="micro-label">Accueil événementiel</span><span className="route-aside__code">04<br/>GESTES</span><p>Un accueil bref, humain et utile donne à l’invité un premier repère fiable.</p></div><span className="route-aside__count">Du salut à la suite</span></aside><div className="route-steps"><div className="route-steps__spine" aria-hidden="true" />{["Saluer avec regard, sourire naturel et formule adaptée au contexte.", "Clarifier : « Bienvenue. Puis-je vous aider à trouver votre espace ou votre contact ? »", "Vérifier les éléments prévus par le brief, sans exposer inutilement les informations de l’invité.", "Indiquer précisément la suite, accompagner si le protocole le prévoit, puis rester disponible pour la demande suivante."].map((item) => <div className="route-step" key={item}>{item}</div>)}</div></div>;
+    case "hostessProximity":
+      return <div className="hostess-proximity-copy"><div><span className="micro-label">Observer avant d’approcher</span><p>Dans les lieux vivants, l’hôtesse choisit un moment où la personne peut réellement écouter. Elle ne coupe pas un repas, un paiement, un appel, une file ou un déplacement pressé.</p></div><div className="hostess-proximity-copy__locations"><span>Hôtels</span><span>Restaurants</span><span>Cafés</span><span>Shops</span><span>Aéroports</span><span>Points de campagne</span></div></div>;
+    case "hostessApproach":
+      return <div className="two-column-copy"><section className="copy-panel"><h3>La formule en trois temps</h3><BulletStack items={["Saluer : « Bonjour, bienvenue. »", "Demander la permission : « Avez-vous une minute pour une information qui peut vous être utile ? »", "Donner une raison concrète : expliquer le service ou l’orientation en une phrase simple."]} /></section><section className="copy-panel"><h3>Ce qui préserve la relation</h3><BulletStack items={["Accepter immédiatement un refus ou une indisponibilité.", "Conserver une distance physique appropriée et un ton posé.", "Éviter le jargon, les promesses et toute insistance.", "Proposer un autre moment seulement si la personne l’accepte."]} /></section></div>;
+    case "hostessConversation":
+      return <div className="global-flow"><div><p className="global-flow__big">Écouter pour rendre l’échange <em>utile</em>.</p><p className="global-flow__desc">L’empathie est une compétence opérationnelle : elle aide à distinguer un besoin simple, une hésitation, une frustration et une demande qui exige une orientation.</p></div><div className="flow-points"><div className="flow-point"><span className="flow-point__index">01</span><div><b>Questionner</b><span>Poser une question ouverte et brève sur le besoin du moment.</span></div></div><div className="flow-point"><span className="flow-point__index">02</span><div><b>Reformuler</b><span>Vérifier que la compréhension est juste avant de répondre.</span></div></div><div className="flow-point"><span className="flow-point__index">03</span><div><b>Répondre ou orienter</b><span>Donner une information confirmée ou annoncer clairement la prochaine étape.</span></div></div></div></div>;
+    case "hostessEmotions":
+      return <div className="rule-cards hostess-rule-cards">{[["PAUSE", "Ralentir sa réponse, respirer et conserver une expression ouverte."], ["ÉCOUTE", "Laisser la personne exposer les faits sans couper ni contester."], ["CADRE", "Dire ce qui peut être fait maintenant, avec des mots simples."], ["RELAIS", "Faire appel au responsable si la demande dépasse le rôle ou devient sensible."], ["SUIVI", "Terminer par une suite précise plutôt qu’une promesse vague."], ["RESPECT", "Préserver la dignité de chacun, même en cas de refus ou de tension."]].map(([value, label]) => <div className="rule-card" key={value}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
+    case "hostessPresence":
+      return <div className="two-column-copy"><section className="copy-panel"><h3>Le standard visible</h3><BulletStack items={["Tenue conforme, propre et adaptée au point d’affectation.", "Posture stable, épaules ouvertes, gestes simples et regard attentif.", "Voix audible, rythme calme, vocabulaire positif et professionnel.", "Téléphone personnel rangé pendant le service, sauf consigne opérationnelle."]} /></section><section className="copy-panel"><h3>Le standard invisible</h3><BulletStack items={["Être ponctuelle et prévenir immédiatement en cas d’aléa.", "Tenir ses engagements et respecter les horaires, les pauses et le brief.", "Rester attentive au lieu même lorsqu’aucune personne ne sollicite d’aide.", "Traiter collègues, invités, clients et prestataires avec la même considération."]} /></section></div>;
+    case "hostessDifficult":
+      return <div className="comparison-grid"><section className="comparison-card"><span className="comparison-card__tag">Refus ou client occupé</span><h3>Respecter le non.</h3><BulletStack items={["Remercier sans montrer de déception.", "Ne pas relancer immédiatement ni bloquer le passage.", "Si la personne le souhaite, proposer un moment ou un point d’information ultérieur.", "Revenir à son observation de terrain sans personnaliser le refus."]} /></section><section className="comparison-card comparison-card--focus"><span className="comparison-card__tag">Réclamation ou incident</span><h3>Stabiliser la situation.</h3><BulletStack items={["Écouter, reconnaître la gêne et ne pas débattre.", "Ne promettre que ce qui est réellement dans le périmètre de l’équipe.", "Mettre en sécurité et prévenir le responsable en cas de risque ou de besoin sensible.", "Noter les faits utiles selon le brief et transmettre sans interprétation."]} /></section></div>;
+    case "hostessEthics":
+      return <div className="two-column-copy"><section className="copy-panel"><h3>Relation éthique</h3><BulletStack items={["Présenter une information fidèle, vérifiée et adaptée au besoin exprimé.", "Ne jamais utiliser une approche romantique, intrusive ou manipulatrice pour obtenir une adhésion.", "Ne pas collecter de données inutiles ni conserver une information personnelle sans cadre autorisé.", "Respecter le refus, la confidentialité et la liberté de choix de chaque personne."]} /></section><section className="copy-panel"><h3>Confidentialité opérationnelle</h3><BulletStack items={["Ne jamais demander, saisir ou mémoriser un PIN, un mot de passe ou un code personnel.", "Éviter de dire à voix haute une donnée confidentielle ou de la laisser visible.", "Laisser la personne manipuler elle-même son téléphone lorsqu’une information sensible est requise.", "Orienter vers le canal compétent si une vérification d’identité ou une décision est nécessaire."]} /></section></div>;
+    case "hostessEscalation":
+      return <div className="takeaway-layout"><div className="takeaway-list">{["Tracer les informations demandées par le brief : volume de contacts, questions récurrentes, besoins observés et incidents.", "Distinguer les faits observés de son interprétation personnelle.", "Remonter rapidement une information urgente, une réclamation sensible, une demande hors périmètre ou un risque de sécurité.", "Utiliser le canal et le responsable indiqués avant la prise de poste.", "Clore le reporting par une prochaine action claire : suivi, rappel, changement de position ou escalade."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Une bonne remontée protège le terrain et améliore la prochaine interaction.</p><span>Reporting responsable</span></aside></div>;
+    case "hostessRolePlay":
+      return <div className="two-column-copy"><section className="copy-panel"><h3>Scénario A · Événement</h3><p>Un invité arrive, regarde autour de lui et paraît hésitant. Il cherche la salle principale, mais son nom n’apparaît pas immédiatement dans le support disponible.</p><BulletStack items={["Accueillir et clarifier sa destination sans le mettre mal à l’aise.", "Vérifier uniquement ce que le brief autorise.", "Expliquer la suite et solliciter le bon relais sans promettre une résolution instantanée."]} /></section><section className="copy-panel"><h3>Scénario B · Proximité</h3><p>Dans un café, une cliente attend son rendez-vous et consulte son téléphone. Elle accepte d’écouter mais répond : « Je n’ai pas le temps pour une longue explication. »</p><BulletStack items={["Demander une minute et annoncer une utilité précise.", "Poser une seule question pour qualifier le besoin.", "Répondre brièvement, accepter sa décision et conclure avec une suite respectueuse."]} /></section></div>;
+    case "hostessScorecard":
+      return <div className="rule-cards">{[["/20", "Préparation : ponctualité, tenue, briefing, matériel et connaissance du point d’affectation."], ["/20", "Relation : accueil, écoute, empathie, clarté et respect de la disponibilité du client."], ["/20", "Posture : langage corporel, maîtrise des émotions, ton et professionnalisme continu."], ["/20", "Conformité : confidentialité, consentement, information juste et respect du périmètre."], ["/20", "Exécution : orientation, résolution, reporting et escalade au bon moment."], ["80 %", "Seuil de maîtrise : un coaching ciblé est prévu sur les critères observés sous le standard."]].map(([value, label]) => <div className="rule-card" key={`${value}-${label}`}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
     case "takeaway":
       return <div className="takeaway-layout"><div className="takeaway-list">{["Commencez toujours par identifier le type et le niveau du compte client.", "Clarifiez le besoin avant de choisir le service à présenter.", "Annoncez les conditions d’éligibilité et les limites avant de guider le parcours USSD.", "Faites confirmer les informations sensibles : numéro, montant, PIN et choix final.", "Rappelez les règles importantes : frais, absence de reversal, remboursement ou assistance 1111 selon le service."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Le bon conseil rend le service plus sûr.</p><span>Réflexe BTL</span></aside></div>;
     case "quiz":
@@ -732,7 +890,16 @@ export default function Home() {
   const [supervisorDashboard, setSupervisorDashboard] = useState<SupervisorDashboard | null>(null);
   const [dashboardError, setDashboardError] = useState("");
 
-  const activeSession = sessions.find((session) => session.id === sessionId) ?? sessions[0];
+  const canAccessHostessModule = canAccessTrainingModule(trainingUser, hostessModuleCode, isGuest);
+  const visibleModuleNames = moduleNames.filter((name) => name !== "Formation Hôtesses" || canAccessHostessModule);
+  const visibleSessions = sessions
+    .filter((session) => session.id === "complete" || !session.moduleCode || canAccessTrainingModule(trainingUser, session.moduleCode, isGuest))
+    .map((session) => {
+      if (session.id !== "complete") return session;
+      const slideIndexes = session.slideIndexes.filter((index) => slides[index].module !== "Formation Hôtesses" || canAccessHostessModule);
+      return canAccessHostessModule ? { ...session, slideIndexes } : { ...session, duration: "3 h 10", description: "L’intégralité des produits, les tests, Vodacom Privilège et la conclusion.", slideIndexes };
+    });
+  const activeSession = visibleSessions.find((session) => session.id === sessionId) ?? visibleSessions[0];
   const currentPosition = Math.max(0, activeSession.slideIndexes.indexOf(current));
   const activeAssessment = activeSession.moduleCode ? assessmentQuestions[activeSession.moduleCode] : undefined;
   const activeProgress = trainingOverview?.progress.find((item) => item.module_code === activeSession.moduleCode);
@@ -742,6 +909,12 @@ export default function Home() {
   const trainingProgress = trainingOverview?.progress ?? [];
   const trainingAttempts = trainingOverview?.attempts ?? [];
   const certificateEligible = isCertificateEligible(trainingModules, trainingProgress, trainingAttempts);
+
+  useEffect(() => {
+    if (!trainingUser || activeSession.slideIndexes.includes(current)) return;
+    setSessionId(activeSession.id);
+    setCurrent(activeSession.slideIndexes[0]);
+  }, [activeSession, current, trainingUser]);
 
   useEffect(() => {
     if (!trainingToken) {
@@ -774,21 +947,21 @@ export default function Home() {
   }, [current]);
 
   const goRelative = useCallback((offset: number) => {
-    const session = sessions.find((item) => item.id === sessionId) ?? sessions[0];
+    const session = visibleSessions.find((item) => item.id === sessionId) ?? visibleSessions[0];
     const position = Math.max(0, session.slideIndexes.indexOf(current));
     const nextPosition = Math.max(0, Math.min(session.slideIndexes.length - 1, position + offset));
     goTo(session.slideIndexes[nextPosition]);
-  }, [current, goTo, sessionId]);
+  }, [current, goTo, sessionId, visibleSessions]);
 
   const startSession = useCallback((nextSessionId: string) => {
-    const nextSession = sessions.find((session) => session.id === nextSessionId) ?? sessions[0];
+    const nextSession = visibleSessions.find((session) => session.id === nextSessionId) ?? visibleSessions[0];
     setSessionId(nextSession.id);
     setDirection("forward");
     setCurrent(nextSession.slideIndexes[0]);
     setShowAnswers(false);
     setShowAssessment(false);
     setShowDeck(false);
-  }, []);
+  }, [visibleSessions]);
 
   const toggleFullscreen = useCallback(async () => {
     if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.();
@@ -846,7 +1019,7 @@ export default function Home() {
 
   const slide = slides[current];
   const theme = getSlideTheme(slide);
-  const moduleIndex = Math.max(0, moduleNames.indexOf(slide.module));
+  const moduleIndex = Math.max(0, visibleModuleNames.indexOf(slide.module));
 
   const handleLogin = (token: string, user: TrainingUser) => {
     setTrainingUser(user);
@@ -917,7 +1090,7 @@ export default function Home() {
               {slide.kind !== "cover" && slide.kind !== "close" && <div className="slide__topline"><span className="eyebrow">{slide.kicker}</span><span className="micro-label">{slide.module}</span></div>}
               {slide.kind !== "cover" && slide.kind !== "close" && slide.kind !== "mikiliIntro" && <h1 className="slide__title">{slide.title}</h1>}
               {slide.kind !== "cover" && slide.kind !== "close" && slide.kind !== "mikiliIntro" && slide.subtitle && <p className="slide__subtitle">{slide.subtitle}</p>}
-              <div className="slide__body"><SlideContent slide={slide} showAnswers={showAnswers} toggleAnswers={() => setShowAnswers((value) => !value)} /></div>
+              <div className="slide__body"><SlideContent slide={slide} showAnswers={showAnswers} toggleAnswers={() => setShowAnswers((value) => !value)} visibleModuleNames={visibleModuleNames} /></div>
               <footer className="slide__footer"><span>{activeSession.id === "complete" ? "Formation Produits & Services M-Pesa · Usage interne" : `${activeSession.label} · Séance autonome`}</span><span>{formatNumber(currentPosition)} / {formatNumber(activeSession.slideIndexes.length - 1)}</span></footer>
             </article>
           </section>
@@ -937,7 +1110,7 @@ export default function Home() {
         <button type="button" className="control-button" onClick={logoutTraining} aria-label="Se déconnecter de la formation"><LogOut size={17} /></button>
       </nav>
 
-      {showDeck && <aside className="deck-panel" aria-label="Sélecteur de séances"><div className="panel-heading"><div><span className="micro-label">{trainingUser.fullName || "Agent connecté"}</span><h2>Choisir une séance</h2></div><button type="button" aria-label="Fermer le sélecteur de séances" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="session-grid">{sessions.map((session) => { const progress = trainingOverview?.progress.find((item) => item.module_code === session.moduleCode); const attempt = trainingOverview?.attempts.find((item) => item.module_code === session.moduleCode); return <button key={session.id} type="button" onClick={() => startSession(session.id)} className={`session-card ${session.id === activeSession.id ? "session-card--active" : ""}`}><span className="session-card__duration">{session.duration}</span><b>{session.label}</b><small>{session.description}</small><span className="session-card__count">{session.moduleCode ? `${progress?.status === "completed" ? "Parcours terminé" : `${progress?.current_slide || 0}/${session.slideIndexes.length} slides`} · ${attempt ? `${attempt.score}%` : "test à faire"}` : `${session.slideIndexes.length} slides`}</span></button>; })}</div><div className="deck-panel__section"><span className="micro-label">Séance active · {activeSession.labelShort}{activeProgress ? ` · ${activeProgress.status === "completed" ? "terminée" : "en cours"}` : ""}{activeAttempt ? ` · dernier test ${activeAttempt.score}%` : ""}</span><div className="deck-panel__list">{activeSession.slideIndexes.map((slideIndex, index) => { const item = slides[slideIndex]; return <button key={`${item.title}-${slideIndex}`} type="button" onClick={() => { goTo(slideIndex); setShowDeck(false); }} className={`deck-panel__item ${current === slideIndex ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>; })}</div>{activeAssessment && <button type="button" className="deck-panel__assessment" onClick={() => { setShowDeck(false); setShowAssessment(true); }}>Lancer le test du module</button>}</div></aside>}
+      {showDeck && <aside className="deck-panel" aria-label="Sélecteur de séances"><div className="panel-heading"><div><span className="micro-label">{trainingUser.fullName || "Agent connecté"}</span><h2>Choisir une séance</h2></div><button type="button" aria-label="Fermer le sélecteur de séances" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="session-grid">{visibleSessions.map((session) => { const progress = trainingOverview?.progress.find((item) => item.module_code === session.moduleCode); const attempt = trainingOverview?.attempts.find((item) => item.module_code === session.moduleCode); return <button key={session.id} type="button" onClick={() => startSession(session.id)} className={`session-card ${session.id === activeSession.id ? "session-card--active" : ""}`}><span className="session-card__duration">{session.duration}</span><b>{session.label}</b><small>{session.description}</small><span className="session-card__count">{session.moduleCode ? `${progress?.status === "completed" ? "Parcours terminé" : `${progress?.current_slide || 0}/${session.slideIndexes.length} slides`} · ${attempt ? `${attempt.score}%` : "test à faire"}` : `${session.slideIndexes.length} slides`}</span></button>; })}</div><div className="deck-panel__section"><span className="micro-label">Séance active · {activeSession.labelShort}{activeProgress ? ` · ${activeProgress.status === "completed" ? "terminée" : "en cours"}` : ""}{activeAttempt ? ` · dernier test ${activeAttempt.score}%` : ""}</span><div className="deck-panel__list">{activeSession.slideIndexes.map((slideIndex, index) => { const item = slides[slideIndex]; return <button key={`${item.title}-${slideIndex}`} type="button" onClick={() => { goTo(slideIndex); setShowDeck(false); }} className={`deck-panel__item ${current === slideIndex ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>; })}</div>{activeAssessment && <button type="button" className="deck-panel__assessment" onClick={() => { setShowDeck(false); setShowAssessment(true); }}>Lancer le test du module</button>}</div></aside>}
 
       {showHelp && <aside className="help-panel" role="dialog" aria-modal="true" aria-label="Raccourcis clavier"><span className="micro-label">Mode présentateur</span><h2>Pilotez au clavier.</h2><div className="help-grid"><div><kbd>→ / espace</kbd>Slide suivante</div><div><kbd>← / retour</kbd>Slide précédente</div><div><kbd>Home / End</kbd>Début / fin de séance</div><div><kbd>G ou M</kbd>Choisir une séance</div><div><kbd>F</kbd>Plein écran</div><div><kbd>A</kbd>Test ou réponses du quiz</div><div><kbd>?</kbd>Cette aide</div><div><kbd>Échap</kbd>Fermer un panneau</div></div><button type="button" className="help-close" onClick={() => setShowHelp(false)}>Reprendre la présentation</button></aside>}
       {showAssessment && activeAssessment && <AssessmentPanel sessionLabel={activeSession.label} questions={activeAssessment} onClose={() => setShowAssessment(false)} onSubmit={handleAssessment} readOnly={isGuest} />}

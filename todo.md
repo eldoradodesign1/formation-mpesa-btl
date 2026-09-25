@@ -116,3 +116,10 @@
 - [x] Rétablir l’autorisation d’écriture GitHub de `eldoradodesign1` et publier le module Vodacom Privilège sur GitHub Pages.
 - [x] Ajouter la procédure d’activation recommandée `*1111#` → option `4 — Privilège` au module Vodacom Privilège.
 - [x] Ajouter une question de contrôle sur le chemin USSD conseillé et vérifier la publication GitHub Pages.
+- [x] Auditer le code, les parcours, le catalogue Supabase et la publication GitHub Pages avant toute évolution Hôtesses.
+- [x] Rechercher et documenter les pratiques d’accueil événementiel, de proximité, de sécurité, d’accessibilité et de pédagogie terrain.
+- [x] Ajouter le module autonome « Formation Hôtesses » : 65 minutes, 14 slides, visuels originaux et parcours complet conditionnel.
+- [x] Ajouter l’évaluation Hôtesses de 12 questions et ses tests de seuil.
+- [x] Restreindre Hôtesses aux catégories `hostess`, aux rôles de supervision/administration et aux visiteurs lecture seule ; filtrer les certificats et totaux par profil.
+- [x] Mettre à jour le catalogue Supabase, l’Edge Function de formation et le cache PWA.
+- [x] Vérifier le rendu Invité, la lecture seule et les contrôles TypeScript/Vitest/build avant publication.
