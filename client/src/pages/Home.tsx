@@ -31,7 +31,7 @@ type Slide = {
   kicker: string;
   title: string;
   subtitle?: string;
-  theme?: "paper" | "red" | "merchant" | "global" | "security" | "cover" | "hostessEvent" | "hostessProximity" | "hostessReady";
+  theme?: "paper" | "red" | "merchant" | "global" | "security" | "cover" | "clientsPhoto" | "commercePhoto" | "merchantPaymentPhoto" | "visaPhoto" | "mikiliPhoto" | "rallongePhoto" | "privilegePhoto" | "hostessEvent" | "hostessProximity" | "hostessReady";
   compact?: boolean;
   kind:
     | "cover"
@@ -118,6 +118,7 @@ const slides: Slide[] = [
     kicker: "Module 01 · profils clients",
     title: "Deux catégories de clients à reconnaître immédiatement.",
     subtitle: "Vodacash distingue les clients individuels et les clients Business, couramment appelés agents M-Pesa.",
+    theme: "clientsPhoto",
     kind: "clients",
   },
   {
@@ -141,7 +142,7 @@ const slides: Slide[] = [
     kicker: "Module 02 · encaisser",
     title: "Encaisser sa vente, sans mélanger son activité et son compte personnel.",
     subtitle: "Petit Commerce permet au client Premium avec activité lucrative de recevoir les paiements dans un compte M-Pesa séparé.",
-    theme: "merchant",
+    theme: "commercePhoto",
     kind: "merchant",
   },
   {
@@ -201,7 +202,7 @@ const slides: Slide[] = [
     kicker: "Module 03 · encaissement client",
     title: "Faire payer le client directement chez le marchand.",
     subtitle: "Le Paiement Marchand permet au client de régler un produit ou un service avec son compte M-Pesa, sans manipulation d’espèces.",
-    theme: "merchant",
+    theme: "merchantPaymentPhoto",
     kind: "merchantPaymentIntro",
   },
   {
@@ -234,6 +235,7 @@ const slides: Slide[] = [
     kicker: "Module 03 · paiement en ligne",
     title: "Payer en ligne, ici comme à l’international.",
     subtitle: "La carte Visa M-Pesa permet d’utiliser l’argent logé sur le compte M-Pesa pour réaliser des transactions en ligne.",
+    theme: "visaPhoto",
     kind: "visaIntro",
   },
   {
@@ -278,7 +280,7 @@ const slides: Slide[] = [
     kicker: "Module 04 · réception internationale",
     title: "Recevoir de l’argent de l’étranger, directement sur M-Pesa.",
     subtitle: "M-Pesa Mikili s’appuie sur le partenariat avec MFS Africa pour offrir au client M-Pesa une nouvelle voie de réception de fonds.",
-    theme: "global",
+    theme: "mikiliPhoto",
     kind: "mikiliIntro",
   },
   {
@@ -337,7 +339,7 @@ const slides: Slide[] = [
     kicker: "Module 05 · découvert ponctuel",
     title: "Quand le solde manque, la Rallonge peut compléter la transaction ciblée.",
     subtitle: "Le service offre à un client individuel M-Pesa éligible un découvert instantané lorsque son solde est nul ou insuffisant.",
-    theme: "red",
+    theme: "rallongePhoto",
     kind: "rallongeIntro",
   },
   {
@@ -368,6 +370,7 @@ const slides: Slide[] = [
     kicker: "Module 07 · Service client premium",
     title: "Vodacom Privilège : un parcours pensé pour des usages exigeants.",
     subtitle: "« Un parcours d’exception, des forfaits à la hauteur de vos attentes. » La mission terrain consiste à attirer, découvrir, expliquer, accompagner et fidéliser.",
+    theme: "privilegePhoto",
     kind: "privilegeIntro",
   },
   {
@@ -687,6 +690,13 @@ function getSlideTheme(slide: Slide) {
   if (slide.theme === "paper") return "slide--paper";
   if (slide.theme === "red") return "slide--red";
   if (slide.theme === "merchant") return "image-split image-split--merchant";
+  if (slide.theme === "clientsPhoto") return "image-split image-split--clients";
+  if (slide.theme === "commercePhoto") return "image-split image-split--commerce";
+  if (slide.theme === "merchantPaymentPhoto") return "image-split image-split--merchant-payment";
+  if (slide.theme === "visaPhoto") return "image-split image-split--visa";
+  if (slide.theme === "mikiliPhoto") return "image-split image-split--mikili";
+  if (slide.theme === "rallongePhoto") return "image-split image-split--rallonge";
+  if (slide.theme === "privilegePhoto") return "image-split image-split--privilege";
   if (slide.theme === "global") return "image-split image-split--global";
   if (slide.theme === "security") return "image-split image-split--security";
   if (slide.theme === "hostessEvent") return "image-split image-split--hostess-event";
