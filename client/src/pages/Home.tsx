@@ -473,109 +473,109 @@ const slides: Slide[] = [
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Présence terrain",
-    title: "Une présence qui rassure, oriente et crée une relation utile.",
-    subtitle: "Une formation complète pour les hôtesses d’accueil événementiel et les hôtesses de proximité en campagne.",
+    title: "Une présence de service qui rassure, oriente et protège les limites.",
+    subtitle: "Accueil événementiel et proximité : une relation utile, une autonomie respectée et une continuité assurée par l’équipe.",
     theme: "hostessEvent",
     kind: "hostessIntro",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Deux rôles",
-    title: "Accueillir quand l’invité vient. Approcher avec tact quand le lieu vit.",
-    subtitle: "Les deux missions partagent la même exigence de service, mais diffèrent par leur point de départ et leur rythme.",
+    title: "Deux rôles, un même cadre : servir, préserver l’espace, passer le relais.",
+    subtitle: "L’accueil et la proximité exigent une information juste, un contact consenti et des limites professionnelles claires.",
     theme: "paper",
     kind: "hostessRoles",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Avant la prise de poste",
-    title: "La qualité du contact se prépare bien avant la première conversation.",
-    subtitle: "Ponctualité, tenue, matériel, briefing et connaissance du lieu forment le premier standard de confiance.",
+    title: "Préparer une mission sûre, tenable et réellement prête.",
+    subtitle: "Brief, référent, circulation, pauses, relais, matériel et limites de rôle se vérifient avant le premier contact.",
     theme: "hostessReady",
     kind: "hostessReadiness",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Accueil événementiel",
-    title: "Recevoir, vérifier, orienter, rester disponible.",
-    subtitle: "À l’événement, l’invité arrive vers l’hôtesse. La mission est de rendre son parcours immédiat, calme et clair.",
+    title: "Accueillir, se situer, clarifier, orienter, conclure.",
+    subtitle: "À l’événement, l’hôtesse rend le parcours immédiat et lisible, avec une expression adaptée, une voix discrète et un passage libre.",
     kind: "hostessOrientation",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Proximité",
-    title: "Dans un lieu fixe, l’approche commence par la lecture du contexte.",
-    subtitle: "HORECA, shop, aéroport ou espace de campagne : l’hôtesse s’adresse aux personnes disponibles, jamais à leur place.",
+    title: "Dans un lieu fixe, l’approche commence par le contexte et le consentement.",
+    subtitle: "HORECA, shop, aéroport ou espace de campagne : observer, demander, se placer, puis ajuster ou renoncer.",
     theme: "hostessProximity",
     kind: "hostessProximity",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Premier contact",
-    title: "Une phrase courte, une permission, une utilité.",
-    subtitle: "Créer l’envie professionnellement, c’est susciter l’attention par la pertinence et le respect — jamais par la pression.",
+    title: "Une phrase courte, une permission, une utilité — et une sortie claire.",
+    subtitle: "La relation de service n’exige aucune proximité personnelle : un refus, une question privée ou une indisponibilité se redirige avec respect.",
     theme: "paper",
     kind: "hostessApproach",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Écoute et empathie",
-    title: "Écouter le besoin avant de proposer une réponse.",
-    subtitle: "L’hôtesse reformule, apporte une information vérifiée et sait reconnaître quand une réponse doit être orientée.",
+    title: "Écouter, adapter, répondre ou orienter : sans se confondre avec le besoin de l’autre.",
+    subtitle: "L’empathie reconnaît l’impact, vérifie les faits et annonce la prochaine étape ; elle n’impose ni confidence, ni promesse.",
     kind: "hostessConversation",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Maîtrise de soi",
-    title: "L’émotion est un signal. La posture reste professionnelle.",
-    subtitle: "En situation de tension, le calme, le ton et les mots transforment une interaction fragile en prochaine étape claire.",
+    title: "L’émotion est un signal : PAUSE aide à choisir la prochaine action sûre.",
+    subtitle: "Réguler ne signifie ni sourire de force, ni supporter une situation abusive : une pause, une relève ou une alerte sont des gestes professionnels.",
     theme: "red",
     kind: "hostessEmotions",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Présence professionnelle",
-    title: "La tenue, le langage corporel et la ponctualité parlent avant les mots.",
-    subtitle: "Une image soignée n’est pas une apparence figée : elle rend le service crédible, accessible et cohérent avec le brief.",
+    title: "La présence professionnelle est accessible, mobile et jamais une performance d’apparence.",
+    subtitle: "La tenue, la posture, le regard, la voix et la ponctualité servent la relation ; on observe des gestes, jamais un charme ou un sourire imposé.",
     theme: "paper",
     kind: "hostessPresence",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Cas sensibles",
-    title: "Un refus, une réclamation ou une urgence se gèrent sans perdre la dignité de personne.",
-    subtitle: "La bonne réponse protège le client, le lieu, l’équipe et l’hôtesse elle-même.",
+    title: "Face à un refus, une avance ou une urgence, préserver la dignité et la sécurité.",
+    subtitle: "La règle n’est pas de gérer seule : poser une limite si c’est sûr, se retirer, relayer et alerter selon le niveau de risque.",
     kind: "hostessDifficult",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Éthique et confidentialité",
-    title: "Informer sans manipuler. Assister sans demander ce qui doit rester privé.",
-    subtitle: "Le respect du consentement, des données personnelles et du périmètre de rôle est une exigence de terrain.",
+    title: "Respecter les frontières personnelles et protéger chaque donnée M-Pesa.",
+    subtitle: "Une interaction utile ne donne accès ni à la vie privée, ni au téléphone, ni à un PIN, OTP, écran ou QR non validé.",
     theme: "security",
     kind: "hostessEthics",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Reporting et escalade",
-    title: "Ce que vous ne pouvez pas résoudre doit être tracé et transmis correctement.",
-    subtitle: "Le reporting transforme les interactions terrain en informations utiles pour le superviseur et l’équipe campagne.",
+    title: "Trier, relayer, tracer : la bonne escalade protège la mission et les personnes.",
+    subtitle: "Courant, sensible ou urgent : le fait observé, le bon relais et une transmission minimale évitent l’improvisation.",
     theme: "paper",
     kind: "hostessEscalation",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Mise en situation",
-    title: "Deux contextes, une même méthode : accueillir, comprendre, aider, conclure.",
-    subtitle: "Le rôle-play permet de passer d’un discours appris à un comportement réellement observable sur le terrain.",
+    title: "Trois scènes terrain pour préparer, poser une limite, protéger et relayer.",
+    subtitle: "Le rôle-play évalue des décisions observables ; personne n’a à tolérer, rejouer ou raconter une situation personnelle difficile.",
     theme: "hostessEvent",
     kind: "hostessRolePlay",
   },
   {
     module: "Formation Hôtesses",
     kicker: "Module 08 · Standard de maîtrise",
-    title: "Une prestation complète se mesure dans le détail et se renforce par le coaching.",
-    subtitle: "La grille terrain combine préparation, relation client, conformité, résolution et reporting.",
+    title: "Le standard se mesure par des faits, une décision sûre et un relais bien donné.",
+    subtitle: "La cotation couvre la préparation, la relation, les limites, la protection des données et la coordination — pas l’apparence ou l’endurance émotionnelle.",
     theme: "paper",
     kind: "hostessScorecard",
   },
@@ -625,7 +625,7 @@ const sessions: Session[] = [
   { id: "mikili", label: "Module 5 · M-Pesa Mikili", labelShort: "Mikili", description: "Réception depuis l’étranger, limites, notification et envoi régional.", duration: "30 min", slideIndexes: [17, 18, 19, 20, 21, 22], moduleCode: "mikili" },
   { id: "rallonge", label: "Module 6 · M-Pesa Rallonge", labelShort: "Rallonge", description: "Découvert ponctuel, éligibilité, usage, remboursement et pénalités.", duration: "25 min", slideIndexes: [23, 24, 25, 26], moduleCode: "rallonge" },
   { id: "vodacom-privilege", label: "Module 7 · Vodacom Privilège", labelShort: "Privilège", description: "Offres Gold et Platinum, activation *1111# → 4, service client, conformité et mise en situation.", duration: "55 min", slideIndexes: [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38], moduleCode: "vodacom-privilege" },
-  { id: "formation-hotesses", label: "Module 8 · Formation Hôtesses", labelShort: "Hôtesses", description: "Accueil événementiel, proximité, posture, relation client, gestion terrain et cas pratiques.", duration: "65 min", slideIndexes: [39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52], moduleCode: hostessModuleCode },
+  { id: "formation-hotesses", label: "Module 8 · Formation Hôtesses", labelShort: "Hôtesses", description: "Accueil, proximité, posture, limites professionnelles, sécurité, confidentialité, relais et cas pratiques.", duration: "75 min", slideIndexes: [39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52], moduleCode: hostessModuleCode },
 ];
 
 type AssessmentQuestion = { id: string; prompt: string; options: string[]; answer: number };
@@ -846,33 +846,33 @@ function SlideContent({ slide, showAnswers, toggleAnswers, visibleModuleNames }:
     case "privilegeScorecard":
       return <div className="rule-cards">{[["15", "Critères notés sur 5 : accueil, écoute, besoin, explication, objections, conformité et conclusion."], ["/75", "Total de la grille terrain : présentation, professionnalisme, protection des données et orientation inclus."], ["65–75", "Excellent : maîtrise et posture de référence."], ["55–64", "Très bon : performance solide à consolider."], ["45–54", "Acceptable : accompagnement ciblé recommandé."], ["<35", "Coaching obligatoire selon le standard de formation."]].map(([value, label]) => <div className="rule-card" key={value}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
     case "hostessIntro":
-      return <div className="hostess-hero-copy"><span className="micro-label">Hospitalité · proximité · confiance</span><p>Une hôtesse ne se limite pas à être présente. Elle rend un lieu lisible, une interaction plus simple et une personne mieux considérée.</p><div className="hostess-hero-copy__pillars"><span>Accueillir</span><span>Comprendre</span><span>Orienter</span><span>Conclure</span></div></div>;
+      return <div className="hostess-hero-copy"><span className="micro-label">Hospitalité · proximité · confiance</span><p>Une présence de service rend le lieu lisible, l’échange utile et la personne mieux considérée — sans exiger de disponibilité personnelle.</p><div className="hostess-hero-copy__pillars"><span>Autonomie</span><span>Service utile</span><span>Relais d’équipe</span><span>Sécurité</span></div></div>;
     case "hostessRoles":
-      return <div className="comparison-grid"><section className="comparison-card"><span className="comparison-card__tag">Événements ponctuels</span><h3>Hôtesse d’accueil</h3><p>L’invité vient vers elle. Elle reçoit, vérifie selon le brief, guide, renseigne et rend le parcours fluide dès l’arrivée.</p><BulletStack items={["Point d’entrée : l’arrivée de l’invité.", "Réflexe : saluer, clarifier, orienter.", "Cadre : accès, programme, services, circulation."]} /></section><section className="comparison-card comparison-card--focus"><span className="comparison-card__tag">Campagnes en lieu fixe</span><h3>Hôtesse de proximité</h3><p>Elle va à la rencontre de personnes disponibles dans un HORECA, un shop, un aéroport ou un autre point d’affectation.</p><BulletStack items={["Point d’entrée : le bon moment et la permission d’échanger.", "Réflexe : observer, approcher avec tact, apporter une utilité.", "Cadre : ne pas gêner le lieu, le client ou l’activité en cours."]} /></section></div>;
+      return <div className="comparison-grid"><section className="comparison-card"><span className="comparison-card__tag">Événements ponctuels</span><h3>Hôtesse d’accueil</h3><p>L’invité vient vers elle. Elle reçoit, vérifie selon le brief, guide et rend le parcours fluide dès l’arrivée.</p><BulletStack items={["Je fais : saluer, clarifier, orienter avec une information confirmée.", "Je transmets : accès exceptionnel, information incertaine, situation sensible.", "Je n’autorise pas : donnée privée, promesse non validée, échange personnel pendant la mission."]} /></section><section className="comparison-card comparison-card--focus"><span className="comparison-card__tag">Campagnes en lieu fixe</span><h3>Hôtesse de proximité</h3><p>Elle va à la rencontre de personnes disponibles dans un HORECA, un shop, un aéroport ou un autre point d’affectation.</p><BulletStack items={["Je fais : observer, demander la permission et apporter une utilité brève.", "Je transmets : besoin hors rôle, doute produit, accès ou incident sensible.", "Je n’autorise pas : pression, passage bloqué, collecte de données ou proximité personnelle."]} /></section></div>;
     case "hostessReadiness":
-      return <div className="takeaway-layout"><div className="takeaway-list">{["Arriver avec une marge suffisante pour prendre connaissance du lieu, du brief et des consignes de sécurité.", "Vérifier une tenue propre, conforme et adaptée à la durée du poste ainsi qu’une hygiène soignée.", "Préparer les supports, le matériel autorisé, les contacts d’escalade et l’objectif de la journée.", "Repérer les entrées, les zones de service, les sanitaires, les issues et le responsable de site.", "Confirmer son point d’affectation, son rythme de pause et le format de reporting attendu."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Être prête, c’est déjà commencer à servir.</p><span>Checklist de prise de poste</span></aside></div>;
+      return <div className="takeaway-layout"><div className="takeaway-list">{["P — Plan : connaître entrées, issues, point de rassemblement et passages à garder libres.", "R — Référent : identifier binôme, chef de zone, renfort et canal d’alerte réellement utilisable.", "Ê — Être prête : tenue fonctionnelle, badge, matériel validé, eau, hygiène, pauses et alternance de posture.", "T — Terrain : vérifier zones autorisées, itinéraire accessible, objectif, information confirmée et point de repli visible.", "E — Escalade : savoir quoi transmettre, à qui, et demander une relève si l’état du moment ne permet pas un poste sûr."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Une micro-transition : état, intention, filet de sécurité. Pas besoin d’effacer sa vie personnelle pour tenir sa mission.</p><span>Routine P.R.Ê.T.E.</span></aside></div>;
     case "hostessOrientation":
-      return <div className="route-layout"><aside className="route-aside"><div><span className="micro-label">Accueil événementiel</span><span className="route-aside__code">04<br/>GESTES</span><p>Un accueil bref, humain et utile donne à l’invité un premier repère fiable.</p></div><span className="route-aside__count">Du salut à la suite</span></aside><div className="route-steps"><div className="route-steps__spine" aria-hidden="true" />{["Saluer avec regard, sourire naturel et formule adaptée au contexte.", "Clarifier : « Bienvenue. Puis-je vous aider à trouver votre espace ou votre contact ? »", "Vérifier les éléments prévus par le brief, sans exposer inutilement les informations de l’invité.", "Indiquer précisément la suite, accompagner si le protocole le prévoit, puis rester disponible pour la demande suivante."].map((item) => <div className="route-step" key={item}>{item}</div>)}</div></div>;
+      return <div className="route-layout"><aside className="route-aside"><div><span className="micro-label">Accueil événementiel</span><span className="route-aside__code">05<br/>GESTES</span><p>Un accueil bref, humain et utile donne un premier repère fiable, sans exposer la personne ni bloquer le flux.</p></div><span className="route-aside__count">Du salut à la suite</span></aside><div className="route-steps"><div className="route-steps__spine" aria-hidden="true" />{["Se situer : expression accueillante et adaptée — sourire si naturel — regard bref, voix intelligible et passage libre.", "Clarifier : « Bienvenue. Puis-je vous aider à trouver votre espace ou votre contact ? »", "Vérifier uniquement le brief autorisé, avec un volume qui protège les informations de l’invité.", "Orienter : donner deux repères simples, accompagner si le protocole le prévoit et vérifier la compréhension.", "Conclure : annoncer la suite, rester disponible pour la demande suivante et relayer toute information non confirmée."].map((item) => <div className="route-step" key={item}>{item}</div>)}</div></div>;
     case "hostessProximity":
-      return <div className="hostess-proximity-copy"><div><span className="micro-label">Observer avant d’approcher</span><p>Dans les lieux vivants, l’hôtesse choisit un moment où la personne peut réellement écouter. Elle ne coupe pas un repas, un paiement, un appel, une file ou un déplacement pressé.</p></div><div className="hostess-proximity-copy__locations"><span>Hôtels</span><span>Restaurants</span><span>Cafés</span><span>Shops</span><span>Aéroports</span><span>Points de campagne</span></div></div>;
+      return <div className="hostess-proximity-copy"><div><span className="micro-label">Voir · demander · se placer · ajuster</span><p>Observer le rythme, demander la permission, garder la distance et le passage libre. Si la personne s’éloigne, refuse ou paraît indisponible, remercier et renoncer.</p></div><div className="hostess-proximity-copy__locations"><span>Hôtels</span><span>Restaurants</span><span>Cafés</span><span>Shops</span><span>Aéroports</span><span>Points de campagne</span></div></div>;
     case "hostessApproach":
-      return <div className="two-column-copy"><section className="copy-panel"><h3>La formule en trois temps</h3><BulletStack items={["Saluer : « Bonjour, bienvenue. »", "Demander la permission : « Avez-vous une minute pour une information qui peut vous être utile ? »", "Donner une raison concrète : expliquer le service ou l’orientation en une phrase simple."]} /></section><section className="copy-panel"><h3>Ce qui préserve la relation</h3><BulletStack items={["Accepter immédiatement un refus ou une indisponibilité.", "Conserver une distance physique appropriée et un ton posé.", "Éviter le jargon, les promesses et toute insistance.", "Proposer un autre moment seulement si la personne l’accepte."]} /></section></div>;
+      return <div className="two-column-copy"><section className="copy-panel"><h3>Permission · utilité · sortie</h3><BulletStack items={["Saluer : « Bonjour, bienvenue. »", "Demander : « Si vous le souhaitez, je peux vous renseigner sur… »", "Expliquer l’utilité en une phrase confirmée, puis laisser la personne choisir.", "Clore au refus : « Très bien, merci. Je vous laisse poursuivre. »"]} /></section><section className="copy-panel"><h3>Garder le cadre</h3><BulletStack items={["Corps légèrement de biais, distance confortable, mains et passage libres.", "Une question privée se redirige : « Je préfère garder cela privé. Que puis-je vous indiquer pour le service ? »", "Aucune insistance, flirt, coordonnées privées ou rendez-vous pendant la mission.", "Une demande personnelle répétée ou inconfortable appelle une fin d’échange et un relais."]} /></section></div>;
     case "hostessConversation":
-      return <div className="global-flow"><div><p className="global-flow__big">Écouter pour rendre l’échange <em>utile</em>.</p><p className="global-flow__desc">L’empathie est une compétence opérationnelle : elle aide à distinguer un besoin simple, une hésitation, une frustration et une demande qui exige une orientation.</p></div><div className="flow-points"><div className="flow-point"><span className="flow-point__index">01</span><div><b>Questionner</b><span>Poser une question ouverte et brève sur le besoin du moment.</span></div></div><div className="flow-point"><span className="flow-point__index">02</span><div><b>Reformuler</b><span>Vérifier que la compréhension est juste avant de répondre.</span></div></div><div className="flow-point"><span className="flow-point__index">03</span><div><b>Répondre ou orienter</b><span>Donner une information confirmée ou annoncer clairement la prochaine étape.</span></div></div></div></div>;
+      return <div className="global-flow"><div><p className="global-flow__big">Écouter pour rendre l’échange <em>utile</em>.</p><p className="global-flow__desc">L’empathie reconnaît l’impact, vérifie les faits et annonce une suite réaliste. Elle n’est ni une confidence, ni un diagnostic, ni une promesse.</p></div><div className="flow-points"><div className="flow-point"><span className="flow-point__index">01</span><div><b>Questionner</b><span>Demander le besoin et, si nécessaire, le mode de communication ou d’aide préféré.</span></div></div><div className="flow-point"><span className="flow-point__index">02</span><div><b>Reformuler</b><span>Une idée à la fois ; vérifier la compréhension sans supposer ni parler à la place de la personne.</span></div></div><div className="flow-point"><span className="flow-point__index">03</span><div><b>Répondre ou orienter</b><span>Donner le confirmé, dire « je vérifie » pour le reste et appeler le relais adapté.</span></div></div></div></div>;
     case "hostessEmotions":
-      return <div className="rule-cards hostess-rule-cards">{[["PAUSE", "Ralentir sa réponse, respirer et conserver une expression ouverte."], ["ÉCOUTE", "Laisser la personne exposer les faits sans couper ni contester."], ["CADRE", "Dire ce qui peut être fait maintenant, avec des mots simples."], ["RELAIS", "Faire appel au responsable si la demande dépasse le rôle ou devient sensible."], ["SUIVI", "Terminer par une suite précise plutôt qu’une promesse vague."], ["RESPECT", "Préserver la dignité de chacun, même en cas de refus ou de tension."]].map(([value, label]) => <div className="rule-card" key={value}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
+      return <div className="rule-cards hostess-rule-cards">{[["P", "Percevoir son état : préoccupation, fatigue, tension ou surcharge sont des signaux, pas une faute."], ["A", "Ancrer le corps : relâcher les épaules, ralentir et adopter une expression calme ou neutre — jamais un sourire forcé."], ["U", "Utiliser une phrase neutre : « Je vais faire appel au responsable pour vous répondre correctement. »"], ["S", "Solliciter soutien ou relève : ne pas surpartager avec le client, ni porter seule une interaction difficile."], ["E", "Escalader si la sécurité, le rôle ou la capacité l’exige. PAUSE ne demande jamais de rester dans une situation abusive."], ["APRÈS", "Noter le nécessaire, transmettre le poste et demander le soutien prévu après un incident éprouvant."]].map(([value, label]) => <div className="rule-card" key={value}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
     case "hostessPresence":
-      return <div className="two-column-copy"><section className="copy-panel"><h3>Le standard visible</h3><BulletStack items={["Tenue conforme, propre et adaptée au point d’affectation.", "Posture stable, épaules ouvertes, gestes simples et regard attentif.", "Voix audible, rythme calme, vocabulaire positif et professionnel.", "Téléphone personnel rangé pendant le service, sauf consigne opérationnelle."]} /></section><section className="copy-panel"><h3>Le standard invisible</h3><BulletStack items={["Être ponctuelle et prévenir immédiatement en cas d’aléa.", "Tenir ses engagements et respecter les horaires, les pauses et le brief.", "Rester attentive au lieu même lorsqu’aucune personne ne sollicite d’aide.", "Traiter collègues, invités, clients et prestataires avec la même considération."]} /></section></div>;
+      return <div className="two-column-copy"><section className="copy-panel"><h3>Présence relationnelle accessible</h3><BulletStack items={["Posture stable mais mobile : épaules relâchées, support organisé, passage et issue libres.", "Regard bref et confortable, voix adaptée au lieu, expression disponible, calme ou neutre selon la situation.", "Tenue propre, sûre, conforme au brief et confortable pour la durée du poste ; téléphone personnel rangé pendant l’échange.", "Alterner les positions et signaler tôt chaleur, douleur, fatigue ou aménagement qui rend le poste intenable."]} /></section><section className="copy-panel"><h3>Ce qui n’est pas évalué</h3><BulletStack items={["Ni corps, âge, genre, accent, coiffure, maquillage, talons, charme ou sourire permanent.", "Ni disponibilité personnelle, détail intime, endurance face à une insistance ou capacité à « gérer seule » un risque.", "La ponctualité inclut prévenir tôt et organiser la relève en cas d’aléa ; elle ne demande pas de cacher une difficulté.", "Le professionnalisme se lit dans le respect, la clarté, la sécurité et l’attention au lieu."]} /></section></div>;
     case "hostessDifficult":
-      return <div className="comparison-grid"><section className="comparison-card"><span className="comparison-card__tag">Refus ou client occupé</span><h3>Respecter le non.</h3><BulletStack items={["Remercier sans montrer de déception.", "Ne pas relancer immédiatement ni bloquer le passage.", "Si la personne le souhaite, proposer un moment ou un point d’information ultérieur.", "Revenir à son observation de terrain sans personnaliser le refus."]} /></section><section className="comparison-card comparison-card--focus"><span className="comparison-card__tag">Réclamation ou incident</span><h3>Stabiliser la situation.</h3><BulletStack items={["Écouter, reconnaître la gêne et ne pas débattre.", "Ne promettre que ce qui est réellement dans le périmètre de l’équipe.", "Mettre en sécurité et prévenir le responsable en cas de risque ou de besoin sensible.", "Noter les faits utiles selon le brief et transmettre sans interprétation."]} /></section></div>;
+      return <div className="comparison-grid"><section className="comparison-card"><span className="comparison-card__tag">Refus, demande privée ou insistance</span><h3>L.I.E.R. : limite et sortie sûre.</h3><BulletStack items={["Limiter seulement si c’est sûr : « Je reste dans un cadre professionnel. »", "Isoler le risque, pas la personne : garder distance, issue et zone visible ; ne pas suivre ni bloquer.", "Escalader : fin d’échange, collègue ou référent si l’insistance continue ou devient inconfortable.", "Reporter les faits après sécurité. Recevoir une avance n’est jamais une faute de la personne ciblée."]} /></section><section className="comparison-card comparison-card--focus"><span className="comparison-card__tag">Courant · sensible · urgent</span><h3>Ne pas résoudre seule une urgence.</h3><BulletStack items={["Courant : information à vérifier ou besoin simple → handover ou débrief.", "Sensible : fraude présumée, harcèlement, accessibilité ou information contradictoire → responsable habilité sans délai.", "Urgent : menace, contact non consenti, passage bloqué, malaise, fumée ou alarme → sécurité / secours selon le brief.", "Priorité : se mettre en sécurité, relayer le message officiel et ne pas intervenir physiquement hors consigne."]} /></section></div>;
     case "hostessEthics":
-      return <div className="two-column-copy"><section className="copy-panel"><h3>Relation éthique</h3><BulletStack items={["Présenter une information fidèle, vérifiée et adaptée au besoin exprimé.", "Ne jamais utiliser une approche romantique, intrusive ou manipulatrice pour obtenir une adhésion.", "Ne pas collecter de données inutiles ni conserver une information personnelle sans cadre autorisé.", "Respecter le refus, la confidentialité et la liberté de choix de chaque personne."]} /></section><section className="copy-panel"><h3>Confidentialité opérationnelle</h3><BulletStack items={["Ne jamais demander, saisir ou mémoriser un PIN, un mot de passe ou un code personnel.", "Éviter de dire à voix haute une donnée confidentielle ou de la laisser visible.", "Laisser la personne manipuler elle-même son téléphone lorsqu’une information sensible est requise.", "Orienter vers le canal compétent si une vérification d’identité ou une décision est nécessaire."]} /></section></div>;
+      return <div className="two-column-copy"><section className="copy-panel"><h3>Frontière professionnelle</h3><BulletStack items={["Une question personnelle peut être redirigée ou ignorée ; aucune justification, coordonnée privée ou rendez-vous n’est requis pendant la mission.", "Les choix personnels libres et consensuels relèvent de la vie privée hors interaction de travail, dans le respect des règles locales.", "Pendant le service, l’échange reste disponible, neutre, sûr et centré sur le besoin public — jamais sur une conversation romantique ou sexuelle.", "Le respect du refus, de l’espace et de la dignité protège autant la personne accompagnée que l’hôtesse."]} /></section><section className="copy-panel"><h3>Confidentialité M-Pesa</h3><BulletStack items={["Ne jamais demander, voir, noter, dicter ou transmettre un PIN, OTP/code à usage unique ou identifiant secret.", "Ne jamais photographier, partager ou manipuler l’écran, la pièce ou la transaction du client.", "Utiliser seulement appareils, QR codes et canaux validés ; aucune promesse d’annulation ou remboursement hors mandat.", "En cas de doute, de lien ou d’instruction inhabituelle : ne pas cliquer, garder les faits utiles et alerter le canal compétent."]} /></section></div>;
     case "hostessEscalation":
-      return <div className="takeaway-layout"><div className="takeaway-list">{["Tracer les informations demandées par le brief : volume de contacts, questions récurrentes, besoins observés et incidents.", "Distinguer les faits observés de son interprétation personnelle.", "Remonter rapidement une information urgente, une réclamation sensible, une demande hors périmètre ou un risque de sécurité.", "Utiliser le canal et le responsable indiqués avant la prise de poste.", "Clore le reporting par une prochaine action claire : suivi, rappel, changement de position ou escalade."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Une bonne remontée protège le terrain et améliore la prochaine interaction.</p><span>Reporting responsable</span></aside></div>;
+      return <div className="takeaway-layout"><div className="takeaway-list">{["Trier : courant → handover ; sensible → responsable habilité ; urgent → sécurité ou secours selon le brief.", "F — Faits : paroles ou gestes observés, sans étiquette ni diagnostic.", "A — Action : limite, retrait, information donnée ou mesure de sécurité prise.", "I/T — Interlocuteur, temps et lieu : qui a reçu le relais, à quel moment et où.", "S — Suite : continuité du poste, prochaine vérification ou condition de travail à corriger ; jamais de détail intime dans le reporting."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Un handover de 30 secondes : flux, information à confirmer, incident ouvert, matériel et destinataire du relais.</p><span>F.A.I.T.S. · transmission factuelle</span></aside></div>;
     case "hostessRolePlay":
-      return <div className="two-column-copy"><section className="copy-panel"><h3>Scénario A · Événement</h3><p>Un invité arrive, regarde autour de lui et paraît hésitant. Il cherche la salle principale, mais son nom n’apparaît pas immédiatement dans le support disponible.</p><BulletStack items={["Accueillir et clarifier sa destination sans le mettre mal à l’aise.", "Vérifier uniquement ce que le brief autorise.", "Expliquer la suite et solliciter le bon relais sans promettre une résolution instantanée."]} /></section><section className="copy-panel"><h3>Scénario B · Proximité</h3><p>Dans un café, une cliente attend son rendez-vous et consulte son téléphone. Elle accepte d’écouter mais répond : « Je n’ai pas le temps pour une longue explication. »</p><BulletStack items={["Demander une minute et annoncer une utilité précise.", "Poser une seule question pour qualifier le besoin.", "Répondre brièvement, accepter sa décision et conclure avec une suite respectueuse."]} /></section></div>;
+      return <div className="rule-cards hostess-roleplay-cards">{[["01", "Avant l’ouverture : fatigue, issue partiellement obstruée et information à vérifier. Appliquer P.R.Ê.T.E., demander la couverture de pause et ne donner que le confirmé."], ["02", "Proximité : une personne écoute l’offre, demande un réseau social puis insiste. Poser la limite si c’est sûr, garder la distance, terminer, relayer et tracer F.A.I.T.S."], ["03", "Accueil : itinéraire adapté, téléphone montrant un OTP et file qui se forme. Demander l’aide préférée, ne pas voir le code, protéger le flux et alerter en cas d’urgence."]].map(([value, label]) => <div className="rule-card" key={value}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
     case "hostessScorecard":
-      return <div className="rule-cards">{[["/20", "Préparation : ponctualité, tenue, briefing, matériel et connaissance du point d’affectation."], ["/20", "Relation : accueil, écoute, empathie, clarté et respect de la disponibilité du client."], ["/20", "Posture : langage corporel, maîtrise des émotions, ton et professionnalisme continu."], ["/20", "Conformité : confidentialité, consentement, information juste et respect du périmètre."], ["/20", "Exécution : orientation, résolution, reporting et escalade au bon moment."], ["80 %", "Seuil de maîtrise : un coaching ciblé est prévu sur les critères observés sous le standard."]].map(([value, label]) => <div className="rule-card" key={`${value}-${label}`}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
+      return <div className="rule-cards hostess-scorecard">{[["0–2", "Préparation : P.R.Ê.T.E., information confirmée, pauses/relais et condition du poste signalée."], ["0–2", "Présence relationnelle : passage libre, posture mobile, voix et expression adaptées — jamais l’apparence."], ["0–2", "Contact : permission, besoin, refus respecté, accessibilité et conclusion claire."], ["0–2", "Protection : frontières personnelles, PIN/OTP/QR, confidentialité et exactitude M-Pesa."], ["0–2", "Sécurité : PAUSE, L.I.E.R., distance, issue, niveau d’alerte et absence d’intervention hors rôle."], ["0–2", "Coordination : relais nommé, handover court, F.A.I.T.S. factuel et suite confirmée."], ["COACHING", "Feedback : fait observé → effet → prochaine action. Alertes, pauses et demandes de soutien ne diminuent jamais la note."], ["SYSTÈME", "Le responsable note aussi la condition à corriger : effectif, flux, pause, signalétique, poste isolé ou canal indisponible."], ["80 %", "Validation du module : la sécurité, les données et les limites exigent une remise en pratique avant validation si elles sont à risque."]].map(([value, label]) => <div className="rule-card" key={`${value}-${label}`}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
     case "takeaway":
       return <div className="takeaway-layout"><div className="takeaway-list">{["Commencez toujours par identifier le type et le niveau du compte client.", "Clarifiez le besoin avant de choisir le service à présenter.", "Annoncez les conditions d’éligibilité et les limites avant de guider le parcours USSD.", "Faites confirmer les informations sensibles : numéro, montant, PIN et choix final.", "Rappelez les règles importantes : frais, absence de reversal, remboursement ou assistance 1111 selon le service."].map((item, index) => <div className="takeaway-item" key={item}><span className="takeaway-item__n">0{index + 1}</span>{item}</div>)}</div><aside className="takeaway-quote"><p>Le bon conseil rend le service plus sûr.</p><span>Réflexe BTL</span></aside></div>;
     case "quiz":
