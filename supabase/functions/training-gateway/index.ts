@@ -27,6 +27,7 @@ type TrainingUser = {
   full_name: string | null;
   role: string;
   user_category: string;
+  is_active?: boolean;
 };
 
 type TrainingModule = {
@@ -37,9 +38,17 @@ type TrainingModule = {
   position: number;
 };
 
-function canAccessModule(user: Pick<TrainingUser, "role" | "user_category">, moduleCode: string) {
+function fallbackCanAccessModule(user: Pick<TrainingUser, "role" | "user_category">, moduleCode: string) {
   if (moduleCode !== hostessModuleCode) return true;
   return user.user_category === "hostess" || managementRoles.has(user.role);
+}
+async function accessForUser(user: TrainingUser) {
+  const { data } = await db.from("training_module_access").select("module_code,granted").eq("user_id", user.id);
+  const rows = data || [];
+  return rows.length ? new Set(rows.filter((row) => row.granted).map((row) => row.module_code)) : null;
+}
+function canAccessModule(user: Pick<TrainingUser, "role" | "user_category">, moduleCode: string, explicit: Set<string> | null = null) {
+  return explicit ? explicit.has(moduleCode) : fallbackCanAccessModule(user, moduleCode);
 }
 
 async function activeModules() {
@@ -68,7 +77,7 @@ async function sessionOf(req: Request) {
 
   const { data: user } = await db
     .from("users")
-    .select("id,phone,full_name,role,user_category")
+    .select("id,phone,full_name,role,user_category,is_active")
     .eq("id", session.user_id)
     .maybeSingle();
 
@@ -77,9 +86,12 @@ async function sessionOf(req: Request) {
 
 async function summary(users: TrainingUser[]) {
   const modules = await activeModules();
+  const accessRows = users.length ? (await db.from("training_module_access").select("user_id,module_code,granted").in("user_id", users.map((user) => user.id))).data || [] : [];
+  const accessByUserId = new Map<string, Set<string>>();
+  for (const row of accessRows) { const set = accessByUserId.get(row.user_id) || new Set<string>(); if (row.granted) set.add(row.module_code); accessByUserId.set(row.user_id, set); }
   const codesByUserId = new Map(users.map((user) => [
     user.id,
-    modules.filter((module) => canAccessModule(user, module.code)).map((module) => module.code),
+    modules.filter((module) => canAccessModule(user, module.code, accessByUserId.has(user.id) ? accessByUserId.get(user.id)! : null)).map((module) => module.code),
   ]));
   const ids = users.map((user) => user.id);
 
@@ -104,11 +116,12 @@ Deno.serve(async (req) => {
     const normalizedPhone = String(phone).trim().replace(/\s+/g, "");
     const { data: user } = await db
       .from("users")
-      .select("id,phone,full_name,role,user_category,password_hash")
+      .select("id,phone,full_name,role,user_category,is_active,password_hash")
       .eq("phone", normalizedPhone)
       .maybeSingle();
 
     if (!user || user.password_hash !== String(password)) return out({ error: "Identifiants incorrects." }, 401);
+    if (!superAdminRoles.has(user.role) && user.is_active === false) return out({ error: "Ce compte est inactif. Contactez un administrateur." }, 403);
 
     await db.from("users").update({ last_login: new Date().toISOString() }).eq("id", user.id);
     const { data: session, error } = await db.from("training_sessions").insert({ user_id: user.id }).select("token,expires_at").single();
@@ -125,14 +138,15 @@ Deno.serve(async (req) => {
   if (!session) return out({ error: "Session invalide ou expirée." }, 401);
 
   if (req.method === "GET" && path === "/overview") {
-    const [modules, progress, attempts, certificate] = await Promise.all([
+    const [modules, progress, attempts, certificate, explicitAccess] = await Promise.all([
       activeModules(),
       db.from("training_module_progress").select("module_code,current_slide,total_slides,status,started_at,completed_at,updated_at").eq("user_id", session.user_id),
       db.from("training_assessment_attempts").select("module_code,score,is_passed,submitted_at").eq("user_id", session.user_id).order("submitted_at", { ascending: false }).limit(100),
       db.from("training_certificates").select("certificate_number,issued_at").eq("user_id", session.user_id).maybeSingle(),
+      accessForUser(session.user),
     ]);
 
-    const visibleModules = modules.filter((module) => canAccessModule(session.user, module.code));
+    const visibleModules = modules.filter((module) => canAccessModule(session.user, module.code, explicitAccess));
     const visibleCodes = new Set(visibleModules.map((module) => module.code));
     return out({
       user: session.user,
@@ -148,7 +162,8 @@ Deno.serve(async (req) => {
     if (!moduleCode || !Number.isInteger(currentSlide) || !Number.isInteger(totalSlides)) return out({ error: "Progression invalide." }, 400);
 
     const modules = await activeModules();
-    if (!modules.some((module) => module.code === moduleCode) || !canAccessModule(session.user, moduleCode)) {
+    const explicitAccess = await accessForUser(session.user);
+    if (!modules.some((module) => module.code === moduleCode) || !canAccessModule(session.user, moduleCode, explicitAccess)) {
       return out({ error: "Ce module n’est pas accessible pour ce profil." }, 403);
     }
 
@@ -175,7 +190,8 @@ Deno.serve(async (req) => {
     }
 
     const modules = await activeModules();
-    if (!modules.some((module) => module.code === moduleCode) || !canAccessModule(session.user, moduleCode)) {
+    const explicitAccess = await accessForUser(session.user);
+    if (!modules.some((module) => module.code === moduleCode) || !canAccessModule(session.user, moduleCode, explicitAccess)) {
       return out({ error: "Ce module n’est pas accessible pour ce profil." }, 403);
     }
 
