@@ -21,7 +21,9 @@ import { canAccessSupervision, isCertificateEligible } from "@shared/trainingCom
 import { getPresentationKeyAction, isEditableKeyboardTarget } from "@shared/presentationKeyboard";
 import { vodacomPrivilegeAssessmentQuestions } from "@shared/vodacomPrivilegeAssessment";
 import { hotessesAssessmentQuestions } from "@shared/hotessesAssessment";
-import { canAccessTrainingModule, hostessModuleCode } from "@shared/trainingModuleAccess";
+import { brandAmbassadorsAssessmentQuestions } from "@shared/brandAmbassadorsAssessment";
+import { brandAmbassadorsModuleCode, canAccessTrainingModule, hostessModuleCode } from "@shared/trainingModuleAccess";
+import BrandAmbassadorsTraining from "@/components/BrandAmbassadorsTraining";
 
 const brandMark = "/manus-storage/mark_512f1f81.png";
 const joinQrCode = `${import.meta.env.BASE_URL}images/join-qr.png`;
@@ -31,7 +33,7 @@ type Slide = {
   kicker: string;
   title: string;
   subtitle?: string;
-  theme?: "paper" | "red" | "merchant" | "global" | "security" | "cover" | "clientsPhoto" | "commercePhoto" | "merchantPaymentPhoto" | "visaPhoto" | "mikiliPhoto" | "rallongePhoto" | "privilegePhoto" | "hostessEvent" | "hostessProximity" | "hostessReady";
+  theme?: "paper" | "red" | "merchant" | "global" | "security" | "cover" | "clientsPhoto" | "commercePhoto" | "merchantPaymentPhoto" | "visaPhoto" | "mikiliPhoto" | "rallongePhoto" | "privilegePhoto" | "hostessEvent" | "hostessProximity" | "hostessReady" | "brandAmbassador" | "brandConversation" | "brandBriefing";
   compact?: boolean;
   kind:
     | "cover"
@@ -81,6 +83,7 @@ type Slide = {
     | "hostessEscalation"
     | "hostessRolePlay"
     | "hostessScorecard"
+    | "brandAmbassador"
     | "takeaway"
     | "quiz"
     | "close";
@@ -580,6 +583,141 @@ const slides: Slide[] = [
     kind: "hostessScorecard",
   },
   {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Activation terrain",
+    title: "Brand Ambassadors : convertir l’intérêt en choix éclairé.",
+    subtitle: "Une méthode pratique pour présenter les services M-Pesa, faire une démonstration sûre et respecter la décision du prospect.",
+    theme: "brandAmbassador",
+    code: "ba-intro",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Le rôle",
+    title: "Créer une conversation utile — sans dépasser son mandat.",
+    subtitle: "La confiance durable compte davantage qu’une activation obtenue sous pression.",
+    theme: "paper",
+    code: "ba-role",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Préparation",
+    title: "Un brief maîtrisé évite l’improvisation sur le terrain.",
+    subtitle: "Avant le premier contact, les faits produit, les conditions, le poste et l’escalade doivent être clairs.",
+    theme: "brandBriefing",
+    code: "ba-readiness",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Conversation",
+    title: "A.C.T.I.F. : cinq gestes pour un échange respectueux.",
+    subtitle: "Aborder, Comprendre, Traduire, Informer et Faciliter le choix — dans cet ordre.",
+    theme: "red",
+    code: "ba-approach",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Découverte",
+    title: "Le besoin exprimé guide la présentation.",
+    subtitle: "Une question ouverte, une écoute réelle et une reformulation suffisent souvent.",
+    theme: "paper",
+    code: "ba-discovery",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Présentation",
+    title: "Relier un bénéfice confirmé au besoin du prospect.",
+    subtitle: "Un message bref, une condition essentielle et une invitation à choisir.",
+    theme: "brandConversation",
+    code: "ba-presentation",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Démonstration",
+    title: "Montrer le parcours sans prendre le téléphone du client.",
+    subtitle: "Le matériel de formation est fictif ; le client conserve la main sur son compte et ses secrets.",
+    theme: "brandConversation",
+    code: "ba-demo",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Objections",
+    title: "Accueillir une réserve sans chercher à la faire disparaître.",
+    subtitle: "Écouter, clarifier, donner un fait vérifié — puis accepter la réponse.",
+    theme: "paper",
+    code: "ba-objections",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Activation sûre",
+    title: "Le client choisit, saisit et confirme lui-même.",
+    subtitle: "Le BA guide avec la procédure officielle, sans toucher au PIN ni effectuer de transaction.",
+    theme: "red",
+    code: "ba-activation",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Confiance M-Pesa",
+    title: "PIN, OTP, mots de passe et écran restent privés.",
+    subtitle: "Une pratique sûre protège le client, le BA et la relation avec le service.",
+    theme: "security",
+    code: "ba-trust",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Refus",
+    title: "Un refus clair est une réponse complète.",
+    subtitle: "Remercier, cesser l’approche et libérer l’espace — sans relance déguisée.",
+    theme: "paper",
+    code: "ba-refusal",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Sécurité terrain",
+    title: "Si le lieu devient risqué, l’activation s’arrête.",
+    subtitle: "Le binôme, le point sûr et le canal du brief font partie de la mission.",
+    theme: "brandBriefing",
+    code: "ba-safety",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Reporting",
+    title: "Rendre compte des faits — pas fabriquer des conversions.",
+    subtitle: "Le reporting fait ressortir les besoins, les questions récurrentes, les orientations et les conditions terrain.",
+    theme: "paper",
+    code: "ba-reporting",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Mise en situation",
+    title: "Trois scènes terrain pour tester les bons réflexes.",
+    subtitle: "Le jeu de rôle entraîne des décisions observables sans inventer une offre ou exiger une conversion.",
+    theme: "brandConversation",
+    code: "ba-roleplay",
+    kind: "brandAmbassador",
+  },
+  {
+    module: "Formation Brand Ambassadors",
+    kicker: "Module 09 · Standard de maîtrise",
+    title: "La maîtrise se voit dans les gestes, les limites et le relais.",
+    subtitle: "Une erreur liée aux secrets ou à une transaction réelle exige une reprise ciblée, même avec un bon score global.",
+    theme: "paper",
+    code: "ba-scorecard",
+    kind: "brandAmbassador",
+  },
+  {
     module: "Conclusion",
     kicker: "Les réflexes BTL",
     title: "Cinq réflexes pour un conseil M-Pesa juste et rassurant.",
@@ -604,7 +742,7 @@ const slides: Slide[] = [
   },
 ];
 
-const moduleNames = ["Ouverture", "Clients M-Pesa", "Petit Commerce", "Paiement Marchand", "M-Pesa Carte Visa", "M-Pesa Mikili", "M-Pesa Rallonge", "Vodacom Privilège", "Formation Hôtesses", "Conclusion"];
+const moduleNames = ["Ouverture", "Clients M-Pesa", "Petit Commerce", "Paiement Marchand", "M-Pesa Carte Visa", "M-Pesa Mikili", "M-Pesa Rallonge", "Vodacom Privilège", "Formation Hôtesses", "Formation Brand Ambassadors", "Conclusion"];
 
 type Session = {
   id: string;
@@ -617,7 +755,7 @@ type Session = {
 };
 
 const sessions: Session[] = [
-  { id: "complete", label: "Formation complète", labelShort: "Complète", description: "L’intégralité des produits, les tests, Vodacom Privilège, Formation Hôtesses et la conclusion.", duration: "4 h 15", slideIndexes: slides.map((_, index) => index) },
+  { id: "complete", label: "Formation complète", labelShort: "Complète", description: "L’intégralité des produits, les tests, Vodacom Privilège, les modules Hôtesses et Brand Ambassadors, puis la conclusion.", duration: "5 h 30", slideIndexes: slides.map((_, index) => index) },
   { id: "clients", label: "Module 1 · Clients M-Pesa", labelShort: "Clients", description: "Profils Lite et Premium, éligibilité et pièces acceptées.", duration: "15 min", slideIndexes: [3, 4, 5], moduleCode: "clients" },
   { id: "commerce", label: "Module 2 · Petit Commerce", labelShort: "Petit Commerce", description: "Compte marchand, activation, paiement et règles d’usage.", duration: "20 min", slideIndexes: [6, 7, 8, 9], moduleCode: "petit-commerce" },
   { id: "paiement-marchand", label: "Module 3 · Paiement Marchand", labelShort: "Paiement Marchand", description: "Paiement client chez le commerçant, validation et message terrain.", duration: "20 min", slideIndexes: [10, 11, 12], moduleCode: "paiement-marchand" },
@@ -626,6 +764,7 @@ const sessions: Session[] = [
   { id: "rallonge", label: "Module 6 · M-Pesa Rallonge", labelShort: "Rallonge", description: "Découvert ponctuel, éligibilité, usage, remboursement et pénalités.", duration: "25 min", slideIndexes: [23, 24, 25, 26], moduleCode: "rallonge" },
   { id: "vodacom-privilege", label: "Module 7 · Vodacom Privilège", labelShort: "Privilège", description: "Offres Gold et Platinum, activation *1111# → 4, service client, conformité et mise en situation.", duration: "55 min", slideIndexes: [27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38], moduleCode: "vodacom-privilege" },
   { id: "formation-hotesses", label: "Module 8 · Formation Hôtesses", labelShort: "Hôtesses", description: "Accueil, proximité, posture, limites professionnelles, sécurité, confidentialité, relais et cas pratiques.", duration: "75 min", slideIndexes: [39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52], moduleCode: hostessModuleCode },
+  { id: "formation-brand-ambassadors", label: "Module 9 · Formation Brand Ambassadors", labelShort: "Brand Ambassadors", description: "Activation respectueuse, découverte du besoin, conseil, démonstration sûre, confidentialité, reporting et rôle-play.", duration: "75 min", slideIndexes: [53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67], moduleCode: brandAmbassadorsModuleCode },
 ];
 
 type AssessmentQuestion = { id: string; prompt: string; options: string[]; answer: number };
@@ -669,6 +808,7 @@ const assessmentQuestions: Record<string, AssessmentQuestion[]> = {
   ],
   "vodacom-privilege": vodacomPrivilegeAssessmentQuestions,
   [hostessModuleCode]: hotessesAssessmentQuestions,
+  [brandAmbassadorsModuleCode]: brandAmbassadorsAssessmentQuestions,
 };
 
 function getInitialSessionId() {
@@ -702,8 +842,18 @@ function getSlideTheme(slide: Slide) {
   if (slide.theme === "hostessEvent") return "image-split image-split--hostess-event";
   if (slide.theme === "hostessProximity") return "image-split image-split--hostess-proximity";
   if (slide.theme === "hostessReady") return "image-split image-split--hostess-ready";
+  if (slide.theme === "brandAmbassador") return "image-split image-split--ba-hero";
+  if (slide.theme === "brandConversation") return "image-split image-split--ba-conversation";
+  if (slide.theme === "brandBriefing") return "image-split image-split--ba-briefing";
   if (slide.theme === "cover") return "cover-slide";
   return "";
+}
+
+function getSlideBackground(slide: Slide) {
+  const image = slide.theme === "brandAmbassador" ? "brand-ambassadors-hero.jpg"
+    : slide.theme === "brandConversation" ? "brand-ambassadors-conversation.jpg"
+      : slide.theme === "brandBriefing" ? "brand-ambassadors-briefing.jpg" : null;
+  return image ? `${import.meta.env.BASE_URL}images/${image}` : undefined;
 }
 
 function BrandMark({ variant = "default" }: { variant?: "default" | "hero" | "close" }) {
@@ -847,6 +997,8 @@ function SlideContent({ slide, showAnswers, toggleAnswers, visibleModuleNames }:
       return <div className="rule-cards">{[["15", "Critères notés sur 5 : accueil, écoute, besoin, explication, objections, conformité et conclusion."], ["/75", "Total de la grille terrain : présentation, professionnalisme, protection des données et orientation inclus."], ["65–75", "Excellent : maîtrise et posture de référence."], ["55–64", "Très bon : performance solide à consolider."], ["45–54", "Acceptable : accompagnement ciblé recommandé."], ["<35", "Coaching obligatoire selon le standard de formation."]].map(([value, label]) => <div className="rule-card" key={value}><span className="rule-card__value">{value}</span><span className="rule-card__label">{label}</span></div>)}</div>;
     case "hostessIntro":
       return <div className="hostess-hero-copy"><span className="micro-label">Hospitalité · proximité · confiance</span><p>Une présence de service rend le lieu lisible, l’échange utile et la personne mieux considérée — sans exiger de disponibilité personnelle.</p><div className="hostess-hero-copy__pillars"><span>Autonomie</span><span>Service utile</span><span>Relais d’équipe</span><span>Sécurité</span></div></div>;
+    case "brandAmbassador":
+      return <BrandAmbassadorsTraining section={slide.code ?? ""} />;
     case "hostessRoles":
       return <div className="comparison-grid"><section className="comparison-card"><span className="comparison-card__tag">Événements ponctuels</span><h3>Hôtesse d’accueil</h3><p>L’invité vient vers elle. Elle reçoit, vérifie selon le brief, guide et rend le parcours fluide dès l’arrivée.</p><BulletStack items={["Je fais : saluer, clarifier, orienter avec une information confirmée.", "Je transmets : accès exceptionnel, information incertaine, situation sensible.", "Je n’autorise pas : donnée privée, promesse non validée, échange personnel pendant la mission."]} /></section><section className="comparison-card comparison-card--focus"><span className="comparison-card__tag">Campagnes en lieu fixe</span><h3>Hôtesse de proximité</h3><p>Elle va à la rencontre de personnes disponibles dans un HORECA, un shop, un aéroport ou un autre point d’affectation.</p><BulletStack items={["Je fais : observer, demander la permission et apporter une utilité brève.", "Je transmets : besoin hors rôle, doute produit, accès ou incident sensible.", "Je n’autorise pas : pression, passage bloqué, collecte de données ou proximité personnelle."]} /></section></div>;
     case "hostessReadiness":
@@ -902,13 +1054,15 @@ export default function Home() {
   const [sessionMessage, setSessionMessage] = useState("");
 
   const canAccessHostessModule = canAccessTrainingModule(trainingUser, hostessModuleCode, isGuest);
-  const visibleModuleNames = moduleNames.filter((name) => name !== "Formation Hôtesses" || canAccessHostessModule);
+  const canAccessBrandAmbassadorsModule = canAccessTrainingModule(trainingUser, brandAmbassadorsModuleCode, isGuest);
+  const visibleModuleNames = moduleNames.filter((name) => (name !== "Formation Hôtesses" || canAccessHostessModule) && (name !== "Formation Brand Ambassadors" || canAccessBrandAmbassadorsModule));
   const visibleSessions = sessions
     .filter((session) => session.id === "complete" || !session.moduleCode || canAccessTrainingModule(trainingUser, session.moduleCode, isGuest))
     .map((session) => {
       if (session.id !== "complete") return session;
-      const slideIndexes = session.slideIndexes.filter((index) => slides[index].module !== "Formation Hôtesses" || canAccessHostessModule);
-      return canAccessHostessModule ? { ...session, slideIndexes } : { ...session, duration: "3 h 10", description: "L’intégralité des produits, les tests, Vodacom Privilège et la conclusion.", slideIndexes };
+      const slideIndexes = session.slideIndexes.filter((index) => (slides[index].module !== "Formation Hôtesses" || canAccessHostessModule) && (slides[index].module !== "Formation Brand Ambassadors" || canAccessBrandAmbassadorsModule));
+      const duration = canAccessHostessModule && canAccessBrandAmbassadorsModule ? "5 h 30" : canAccessHostessModule ? "4 h 15" : canAccessBrandAmbassadorsModule ? "4 h 25" : "3 h 10";
+      return { ...session, duration, slideIndexes };
     });
   const activeSession = visibleSessions.find((session) => session.id === sessionId) ?? visibleSessions[0];
   const currentPosition = Math.max(0, activeSession.slideIndexes.indexOf(current));
@@ -1100,7 +1254,7 @@ export default function Home() {
             <div className="rail__position">{activeSession.id === "complete" ? formatNumber(moduleIndex + 1) : `${formatNumber(currentPosition)} / ${formatNumber(activeSession.slideIndexes.length - 1)}`}</div>
           </aside>
           <section className="slide-stage" aria-live="polite">
-            <article key={current} className={`slide ${theme} ${slide.compact ? "compact" : ""} ${direction === "forward" ? "slide--forward" : "slide--backward"}`}>
+            <article key={current} className={`slide ${theme} ${slide.compact ? "compact" : ""} ${direction === "forward" ? "slide--forward" : "slide--backward"}`} style={getSlideBackground(slide) ? { backgroundImage: `url("${getSlideBackground(slide)}")` } : undefined}>
               {slide.kind !== "cover" && slide.kind !== "close" && <div className="slide__topline"><span className="eyebrow">{slide.kicker}</span><span className="micro-label">{slide.module}</span></div>}
               {slide.kind !== "cover" && slide.kind !== "close" && slide.kind !== "mikiliIntro" && <h1 className="slide__title">{slide.title}</h1>}
               {slide.kind !== "cover" && slide.kind !== "close" && slide.kind !== "mikiliIntro" && slide.subtitle && <p className="slide__subtitle">{slide.subtitle}</p>}

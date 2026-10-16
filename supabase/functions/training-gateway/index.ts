@@ -20,6 +20,7 @@ const db = createClient(
 const managementRoles = new Set(["supervisor", "admin", "sub_admin", "superadmin", "super_admi", "super_admin"]);
 const superAdminRoles = new Set(["superadmin", "super_admi", "super_admin"]);
 const hostessModuleCode = "formation-hotesses";
+const brandAmbassadorsModuleCode = "formation-brand-ambassadors";
 
 type TrainingUser = {
   id: string;
@@ -39,8 +40,9 @@ type TrainingModule = {
 };
 
 function fallbackCanAccessModule(user: Pick<TrainingUser, "role" | "user_category">, moduleCode: string) {
-  if (moduleCode !== hostessModuleCode) return true;
-  return user.user_category === "hostess" || managementRoles.has(user.role);
+  if (moduleCode === hostessModuleCode) return user.user_category === "hostess" || managementRoles.has(user.role);
+  if (moduleCode === brandAmbassadorsModuleCode) return user.user_category === "brand_ambassador" || managementRoles.has(user.role);
+  return true;
 }
 async function accessForUser(user: TrainingUser) {
   const { data } = await db.from("training_module_access").select("module_code,granted").eq("user_id", user.id);

@@ -1,6 +1,7 @@
 import { canAccessSupervision } from "./trainingCompletion";
 
 export const hostessModuleCode = "formation-hotesses";
+export const brandAmbassadorsModuleCode = "formation-brand-ambassadors";
 
 type TrainingAccessUser = {
   role?: string | null;
@@ -8,9 +9,10 @@ type TrainingAccessUser = {
 };
 
 export function canAccessTrainingModule(user: TrainingAccessUser | null | undefined, moduleCode: string, isGuest = false) {
-  if (moduleCode !== hostessModuleCode) return true;
   if (isGuest) return true;
-  return user?.category === "hostess" || canAccessSupervision(user?.role);
+  if (moduleCode === hostessModuleCode) return user?.category === "hostess" || canAccessSupervision(user?.role);
+  if (moduleCode === brandAmbassadorsModuleCode) return user?.category === "brand_ambassador" || canAccessSupervision(user?.role);
+  return true;
 }
 
 export function filterAccessibleTrainingCodes<T extends { code: string }>(modules: T[], user: TrainingAccessUser | null | undefined, isGuest = false) {
