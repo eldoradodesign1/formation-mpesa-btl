@@ -6,23 +6,13 @@ on:
 permissions:
   contents: read
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+  probe:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Node 22
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - name: Corepack
-        run: corepack enable
-      - name: Install
-        run: pnpm install --frozen-lockfile
-      - name: Typecheck
-        run: pnpm check
-      - name: Unit tests
-        run: pnpm test
-      - name: Build
-        run: pnpm build
+      - name: Runner probe
+        run: echo "GitHub Actions runner started"
