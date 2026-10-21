@@ -120,7 +120,7 @@ export function saveModuleProgress(token: string, payload: { moduleCode: string;
   return request<{ success: true }>("/progress", { method: "POST", body: JSON.stringify(payload) }, token);
 }
 
-export function saveAssessment(token: string, payload: { moduleCode: string; score: number; correctAnswers: number; totalQuestions: number; answers: Record<string, number> }) {
+export function saveAssessment(token: string, payload: { moduleCode: string; score: number; correctAnswers: number; totalQuestions: number; answers: Record<string, number | string | string[]> }) {
   return request<{ success: true; isPassed: boolean }>("/assessment", { method: "POST", body: JSON.stringify(payload) }, token);
 }
 
