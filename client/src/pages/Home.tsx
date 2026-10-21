@@ -151,7 +151,7 @@ const slides: Slide[] = [
   {
     module: "Petit Commerce",
     kicker: "Module 02 · activation",
-    title: "Activez le compte marchand en six jalons.",
+    title: "Activez le compte petit commerce en six jalons.",
     subtitle: "Le client Premium doit activer le service avant de pouvoir recevoir les paiements de ses clients.",
     kind: "route",
     code: "*1122#",
