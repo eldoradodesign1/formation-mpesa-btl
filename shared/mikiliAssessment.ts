@@ -71,7 +71,7 @@ export function calculateMikiliResult(answers: MikiliAnswers) {
   const correctChoices = mikiliChoiceQuestions.filter(question => answers[question.id] === question.answer).length;
   const order = answers["mikili-16"];
   const correctPositions = Array.isArray(order) ? mikiliCorrectOrder.filter((step, index) => order[index] === step).length : 0;
-  const orderPoints = correctPositions === 5 ? 2 : correctPositions >= 4 ? 1 : 0;
+  const orderPoints = correctPositions === 5 ? 2 : correctPositions >= 3 ? 1 : 0;
   const correctOpen = mikiliOpenQuestions.filter(question => openAnswerIsCorrect(question.id, typeof answers[question.id] === "string" ? answers[question.id] as string : "")).length;
   const points = correctChoices + orderPoints + correctOpen;
   const correctAnswers = correctChoices + (correctPositions === 5 ? 1 : 0) + correctOpen;
