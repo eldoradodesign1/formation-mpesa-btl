@@ -22,6 +22,8 @@ import { getPresentationKeyAction, isEditableKeyboardTarget } from "@shared/pres
 import { vodacomPrivilegeAssessmentQuestions } from "@shared/vodacomPrivilegeAssessment";
 import { hotessesAssessmentQuestions } from "@shared/hotessesAssessment";
 import { brandAmbassadorsAssessmentQuestions } from "@shared/brandAmbassadorsAssessment";
+import { mikiliChoiceQuestions, mikiliQuestionCount, type MikiliAnswers } from "@shared/mikiliAssessment";
+import { MikiliAssessmentPanel } from "@/components/MikiliAssessmentPanel";
 import { brandAmbassadorsModuleCode, canAccessTrainingModule, hostessModuleCode } from "@shared/trainingModuleAccess";
 import BrandAmbassadorsTraining from "@/components/BrandAmbassadorsTraining";
 
@@ -794,12 +796,7 @@ const assessmentQuestions: Record<string, AssessmentQuestion[]> = {
     { id: "visa-3", prompt: "Après la création, le client peut notamment gérer sa carte pour :", options: ["Modifier le CVV ou bloquer la carte", "Changer sa SIM automatiquement", "Créer un compte marchand", "Supprimer son compte Premium"], answer: 0 },
     { id: "visa-4", prompt: "Quel élément faut-il clarifier avant toute décision client ?", options: ["Les frais applicables", "La couleur du téléphone", "Le quartier du BA", "La marque du navigateur"], answer: 0 },
   ],
-  mikili: [
-    { id: "mikili-1", prompt: "M-Pesa Mikili permet principalement :", options: ["De recevoir des fonds depuis l’étranger", "D’ouvrir une carte Visa", "De créer un commerce", "De demander un découvert"], answer: 0 },
-    { id: "mikili-2", prompt: "Quel profil est requis pour recevoir le service selon le module ?", options: ["Lite", "Premium correctement enregistré", "Compte sans identité", "Compte marchand uniquement"], answer: 1 },
-    { id: "mikili-3", prompt: "Quel point doit être expliqué avant l’opération ?", options: ["L’absence de reversal prévue", "Une remise automatique", "Un crédit garanti", "La fermeture du compte"], answer: 0 },
-    { id: "mikili-4", prompt: "Comment le bénéficiaire est-il informé après une transaction aboutie ?", options: ["Par notification SMS", "Par courrier", "Par appel obligatoire du BA", "Par carte Visa"], answer: 0 },
-  ],
+  mikili: mikiliChoiceQuestions,
   rallonge: [
     { id: "rallonge-1", prompt: "Dans quelle situation la Rallonge intervient-elle ?", options: ["Quand le solde est insuffisant pour une transaction ciblée", "À l’ouverture du compte", "Après un retrait cash", "Pour toute demande de crédit"], answer: 0 },
     { id: "rallonge-2", prompt: "Quel profil peut être éligible selon le module ?", options: ["Un client Premium actif", "Tout compte Lite", "Un visiteur sans compte", "Un marchand sans activité"], answer: 0 },
@@ -1194,9 +1191,9 @@ export default function Home() {
     setTrainingReady(false);
   };
 
-  const handleAssessment = async (answers: Record<string, number>, score: number, correctAnswers: number) => {
+  const handleAssessment = async (answers: MikiliAnswers, score: number, correctAnswers: number) => {
     if (!trainingToken || isGuest || !activeSession.moduleCode || !activeAssessment) return;
-    await saveAssessment(trainingToken, { moduleCode: activeSession.moduleCode, score, correctAnswers, totalQuestions: activeAssessment.length, answers });
+    await saveAssessment(trainingToken, { moduleCode: activeSession.moduleCode, score, correctAnswers, totalQuestions: activeSession.moduleCode === "mikili" ? mikiliQuestionCount : activeAssessment.length, answers });
     setTrainingOverview(await getTrainingOverview(trainingToken));
   };
 
@@ -1281,7 +1278,7 @@ export default function Home() {
       {showDeck && <aside className="deck-panel" aria-label="Sélecteur de séances"><div className="panel-heading"><div><span className="micro-label">{trainingUser.fullName || "Agent connecté"}</span><h2>Choisir une séance</h2></div><button type="button" aria-label="Fermer le sélecteur de séances" onClick={() => setShowDeck(false)}><X size={19} /></button></div><div className="session-grid">{visibleSessions.map((session) => { const progress = trainingOverview?.progress.find((item) => item.module_code === session.moduleCode); const attempt = trainingOverview?.attempts.find((item) => item.module_code === session.moduleCode); return <button key={session.id} type="button" onClick={() => startSession(session.id)} className={`session-card ${session.id === activeSession.id ? "session-card--active" : ""}`}><span className="session-card__duration">{session.duration}</span><b>{session.label}</b><small>{session.description}</small><span className="session-card__count">{session.moduleCode ? `${progress?.status === "completed" ? "Parcours terminé" : `${progress?.current_slide || 0}/${session.slideIndexes.length} slides`} · ${attempt ? `${attempt.score}%` : "test à faire"}` : `${session.slideIndexes.length} slides`}</span></button>; })}</div><div className="deck-panel__section"><span className="micro-label">Séance active · {activeSession.labelShort}{activeProgress ? ` · ${activeProgress.status === "completed" ? "terminée" : "en cours"}` : ""}{activeAttempt ? ` · dernier test ${activeAttempt.score}%` : ""}</span><div className="deck-panel__list">{activeSession.slideIndexes.map((slideIndex, index) => { const item = slides[slideIndex]; return <button key={`${item.title}-${slideIndex}`} type="button" onClick={() => { goTo(slideIndex); setShowDeck(false); }} className={`deck-panel__item ${current === slideIndex ? "deck-panel__item--active" : ""}`}><span>{formatNumber(index)}</span><b>{item.title.replace(/<[^>]+>/g, "").replace(/\n/g, " ")}</b></button>; })}</div>{activeAssessment && <button type="button" className="deck-panel__assessment" onClick={() => { setShowDeck(false); setShowAssessment(true); }}>Lancer le test du module</button>}</div></aside>}
 
       {showHelp && <aside className="help-panel" role="dialog" aria-modal="true" aria-label="Raccourcis clavier"><span className="micro-label">Mode présentateur</span><h2>Pilotez au clavier.</h2><div className="help-grid"><div><kbd>→ / espace</kbd>Slide suivante</div><div><kbd>← / retour</kbd>Slide précédente</div><div><kbd>Home / End</kbd>Début / fin de séance</div><div><kbd>G ou M</kbd>Choisir une séance</div><div><kbd>F</kbd>Plein écran</div><div><kbd>A</kbd>Test ou réponses du quiz</div><div><kbd>?</kbd>Cette aide</div><div><kbd>Échap</kbd>Fermer un panneau</div></div><button type="button" className="help-close" onClick={() => setShowHelp(false)}>Reprendre la présentation</button></aside>}
-      {showAssessment && activeAssessment && <AssessmentPanel sessionLabel={activeSession.label} questions={activeAssessment} onClose={() => setShowAssessment(false)} onSubmit={handleAssessment} readOnly={isGuest} />}
+      {showAssessment && activeAssessment && (activeSession.moduleCode === "mikili" ? <MikiliAssessmentPanel sessionLabel={activeSession.label} onClose={() => setShowAssessment(false)} onSubmit={handleAssessment} readOnly={isGuest} /> : <AssessmentPanel sessionLabel={activeSession.label} questions={activeAssessment} onClose={() => setShowAssessment(false)} onSubmit={handleAssessment} readOnly={isGuest} />)}
       {showCertificate && <CertificatePanel user={trainingUser} certificate={trainingOverview?.certificate || null} eligible={certificateEligible} onClose={() => setShowCertificate(false)} onIssue={issueCertificate} />}
       {showSupervisor && supervisorDashboard && <SupervisorPanel dashboard={supervisorDashboard} onClose={() => setShowSupervisor(false)} onRate={rateAgent} />}
       {dashboardError && <div className="session-error" role="status">{dashboardError}</div>}
