@@ -115,14 +115,10 @@ Deno.serve(async (req) => {
     const { phone, password } = await req.json().catch(() => ({}));
     if (!phone || !password) return out({ error: "Numéro de téléphone et mot de passe requis." }, 400);
 
-    const normalizedPhone = String(phone).trim().replace(/\s+/g, "");
-    const { data: user } = await db
-      .from("users")
-      .select("id,phone,full_name,role,user_category,is_active,password_hash")
-      .eq("phone", normalizedPhone)
-      .maybeSingle();
+    // Vérification côté serveur contre le compte Auth chiffré (btl_login), tous formats de numéro.
+    const { data: user } = await db.rpc("btl_login", { p_login: String(phone).trim(), p_password: String(password) });
 
-    if (!user || user.password_hash !== String(password)) return out({ error: "Identifiants incorrects." }, 401);
+    if (!user) return out({ error: "Identifiants incorrects." }, 401);
     if (!superAdminRoles.has(user.role) && user.is_active === false) return out({ error: "Ce compte est inactif. Contactez un administrateur." }, 403);
 
     await db.from("users").update({ last_login: new Date().toISOString() }).eq("id", user.id);
